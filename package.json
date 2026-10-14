@@ -12,7 +12,8 @@
   "dependencies": {
     "@astrojs/starlight": "^0.42.6",
     "astro": "^7.2.10",
-    "sharp": "^0.35.3"
+    "sharp": "^0.35.3",
+    "starlight-llms-markdown": "^0.1.0"
   },
   "overrides": {
     "postcss-selector-parser": "^7.1.6"
