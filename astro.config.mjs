@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightSidebarTopics from 'starlight-sidebar-topics';
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,15 +12,27 @@ export default defineConfig({
 			logo: { src: './public/logo.png', alt: 'AU Modding Logo', replacesTitle: true },
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/AUModding/wiki' }],
 			customCss: ['./src/styles/custom.css'],
-			sidebar: [
-				{
-					label: 'Guides',
-					items: [{ autogenerate: { directory: 'guides' } }],
-				},
-				{
-					label: 'Reference',
-					items: [{ autogenerate: { directory: 'reference' } }],
-				},
+			editLink: { baseUrl: "https://github.com/AUModding/wiki/tree/master/" },
+			pagination: true,
+			lastUpdated: true,
+			components: {
+				Sidebar: './src/components/override/Sidebar.astro',
+			},
+			plugins: [
+				starlightSidebarTopics([
+					{
+						label: 'Getting Started',
+						link: '/welcome',
+						icon: 'information',
+						items: ['welcome'],
+					},
+					{
+						label: 'Guides',
+						link: '/guides/',
+						icon: 'open-book',
+						items: [{ autogenerate: { directory: 'guides' } }],
+					},
+				]),
 			],
 		}),
 	],
