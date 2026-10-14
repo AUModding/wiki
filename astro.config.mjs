@@ -14,7 +14,6 @@ export default defineConfig({
 			logo: { src: './public/logo.png', alt: 'AU Modding Logo', replacesTitle: true },
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/AUModding/wiki' }],
 			customCss: ['./src/styles/custom.css'],
-			plugins: [starlightLlmsMarkdown()],
 			sidebar: [
 				{
 					label: 'Guides',
@@ -31,7 +30,8 @@ export default defineConfig({
 			components: {
 				Sidebar: './src/components/override/Sidebar.astro',
 			},
-			plugins: [
+      plugins: [
+        starlightLlmsMarkdown(),
 				starlightSidebarTopics([
 					{
 						label: 'Getting Started',
