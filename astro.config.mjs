@@ -4,7 +4,8 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://au-wiki.eps.lol",
+	site: "http://aumodding.github.io/",
+	base: "/wiki",
 	integrations: [
 		starlight({
 			title: 'Among Us Dev Wiki',
