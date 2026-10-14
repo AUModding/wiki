@@ -24,7 +24,7 @@ export default defineConfig({
 					label: 'Reference',
 					items: [{ autogenerate: { directory: 'reference' } }],
 				},
-      ]
+      ],
 			editLink: { baseUrl: "https://github.com/AUModding/wiki/tree/master/" },
 			pagination: true,
 			lastUpdated: true,
