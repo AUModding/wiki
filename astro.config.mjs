@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLlmsMarkdown from 'starlight-llms-markdown';
+import starlightSidebarTopics from 'starlight-sidebar-topics';
 
 // https://astro.build/config
 export default defineConfig({
@@ -23,6 +24,28 @@ export default defineConfig({
 					label: 'Reference',
 					items: [{ autogenerate: { directory: 'reference' } }],
 				},
+      ]
+			editLink: { baseUrl: "https://github.com/AUModding/wiki/tree/master/" },
+			pagination: true,
+			lastUpdated: true,
+			components: {
+				Sidebar: './src/components/override/Sidebar.astro',
+			},
+			plugins: [
+				starlightSidebarTopics([
+					{
+						label: 'Getting Started',
+						link: '/welcome',
+						icon: 'information',
+						items: ['welcome'],
+					},
+					{
+						label: 'Guides',
+						link: '/guides/',
+						icon: 'open-book',
+						items: [{ autogenerate: { directory: 'guides' } }],
+					},
+				]),
 			],
 		}),
 	],
