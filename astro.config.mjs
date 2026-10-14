@@ -8,8 +8,8 @@ export default defineConfig({
 	base: "/wiki",
 	integrations: [
 		starlight({
-			title: 'Among Us Dev Wiki',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+			title: 'Among Us Modding Wiki',
+			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/AUModding/wiki' }],
 			sidebar: [
 				{
 					label: 'Guides',
