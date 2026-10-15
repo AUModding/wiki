@@ -27,3 +27,18 @@
 	--sl-color-gray-7: #f8f6f5;
 	--sl-color-black: #ffffff;
 }
+
+@media (min-width: 50em) {
+	html[data-sidebar-collapsed='true'][data-has-sidebar] {
+		--sl-content-inline-start: 0rem;
+		--sl-content-margin-inline: auto;
+	}
+
+	html[data-sidebar-collapsed='true'][data-has-sidebar] .sl-container {
+		margin-inline: auto !important;
+	}
+
+	html[data-sidebar-collapsed='true'] nav.sidebar {
+		display: none !important;
+	}
+}

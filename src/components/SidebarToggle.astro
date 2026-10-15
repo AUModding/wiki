@@ -1,0 +1,69 @@
+---
+import { Icon } from "@astrojs/starlight/components";
+---
+
+<button
+  id="sidebar-toggle"
+  type="button"
+  class="sidebar-toggle"
+  aria-label="Toggle sidebar"
+  aria-pressed="false"
+  title="Toggle sidebar"
+>
+  <Icon name="bars" />
+</button>
+
+<script is:inline>
+  (function () {
+    const storageKey = "au-sidebar-collapsed";
+
+    function applyCollapsedState() {
+      const isCollapsed = window.localStorage.getItem(storageKey) === "1";
+      document.documentElement.dataset.sidebarCollapsed = isCollapsed ? "true" : "false";
+
+      const toggleButton = document.getElementById("sidebar-toggle");
+      if (toggleButton) {
+        toggleButton.setAttribute("aria-pressed", String(isCollapsed));
+      }
+    }
+
+    applyCollapsedState();
+
+    document.addEventListener("click", function (event) {
+      const toggleButton = event.target instanceof Element ? event.target.closest("#sidebar-toggle") : null;
+      if (!toggleButton) {
+        return;
+      }
+
+      const willCollapse = document.documentElement.dataset.sidebarCollapsed !== "true";
+      window.localStorage.setItem(storageKey, willCollapse ? "1" : "0");
+      document.documentElement.dataset.sidebarCollapsed = willCollapse ? "true" : "false";
+      toggleButton.setAttribute("aria-pressed", String(willCollapse));
+    });
+  })();
+</script>
+
+<style>
+  .sidebar-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--sl-color-gray-2);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+  }
+
+  .sidebar-toggle:hover {
+    color: var(--sl-color-white);
+    background: var(--sl-color-gray-6);
+  }
+
+  @media (max-width: 49.999em) {
+    .sidebar-toggle {
+      display: none;
+    }
+  }
+</style>
