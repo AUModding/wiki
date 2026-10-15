@@ -11,7 +11,7 @@ export default defineConfig({
 		starlight({
 			title: 'Among Us Modding Wiki',
 			logo: { src: './public/logo.png', alt: 'AU Modding Logo', replacesTitle: true },
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/AUModding/wiki' }],
+			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/AUModding/wiki' }, { icon: 'discord', label: 'Discord', href: 'https://discord.gg/JcHncQVWa2' }],
 			customCss: ['./src/styles/custom.css'],
 			editLink: { baseUrl: "https://github.com/AUModding/wiki/tree/master/" },
 			pagination: true,
@@ -19,9 +19,10 @@ export default defineConfig({
 			components: {
 				Sidebar: './src/components/override/Sidebar.astro',
 				SiteTitle: './src/components/override/SiteTitle.astro',
+				PageFrame: './src/components/override/PageFrame.astro',
 			},
-      plugins: [
-        starlightLlmsMarkdown(),
+			plugins: [
+				starlightLlmsMarkdown(),
 				starlightSidebarTopics([
 					{
 						label: 'Getting Started',
