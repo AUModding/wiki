@@ -32,9 +32,7 @@ export default defineConfig({
 						label: 'Guides',
 						link: '/guides/',
 						icon: 'open-book',
-						items: [
-  							{ label: 'Your First Mod', items: [{ autogenerate: { directory: 'guides/first-mod' } }] },
-						],
+						items: [{ autogenerate: { directory: 'guides' } }],
 					},
 				]),
 			],
