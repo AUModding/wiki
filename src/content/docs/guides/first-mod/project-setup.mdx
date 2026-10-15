@@ -3,10 +3,38 @@ title: Setting up your project
 description: Outlines project setup and the various templates available.
 ---
 
-Fortunately for us, someone made a [.NET template for Among Us mods](https://github.com/DaemonBeast/Reactor.Template). 
-This template sets up a new BepInEx plugin with a dependency on Reactor.
-After installing the .NET SDK, you can open your terminal and enter the following commands to install and use it:
+Fortunately for us, there are [.NET templates for Among Us mods](https://github.com/AUModding/AUModding.Templates).
+Each template is designed for a different setup.
+
+After installing the .NET SDK, you can open your terminal and use the following command
+to install the templates:
 ```bash
-dotnet new install Daemon.Reactor.Template # install the latest template from nuget.org
-dotnet new daemon.reactor -n {Name}        # create a new Reactor plugin
+dotnet new install AUModding.Templates
 ```
+
+There are three templates, Minimal, Reactor, and MiraAPI. For this guide, we will use
+the Reactor template. It is usually recommended to build your mods with Reactor,
+as it provides many utilities to make mod development easier.
+
+### Minimal
+
+A minimal template which does not include any APIs outside of BepInEx.
+```bash
+dotnet new aumodding.minimal -n (name)
+```
+
+### Reactor
+
+A template which has Reactor preinstalled and some minimal things configured for you.
+```bash
+dotnet new aumodding.reactor -n (name)
+```
+Credits: [Daemon](https://github.com/DaemonBeast/Reactor.Template)
+
+### MiraAPI
+
+A template which has MiraAPI preinstalled and some minimal things configured for you.
+```bash
+dotnet new aumodding.reactor -n (name)
+```
+Credits: [All Of Us](https://github.com/All-Of-Us-Mods/MiraAPI/tree/master/MiraAPI.Example)
