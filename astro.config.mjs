@@ -12,7 +12,7 @@ export default defineConfig({
 			title: 'Among Us Modding Wiki',
 			logo: { src: './public/logo.png', alt: 'AU Modding Logo', replacesTitle: true },
 			social: [
-				{ icon: 'github', label: 'GitHub', href: 'https://github.com/AUModding/wiki' }, 
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/AUModding/wiki' },
 				{ icon: 'discord', label: 'Discord', href: 'https://discord.gg/JcHncQVWa2' }
 			],
 			customCss: ['./src/styles/custom.css'],
@@ -24,6 +24,40 @@ export default defineConfig({
 				SiteTitle: './src/components/override/SiteTitle.astro',
 				PageFrame: './src/components/override/PageFrame.astro',
 			},
+
+			head: [
+				
+				{
+					tag: 'meta',
+					attrs: {
+						name: "og:site_name",
+						content: "Among Us Modding Wiki"
+					}
+				},
+				// <meta name="og:image" content="https://aumodding.dev/AUModders.logo.png" />
+				{
+					tag: 'meta',
+					attrs: {
+						name: "og:image",
+						content: "https://aumodding.dev/AUModders.logo.png"
+					}
+				},
+				// <meta name="theme-color" content="#a3d99f" />
+				{
+					tag: 'meta',
+					attrs: {
+						name: "theme-color",
+						content: "#a3d99f"
+					}
+				},
+				//<meta name="twitter:card" content="summary" />
+				{
+					tag: 'meta',
+					attrs: {
+						name: 'twitter:card',
+						content: "summary"
+					}
+				}],
 			plugins: [
 				starlightLlmsMarkdown(),
 				starlightSidebarTopics([
