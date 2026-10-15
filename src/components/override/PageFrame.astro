@@ -1,0 +1,14 @@
+---
+import DefaultPageFrame from '@astrojs/starlight/components/PageFrame.astro';
+import Stars from '../Stars.astro';
+
+const { stars: showStars } = Astro.locals.starlightRoute.entry.data;
+---
+
+{showStars && <Stars />}
+
+<DefaultPageFrame>
+    <slot name="header" slot="header" />
+    <slot name="sidebar" slot="sidebar" />
+    <slot />
+</DefaultPageFrame>
