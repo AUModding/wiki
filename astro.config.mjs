@@ -39,6 +39,12 @@ export default defineConfig({
 						icon: 'open-book',
 						items: [{ autogenerate: { directory: 'guides' } }],
 					},
+					{
+						label: 'Resources',
+						link: '/resources/',
+						icon: 'document',
+						items: [{ autogenerate: { directory: 'resources' } }],
+					}
 				]),
 			],
 		}),
