@@ -1,6 +1,8 @@
 ---
-title: Making your first mod.
-description: A step-by-step guide on making your first Among Us mod.
+title: Tools and Requirements
+description: Specifies the required software and knowledge.
+sidebar:
+    order: 0
 ---
 
 Hi. I'm XtraCube, owner of All Of Us and developer of some really cool mods.
@@ -58,13 +60,3 @@ modders to find out how the game works internally without using a disassembler l
 
 - [dnSpy](https://github.com/dnSpyEx/dnSpy) / [ILSpy](https://github.com/icsharpcode/ILSpy): A decompiler for .NET programs.
 Use it to open the Mono DLL. You can also explore other mods and plugins in these programs. Very useful!
-
-## Setting up your project
-
-Fortunately for us, someone made a [.NET template for Among Us mods](https://github.com/DaemonBeast/Reactor.Template). 
-This template sets up a new BepInEx plugin with a dependency on Reactor.
-After installing the .NET SDK, you can open your terminal and enter the following commands to install and use it:
-```bash
-dotnet new install Daemon.Reactor.Template # install the latest template from nuget.org
-dotnet new daemon.reactor -n {Name}        # create a new Reactor plugin
-```
