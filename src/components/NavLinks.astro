@@ -1,0 +1,58 @@
+---
+// code credit: https://github.com/lorenzolewis/starlight-utils/blob/6ec8fa66ee0dd4186a02678a5443e8ff1f59ab91/packages/starlight-utils/components/NavLinks.astro
+import { getRelativeLocaleUrl } from "astro:i18n";
+const entries = [
+    {
+        label: "Getting Started",
+        link: "/welcome",
+    },
+    {
+        label: "Resources",
+        link: "/resources",
+    }
+];
+---
+
+{
+    entries && (
+        <ul>
+            {entries.map((entry) => (
+                <li>
+                    <a href={getRelativeLocaleUrl(Astro.currentLocale ?? "en", entry.link )}>
+                        <b>{entry.label}</b>
+                    </a>
+                </li>
+            ))}
+        </ul>
+    )
+}
+
+<style>
+    ul {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        gap: var(--sl-nav-gap);
+    }
+    a {
+        text-decoration: none;
+        color: var(--sl-color-accent-high);
+    }
+
+    a:hover,
+    a:focus {
+        color: var(--sl-color-gray-1);
+    }
+
+    [aria-current="page"],
+    [aria-current="page"]:hover,
+    [aria-current="page"]:focus {
+        font-weight: 600;
+    }
+
+    @media (min-width: 50rem) {
+        a {
+            font-size: var(--sl-text-sm);
+        }
+    }
+</style>
