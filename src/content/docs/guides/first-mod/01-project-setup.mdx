@@ -38,3 +38,25 @@ A template which has MiraAPI preinstalled and some minimal things configured for
 dotnet new aumodding.reactor -n (name)
 ```
 Credits: [All Of Us](https://github.com/All-Of-Us-Mods/MiraAPI/tree/master/MiraAPI.Example)
+
+## Building your project
+
+Most IDEs have a "Build" button, which will build your project. If you do not have one, or cannot find it,
+you can also build your project from the command line. Open your terminal, navigate to your project folder,
+and run the following command:
+```bash
+dotnet build
+```
+
+A successful build will create a DLL file that contains your mod. Usually the build output will
+tell you where it is:
+```
+Restore complete (0.9s)
+  MyFirstMod net6.0 succeeded (3.6s) → MyFirstMod/bin/Debug/net6.0/MyFirstMod.dll
+
+Build succeeded in 4.8s
+```
+
+You can place the DLL file in your BepInEx plugins folder to load it into the game.
+The templates will automatically place the DLL in the plugins folder for you,
+as long as you set the `AmongUs` environment variable to the path of your Among Us installation.
