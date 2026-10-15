@@ -18,6 +18,7 @@ export default defineConfig({
 			lastUpdated: true,
 			components: {
 				Sidebar: './src/components/override/Sidebar.astro',
+				SiteTitle: './src/components/override/SiteTitle.astro',
 			},
       plugins: [
         starlightLlmsMarkdown(),
