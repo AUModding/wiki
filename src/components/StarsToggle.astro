@@ -40,7 +40,7 @@
 <script>
   const key = "au-stars";
 
-  function setStars(on) {
+  function setStars(on: boolean) {
     document.documentElement.dataset.stars = on ? "on" : "off";
     localStorage.setItem(key, on ? "on" : "off");
     document.querySelectorAll(".stars-toggle").forEach((button) => {

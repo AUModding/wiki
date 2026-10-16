@@ -37,7 +37,6 @@
 @media (min-width: 50em) {
 	html[data-has-sidebar] {
 		--sidebar-width: var(--sl-sidebar-width);
-		transition: --sidebar-width 0.25s ease;
 	}
 
 	html[data-sidebar-collapsed='true'] {
@@ -48,11 +47,12 @@
 	.sidebar-pane {
 		width: var(--sidebar-width);
 		overflow-x: hidden;
-		transition: opacity 0.2s ease;
+		transition: width 0.25s ease, padding-inline-start 0.25s ease, opacity 0.2s ease;
 	}
 
 	.main-frame {
 		padding-inline-start: var(--sidebar-width);
+		transition: padding-inline-start 0.25s ease;
 	}
 
 	html[data-sidebar-collapsed='true'] .sidebar-pane {

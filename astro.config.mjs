@@ -25,6 +25,7 @@ export default defineConfig({
 				SiteTitle: './src/components/override/SiteTitle.astro',
 				PageFrame: './src/components/override/PageFrame.astro',
 				ThemeSelect: './src/components/override/ThemeSelect.astro',
+				Head: './src/components/override/Head.astro',
 			},
 
 			head: [
