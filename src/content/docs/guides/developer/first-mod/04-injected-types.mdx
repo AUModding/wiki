@@ -1,0 +1,35 @@
+---
+title: Using Injected Types
+description: Provides a brief introduction to registering your own MonoBehaviours
+---
+
+Unity is a component-based game engine, MonoBehaviours are attached to GameObjects to drive specific functionality.
+This is needed for more complex functionalities.
+
+## Creating a new MonoBehaviour
+
+You can create a new MonoBehaviour like so:
+```csharp using System;
+using UnityEngine;
+
+namespace YourMod.Modules.Components
+{
+    public class CustomMonoBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
+    {
+        private void Start() {} //Gets called when the component is first enabled.
+        private void Update() {} //Gets called every frame.
+    }
+}```
+
+## Registering the MonoBehaviour
+
+If you're using Reactor, you can use the [RegisterInIl2Cpp] Attribute on your class to register it.
+This has a small drawback of not having control over which types get registered first, which we'll get to eventually.
+
+A better approach is using the ```ClassInjector``` class and call ```csharp RegisterTypeInIl2Cpp<CustomMonoBehaviour>();``` in your plugin's ```Load``` function.
+
+## Registration Order
+
+Order is important if you have multiple custom MonoBehaviours thqt depend on **one another**, so a specific order is needed.
+
+TODO: Finish writing docs about Il2CppReferenceField, Il2CppReferenceValue, and using stubs in Unity.
