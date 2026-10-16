@@ -46,6 +46,7 @@ original method to run in Hide and Seek mode, otherwise changing the result and 
 
 
 ```csharp
+[HarmonyPrefix]
 private static bool Prefix(ref bool __result)
 {
     if (GameOptionsManager.Instance.currentGameMode == GameModes.HideNSeek)
@@ -58,9 +59,11 @@ private static bool Prefix(ref bool __result)
 
 In the above prefix, you should note the following:
 
-- The patch method must be named *"Prefix"* or *"Postfix"*, or alternatively be annotated with the `[HarmonyPrefix]` attribute
-- It can return a `bool` that specifies whether **the original method should run**
-- In this case the original method's return type is `bool`, so the ref parameter `ref bool __result` can be used to change the method's output
+- The patch method must be named *"Prefix"* or *"Postfix"*, or alternatively be annotated with the `[HarmonyPrefix]` attribute.
+Both are used above for demonstration purposes.
+- A `bool` return type allows the prefix to control whether the original method should run.
+Returning `true` causes it to execute normally after your code, while `false` skips it entirely.
+- In this case the original method's return type is `bool`, so the ref parameter `ref bool __result` can be used to change the method's output.
 
 :::tip
 One of the most useful parameters available in a patch method is `__instance`, since it provides access to the instance on which the patched method is running.
