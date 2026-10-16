@@ -14,33 +14,22 @@ import { Icon } from "@astrojs/starlight/components";
 </button>
 
 <script is:inline>
-  (function () {
     const storageKey = "au-sidebar-collapsed";
+    const sidebarToggle = document.getElementById("sidebar-toggle");
 
-    function applyCollapsedState() {
-      const isCollapsed = window.localStorage.getItem(storageKey) === "1";
-      document.documentElement.dataset.sidebarCollapsed = isCollapsed ? "true" : "false";
-
-      const toggleButton = document.getElementById("sidebar-toggle");
-      if (toggleButton) {
-        toggleButton.setAttribute("aria-pressed", String(isCollapsed));
-      }
+    function setCollapsed(collapsed) {
+        document.documentElement.dataset.sidebarCollapsed = String(collapsed);
+        sidebarToggle?.setAttribute("aria-pressed", String(collapsed));
     }
 
-    applyCollapsedState();
+    setCollapsed(localStorage.getItem(storageKey) === "1");
 
-    document.addEventListener("click", function (event) {
-      const toggleButton = event.target instanceof Element ? event.target.closest("#sidebar-toggle") : null;
-      if (!toggleButton) {
-        return;
-      }
+    sidebarToggle?.addEventListener("click", function () {
+        const collapsed = document.documentElement.dataset.sidebarCollapsed !== "true";
 
-      const willCollapse = document.documentElement.dataset.sidebarCollapsed !== "true";
-      window.localStorage.setItem(storageKey, willCollapse ? "1" : "0");
-      document.documentElement.dataset.sidebarCollapsed = willCollapse ? "true" : "false";
-      toggleButton.setAttribute("aria-pressed", String(willCollapse));
+        localStorage.setItem(storageKey, collapsed ? "1" : "0");
+        setCollapsed(collapsed);
     });
-  })();
 </script>
 
 <style>
@@ -56,14 +45,18 @@ import { Icon } from "@astrojs/starlight/components";
     border-radius: 0.25rem;
   }
 
-  .sidebar-toggle:hover {
-    color: var(--sl-color-white);
-    background: var(--sl-color-gray-6);
-  }
-
-  @media (max-width: 49.999em) {
-    .sidebar-toggle {
-      display: none;
+    .sidebar-toggle:hover {
+        background: var(--sl-color-gray-6);
+        color: var(--sl-color-white);
     }
-  }
+
+    :global(html:not([data-has-sidebar])) .sidebar-toggle {
+        display: none;
+    }
+
+    @media (max-width: 49.999em) {
+        .sidebar-toggle {
+            display: none;
+        }
+    }
 </style>

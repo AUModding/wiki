@@ -5,16 +5,6 @@ import Stars from '../Stars.astro';
 const { stars: showStars } = Astro.locals.starlightRoute.entry.data;
 ---
 
-<script is:inline>
-  (function () {
-    try {
-      if (localStorage.getItem('au-sidebar-collapsed') === '1') {
-        document.documentElement.dataset.sidebarCollapsed = 'true';
-      }
-    } catch {}
-  })();
-</script>
-
 {showStars && <Stars />}
 
 <DefaultPageFrame>
