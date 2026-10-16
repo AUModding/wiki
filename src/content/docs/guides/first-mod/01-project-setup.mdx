@@ -1,0 +1,62 @@
+---
+title: Setting up your project
+description: Outlines project setup and the various templates available.
+---
+
+Fortunately for us, there are [.NET templates for Among Us mods](https://github.com/AUModding/AUModding.Templates).
+Each template is designed for a different setup.
+
+After installing the .NET SDK, you can open your terminal and use the following command
+to install the templates:
+```bash
+dotnet new install AUModding.Templates
+```
+
+There are three templates, Minimal, Reactor, and MiraAPI. For this guide, we will use
+the Reactor template. It is usually recommended to build your mods with Reactor,
+as it provides many utilities to make mod development easier.
+
+### Minimal
+
+A minimal template which does not include any APIs outside of BepInEx.
+```bash
+dotnet new aumodding.minimal -n (name)
+```
+
+### Reactor
+
+A template which has Reactor preinstalled and some minimal things configured for you.
+```bash
+dotnet new aumodding.reactor -n (name)
+```
+Credits: [Daemon](https://github.com/DaemonBeast/Reactor.Template)
+
+### MiraAPI
+
+A template which has MiraAPI preinstalled and some minimal things configured for you.
+```bash
+dotnet new aumodding.reactor -n (name)
+```
+Credits: [All Of Us](https://github.com/All-Of-Us-Mods/MiraAPI/tree/master/MiraAPI.Example)
+
+## Building your project
+
+Most IDEs have a "Build" button, which will build your project. If you do not have one, or cannot find it,
+you can also build your project from the command line. Open your terminal, navigate to your project folder,
+and run the following command:
+```bash
+dotnet build
+```
+
+A successful build will create a DLL file that contains your mod. Usually the build output will
+tell you where it is:
+```
+Restore complete (0.9s)
+  MyFirstMod net6.0 succeeded (3.6s) → MyFirstMod/bin/Debug/net6.0/MyFirstMod.dll
+
+Build succeeded in 4.8s
+```
+
+You can place the DLL file in your BepInEx plugins folder to load it into the game.
+The templates will automatically place the DLL in the plugins folder for you,
+as long as you set the `AmongUs` environment variable to the path of your Among Us installation.

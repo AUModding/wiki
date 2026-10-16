@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightSidebarTopics from 'starlight-sidebar-topics';
 import starlightLlmsMarkdown from 'starlight-llms-markdown';
+import starlightAutoSidebar from 'starlight-auto-sidebar';
 
 // https://astro.build/config
 export default defineConfig({
@@ -60,6 +61,7 @@ export default defineConfig({
 				}],
 			plugins: [
 				starlightLlmsMarkdown(),
+				starlightAutoSidebar(),
 				starlightSidebarTopics([
 					{
 						label: 'Getting Started',
