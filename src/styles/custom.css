@@ -14,9 +14,9 @@
 }
 /* Light mode colors. */
 :root[data-theme='light'] {
-	--sl-color-accent-low: #bbe4b8;
-	--sl-color-accent: #005804;
-	--sl-color-accent-high: #003f02;
+	--sl-color-accent-low: #cfe3c4;
+	--sl-color-accent: #4a8a3f;
+	--sl-color-accent-high: #4a7c40;
 	--sl-color-white: #1b1717;
 	--sl-color-gray-1: #2d2424;
 	--sl-color-gray-2: #3f3635;
@@ -28,17 +28,46 @@
 	--sl-color-black: #ffffff;
 }
 
+@property --sidebar-width {
+	syntax: '<length>';
+	inherits: true;
+	initial-value: 0rem;
+}
+
 @media (min-width: 50em) {
-	html[data-sidebar-collapsed='true'][data-has-sidebar] {
+	html[data-has-sidebar] {
+		--sidebar-width: var(--sl-sidebar-width);
+		transition: --sidebar-width 0.25s ease;
+	}
+
+	html[data-sidebar-collapsed='true'] {
+		--sidebar-width: 0rem;
 		--sl-content-inline-start: 0rem;
-		--sl-content-margin-inline: auto;
 	}
 
-	html[data-sidebar-collapsed='true'][data-has-sidebar] .sl-container {
-		margin-inline: auto !important;
+	.sidebar-pane {
+		width: var(--sidebar-width);
+		overflow-x: hidden;
+		transition: opacity 0.2s ease;
 	}
 
-	html[data-sidebar-collapsed='true'] nav.sidebar {
-		display: none !important;
+	.main-frame {
+		padding-inline-start: var(--sidebar-width);
 	}
+
+	html[data-sidebar-collapsed='true'] .sidebar-pane {
+		opacity: 0;
+		visibility: hidden;
+		transition:
+			opacity 0.2s ease,
+			visibility 0s 0.25s;
+	}
+}
+
+.glass-pane {
+	backdrop-filter: blur(3px);
+}
+
+html[data-stars='off'] .space {
+	display: none;
 }

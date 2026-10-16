@@ -1,0 +1,17 @@
+---
+import Default from "@astrojs/starlight/components/ThemeSelect.astro";
+import StarsToggle from "../StarsToggle.astro";
+---
+
+<div class="sl-theme-controls">
+  <StarsToggle />
+  <Default />
+</div>
+
+<style>
+  .sl-theme-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--sl-nav-gap);
+  }
+</style>
