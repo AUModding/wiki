@@ -70,16 +70,10 @@ export default defineConfig({
 						items: ['welcome'],
 					},
 					{
-						label: 'Using Mods',
-						link: '/user-guides/',
+						label: 'Guides',
+						link: '/guides/',
 						icon: 'open-book',
-						items: [{ autogenerate: { directory: 'user-guides' } }],
-					},
-					{
-						label: 'Developing Mods',
-						link: '/developing-guides/',
-						icon: 'pencil',
-						items: [{ autogenerate: { directory: 'developing-guides' } }],
+						items: [{ autogenerate: { directory: 'guides' } }],
 					},
 					{
 						label: 'Resources',
