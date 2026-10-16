@@ -3,53 +3,56 @@ title: Tools and Requirements
 description: Specifies the required software and knowledge.
 ---
 
-Welcome to a step-by-step guide on making your first Among Us mod!
-
-Please follow the environment setup before this guide.
+Hi. I'm XtraCube, owner of All Of Us and developer of some really cool mods.
+Welcome to a step-by-step guide on making your first Among Us mod.
+Please follow the [environment setup](/developing-guides/environment/) before this guide.
 
 Before we start, you need to have the following:
 
-- Some kind of computer. Preferably not a mobile device.
+- A decent computer. At least 8GB RAM is recommended.
 - The [.NET SDK](https://dotnet.microsoft.com/en-us/download)
-- A functioning brain. (REQUIRED)
-- Some kind of programming background (optional???)
+- An IDE suitable for .NET. Examples include [VS Code](https://code.visualstudio.com/download),
+[JetBrains Rider](https://www.jetbrains.com/rider/),
+and [Visual Studio](https://visualstudio.microsoft.com/).
+- Some kind of programming background.
 
-It is HIGHLY recommended to already have programming experience,
-especially with an object-oriented language like C# or Java.
-It's okay to start with zero experience, but you will need
-DETERMINATION and PATIENCE, as starting from zero is much harder.
+This guide assumes you already have experience with object-oriented languages like C# or Java.
+
+If you are new to C#, you can learn at [freeCodeCamp](https://www.freecodecamp.org/) or [Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/csharp/).
 
 ## Installing the .NET SDK
 
-Hopefully you don't struggle with this part, otherwise you're going to have a bad time.
+Hopefully you don't struggle with this part, otherwise you're gonna have a bad time.
 
-Installing .NET should be easy, just go to the [download page](https://dotnet.microsoft.com/en-us/download)
+Installing .NET should be easy, just go to the official .NET [download page](https://dotnet.microsoft.com/en-us/download)
 and grab the latest version of the SDK for your platform. Even though Among Us mods are developed for .NET 6.0,
-modern SDK versions can still compile programs made for older versions.
+modern SDK versions can still compile programs made for older versions. Just use the latest available SDK.
 
 If you are trying to develop mods on a mobile device... please don't.
-If you really really want to... I'll let you figure it out. If you can
-do that, you are probably smart enough to start modding.
+Installing the .NET SDK and an IDE is much more difficult on mobile.
+If you can figure it out, go for it, but we aren't gonna talk about
+that here.
 
-## Important things to know
+## Installing an IDE
 
-So there is a lot of terminology and stuff you will be expected to know. Try your best to not forget.
+To actually write code, you will need an IDE. Most mod developers recommend Rider or VS Code.
+Beginners usually start with VS Code, but Rider comes with some features you won't find in VSC.
+Review the following options and make a choice:
 
-- IL: Stands for Intermediate Language. It is similar to assembly language, but for the .NET runtime
-instead of your computer. C# programs are compiled into IL, then .NET compiles that IL into assembly
-at runtime. This is called Just-In-Time, or JIT compilation.
+- No IDE (Text Editor): It's included with your platform, like Notepad on Windows, but you don't get
+anything to help you write code. No syntax highlighting, no autocomplete, nothing. Not recommended.
 
-- IL2CPP: The scripting backend used by Among Us. Unity games are typically programmed in C#, but IL2CPP
-converts the IL code into C++, which can be compiled Ahead-Of-Time, or AOT compilation. AOT compilation
-means the game typically runs faster. However it makes modding and reverse engineering a pain in the butt.
+- JetBrains Rider: A full .NET IDE with C# and Unity support, autocomplete, syntax highlighting,
+debugging, and more. It can be a bit resource-intensive, but a good option overall. You can download
+it [here](https://www.jetbrains.com/rider/)
 
-- BepInEx: The mod loader typically used for Among Us mods. We specifically use the "bleeding edge" builds,
-which are "experimental" versions that support stuff like IL2CPP. The specific version you use is VERY IMPORTANT!
+- Visual Studio Code: Lightweight and open-source. You can install extensions for C# and Unity to get
+the same feature-set as JetBrains Rider. A good choice for saving memory and disk space.
+Download it [here](https://code.visualstudio.com/download).
 
-- The Assembly-CSharp / Mono DLL: An essential tool in every modders toolkit!
-Thankfully, InnerSloth is merciful enough to provide modders with the `Assembly-CSharp.dll`
-file from the Mono build of Among Us. This is the code before the IL2CPP process. The Mono DLL makes it easy for
-modders to find out how the game works internally without using a disassembler like IDA or Ghidra.
+- Visual Studio: A full .NET IDE with the various features mentioned above. It basically does what
+Rider does, but can be heavier on your CPU and memory. More complex than VS Code as well.
+You can download it [here](https://visualstudio.microsoft.com/).
 
-- [dnSpy](https://github.com/dnSpyEx/dnSpy) / [ILSpy](https://github.com/icsharpcode/ILSpy): A decompiler for .NET programs.
-Use it to open the Mono DLL. You can also explore other mods and plugins in these programs. Very useful!
+Once you have installed an IDE, and any necessary plugins or extensions, we can move on
+to important terminology.
