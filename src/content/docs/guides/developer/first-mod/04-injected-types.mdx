@@ -35,4 +35,10 @@ A better approach is using the `ClassInjector` class and calling `ClassInjector.
 
 Order is important if you have multiple custom MonoBehaviours that depend on **one another**, so a specific order is needed.
 
-TODO: Finish writing docs about Il2CppReferenceField, Il2CppReferenceValue, and using stubs in Unity.
+## Accessing fields set within Unity's Inspector
+
+If you have a prefab in Unity with a custom MonoBehaviour, and try loading it into the game through an AssetBundle, you may notice that the values you set in editor are **lost**, to preserve them, you should use ```Il2CppReferenceField<T>``` In your MonoBehaviour (in the mod's codebase), ```T``` being the type of the object, for values like integers, floats ect, use ```Il2CppValueField<T>```.
+
+:::note
+the Class, namespace, and field names **must match** in both your Unity project and mod.
+:::
