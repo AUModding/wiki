@@ -26,6 +26,7 @@ export default defineConfig({
 				PageFrame: './src/components/override/PageFrame.astro',
 				ThemeSelect: './src/components/override/ThemeSelect.astro',
 				Head: './src/components/override/Head.astro',
+				PageTitle: './src/components/override/PageTitle.astro',
 			},
 
 			head: [
