@@ -6,10 +6,3 @@ import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 <VtbotStarlight transition:animate="fade">
     <StarlightHead><slot /></StarlightHead>
 </VtbotStarlight>
-
-<script>
-    if (document.documentElement.hasAttribute('data-is-home')) {
-        const panel = document.getElementsByClassName('content-panel')[0]
-        if (panel) panel.remove()
-    }
-</script>
