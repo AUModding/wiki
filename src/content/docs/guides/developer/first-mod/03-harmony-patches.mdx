@@ -107,8 +107,13 @@ internal static class ShipStatusBeginPatch
 ```
 :::
 
+## Troubleshooting
+
 Assuming you did everything correctly, your patch should run when you test the mod and flashlights should be enabled!
-If nothing happens, make sure `Harmony.PatchAll()` is called in your plugin's `Load()` method (see [Plugin Structure](../02-plugin-structure)).
+If your patch doesn't work, or another patch you have written doesn't run, try the following:
+
+- Make sure `Harmony.PatchAll()` is called in your plugin's `Load()` method (see [Plugin Structure](../02-plugin-structure)).
+- See [Troubleshooting](../04-troubleshooting) to learn about inlining or other issues that might be affecting your patches.
 
 If you would like to learn more about Harmony, see the [HarmonyX Wiki](https://github.com/BepInEx/HarmonyX/wiki)
 and the [Harmony Docs](https://harmony.pardeike.net/v2/articles/intro.html).
