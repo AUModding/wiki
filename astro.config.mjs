@@ -32,7 +32,6 @@ export default defineConfig({
 				SiteTitle: './src/components/override/SiteTitle.astro',
 				PageFrame: './src/components/override/PageFrame.astro',
 				ThemeSelect: './src/components/override/ThemeSelect.astro',
-				Head: './src/components/override/Head.astro',
 				PageTitle: './src/components/override/PageTitle.astro',
 			},
 
@@ -60,7 +59,12 @@ export default defineConfig({
 						name: 'twitter:card',
 						content: "summary"
 					}
-				}],
+        },
+        {
+          tag: 'style',
+          content: '@view-transition { navigation: auto; }'
+        }
+      ],
 			plugins: [
 				starlightLlmsMarkdown(),
 				starlightAutoSidebar(),

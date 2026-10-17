@@ -5,8 +5,6 @@ const layers = [
     { amount: 50, size: 3, speed: 200 },
 ];
 
-const showGlassPane = Astro.locals.starlightRoute.entry.data.template !== "splash";
-
 function makeStars(amount: number) {
     const stars = [];
 
@@ -38,7 +36,7 @@ function makeStars(amount: number) {
         );
     })}
 
-    {showGlassPane && <div class="glass-pane" />}
+    <div class="glass-pane" />
 </div>
 
 <style>
@@ -54,10 +52,18 @@ function makeStars(amount: number) {
         position: absolute;
         inset: 0;
         background:
-            linear-gradient(180deg, color-mix(in srgb, var(--sl-color-white) 5%, transparent), transparent 55%),
+            linear-gradient(
+                180deg,
+                color-mix(in srgb, var(--sl-color-white) 5%, transparent),
+                transparent 55%
+            ),
             color-mix(in srgb, var(--sl-color-gray-6) 45%, transparent);
         backdrop-filter: blur(3px);
         -webkit-backdrop-filter: blur(3px);
+    }
+
+    html:not([data-has-sidebar]) .glass-pane {
+        display: none;
     }
 
     .layer {
