@@ -1,6 +1,9 @@
+---
+const translate = Astro.locals.t;
+---
 <div class="innersloth-disclaimer">
     <sub style="text-align: center; justify-content: center; display: flex; font-size: 0.8rem; color: var(--color-text-muted);">
-        This wiki is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. 
-        <br />Portions of the materials contained herein are the property of Innersloth LLC.
+        {translate('inner.disclaimer.line1')}
+        <br />{translate('inner.disclaimer.line2')}
     </sub>
 </div>

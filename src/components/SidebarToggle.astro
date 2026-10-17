@@ -1,14 +1,16 @@
 ---
 import { Icon } from "@astrojs/starlight/components";
+
+const translate = Astro.locals.t;
 ---
 
 <button
     id="sidebar-toggle"
     type="button"
     class="sidebar-toggle"
-    aria-label="Toggle sidebar"
+    aria-label={translate('settings.toggleSidebar')}
     aria-pressed="false"
-    title="Toggle sidebar"
+    title={translate('settings.toggleSidebar')}
 >
     <span class="sidebar-toggle-icon"><Icon name="left-caret" /></span>
 </button>

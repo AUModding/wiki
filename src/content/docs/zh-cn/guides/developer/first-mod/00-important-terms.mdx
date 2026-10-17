@@ -1,0 +1,55 @@
+---
+title: 重要术语
+description: 说明需要记住的重要术语和信息。
+author: "XtraCube"
+translator: "HayashiUme"
+---
+
+需要了解的术语和信息很多，请尽量理解以下内容：
+
+## C# 编译
+
+- **.NET 运行时（.NET Runtime）**：运行你的 C# 代码的「程序」。当你运行一个 C# 程序时，
+  计算机并不是直接执行它，而是运行一个叫 .NET 运行时的程序，由它来实际运行你的 C# 代码。
+  在 Among Us 模组开发中，我们通过 .NET 运行时让模组在游戏之上运行。
+
+- **IL（中间语言，Intermediate Language）**：类似汇编语言，但面向的是 .NET 运行时而不是你计算机的 CPU。
+C# 程序会被编译成 IL，然后 .NET 在运行时再把 IL 编译成适合你机器的汇编代码。
+  这被称为即时编译（JIT）。
+
+- **即时编译（JIT，Just-In-Time）**：JIT 编译让开发跨平台应用更容易，
+  代价是应用启动更慢、内存占用更高。在 Among Us 模组的场景中，
+  .NET 运行时会读取模组中的 IL 代码，并在代码即将运行时把它转换成适合你计算机的汇编代码。
+
+- **提前编译（AOT，Ahead-Of-Time）**：AOT 编译把源代码直接转换成汇编代码，
+  不经过任何运行时的编译。AOT 的主要优点是启动更快、
+  内存和 CPU 占用更低。某些平台（如 iOS）也强制要求 AOT，
+  因为它们不允许运行 JIT 程序。在 Among Us 模组开发中，
+  Among Us 游戏本体本身就是用 IL2CPP 构建的，因此使用 AOT。
+
+## Unity 后端
+
+- **Unity**：Among Us 使用的游戏引擎。Unity 游戏通常用 C# 编写，
+  游戏本身可以编译为两种不同的脚本后端：Mono 和 IL2CPP。
+  Among Us 使用的是 IL2CPP。由于 IL2CPP 的工作方式，Among Us 存在一个 Mono 版本，
+  我们稍后会再讲到这一点。
+
+- **Mono**：.NET 运行时的早期开源实现。Mono 游戏很容易
+  逆向工程，因为 IL 代码很容易还原成 C# 代码。Mono 游戏也很容易制作模组：
+  你可以编写一个面向 Mono 运行时（通常是 netstandard）的标准 C# 程序，然后把它放进游戏文件里。
+
+- **IL2CPP**：由 Unity 开发，用于把 IL 代码转换成 C++，再编译为汇编代码。
+  它带来了许多好处，比如只有「提前编译」应用才能实现的各类优化和提速。
+  但 IL2CPP 让逆向工程难得多，因为汇编代码不像 IL → C# 那样容易还原成 C++。
+  它也让制作模组更困难，因为从 C# 程序给 IL2CPP 游戏写模组需要一层互操作层（Il2CppInterop）。
+
+## 模组工具
+
+- **Assembly-CSharp（Mono DLL）**：每个模组开发者工具箱里的必备工具！
+  所幸 InnerSloth 挺够意思，在运行 IL2CPP 流程之前，把 Among Us Mono 构建版的`Assembly-CSharp.dll` 文件提供给了模组开发者。
+  由于 Mono DLL 是 IL 代码，模组开发者无需使用 IDA 或 Ghidra 这类反汇编器，
+  就能轻松弄清游戏的内部运作方式。
+  我们稍后会讨论如何使用 Mono DLL。
+
+- **[dnSpy](https://github.com/dnSpyEx/dnSpy) / [ILSpy](https://github.com/icsharpcode/ILSpy)**：.NET 程序的反编译器。
+  可以用它打开 Mono DLL，阅读原始代码。你也可以用这些程序研究其他模组和插件。非常有用！

@@ -1,0 +1,87 @@
+---
+title: 使用 Harmony 补丁
+description: 简要介绍 Harmony，并编写你的第一个补丁
+author: "PalmForest"
+translator: "HayashiUme"
+---
+
+每个模组都离不开一个关键能力：修补游戏的代码。
+当你想要修改现有功能，或钩住某个方法以运行自己的代码时，这就非常有用。
+这通过 Harmony 实现（更准确地说是它的一个分支 [HarmonyX](https://github.com/BepInEx/HarmonyX)，
+通常以 `0Harmony.dll` 的形式被引用）。
+
+## 找到目标方法
+
+写补丁之前，你必须先找到想要修补的类和方法。
+最简单的做法是用 [dnSpy](https://github.com/dnSpyEx/dnSpy) 之类的程序查看 Innersloth 提供的 `Assembly-CSharp.dll`。
+你可以从 [Reactor Discord 服务器](https://reactor.gg/discord)下载 Mono 程序集。
+
+不过，在下面的示例中，我们要修补 `PlayerControl.IsFlashlightEnabled`，让手电筒在「捉迷藏」模式之外也能启用。
+对游戏代码更深入的分析会在以后的指南中介绍，等你对 Harmony 足够熟悉之后再去阅读。
+
+## 修补方法
+
+给方法附加补丁最简单的方式，是使用 `[HarmonyPatch]` 特性的各种重载。
+先来看一个基础 Harmony 补丁的第一部分：
+
+
+```csharp
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.IsFlashlightEnabled))]
+internal static class IsFlashlightEnabledPatch
+{
+     
+}
+```
+
+你会注意到，上面创建了一个静态类来容纳这个补丁，并给它起了个描述性的名字。
+它被标注了 `[HarmonyPatch(Type declaringType, string methodName)]` 特性，从而暴露给 Harmony 并指定目标方法。更具体地说，这个特性接受：
+
+:::tip
+建议在提供方法名时使用 `nameof()`，以避免拼写错误之类的常见失误。
+:::
+
+声明好静态补丁类之后，你可以在其中编写会在目标方法**之前**或**之后**运行的代码。
+这分别通过 `Prefix` 和 `Postfix` 方法实现。虽然前缀和后缀都能修改方法的输出，
+但前缀的关键优势在于它可以**取消原方法的执行**。下面的前缀就利用这一点：在「捉迷藏」模式下让原方法正常运行，否则修改结果并跳过原方法。
+
+
+```csharp
+[HarmonyPrefix]
+private static bool Prefix(ref bool __result)
+{
+    if (GameOptionsManager.Instance.currentGameMode == GameModes.HideNSeek)
+        return true;
+
+    __result = true;
+    return false;
+}
+```
+
+关于上面的前缀，你需要注意以下几点：
+- 补丁方法必须命名为 *"Prefix"* 或 *"Postfix"*，或者用 `[HarmonyPrefix]` 特性标注。
+上面两者都用了，仅作演示。
+- `bool` 返回类型让前缀可以控制原方法是否运行。
+返回 `true` 表示在你的代码之后正常执行原方法，返回 `false` 则完全跳过它。
+- 在这里，原方法的返回类型是 `bool`，因此可以用 ref 参数 `ref bool __result` 修改方法的输出。
+
+:::tip
+补丁方法中最有用的参数之一是 `__instance`，它让你可以访问被修补方法所在的那个实例。
+例如：
+
+```csharp
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Begin))]
+internal static class ShipStatusBeginPatch
+{
+    private static void Postfix(ShipStatus __instance)
+    {
+        ...
+    }
+}
+```
+:::
+
+如果一切正确，测试模组时补丁就会生效，
+手电筒应该就能用了！
+
+如果你想进一步了解 Harmony 补丁，可以阅读
+[Harmony 文档](https://harmony.pardeike.net/v2/articles/intro.html)获取更多信息。

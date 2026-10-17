@@ -10,7 +10,14 @@ export default defineConfig({
 	site: "https://aumodding.dev",
 	integrations: [
 		starlight({
-			title: 'Among Us Modding Wiki',
+			title: { 
+				en: 'Among Us Modding Wiki',
+				'zh-CN': 'AmongUs 模组维基' },
+			defaultLocale: 'root',
+			locales: {
+				root: { label: 'English', lang: 'en' },
+				'zh-cn': { label: '简体中文', lang: 'zh-CN' },
+			},
 			logo: { src: './public/logo.png', alt: 'AU Modding Logo', replacesTitle: true },
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/AUModding/wiki' },
@@ -30,14 +37,6 @@ export default defineConfig({
 			},
 
 			head: [
-				
-				{
-					tag: 'meta',
-					attrs: {
-						name: "og:site_name",
-						content: "Among Us Modding Wiki"
-					}
-				},
 				// <meta name="og:image" content="https://aumodding.dev/AUModders.logo.png" />
 				{
 					tag: 'meta',
@@ -67,19 +66,19 @@ export default defineConfig({
 				starlightAutoSidebar(),
 				starlightSidebarTopics([
 					{
-						label: 'Getting Started',
+						label: { en: 'Getting Started', 'zh-CN': '快速开始' },
 						link: '/welcome',
 						icon: 'information',
 						items: ['welcome'],
 					},
 					{
-						label: 'Guides',
+						label: { en: 'Guides', 'zh-CN': '指南' },
 						link: '/guides/',
 						icon: 'open-book',
 						items: [{ autogenerate: { directory: 'guides' } }],
 					},
 					{
-						label: 'Resources',
+						label: { en: 'Resources', 'zh-CN': '资源' },
 						link: '/resources/',
 						icon: 'document',
 						items: [{ autogenerate: { directory: 'resources' } }],
