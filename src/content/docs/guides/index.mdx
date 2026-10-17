@@ -1,12 +1,23 @@
 ---
-title: Directory
-description: A guide in my new Starlight docs site.
+title: Guides
+description: Guides for using and making Among Us mods.
+sidebar:
+  order: 0
 ---
 import {LinkCard} from '@astrojs/starlight/components'
 
+Pick the one that matches what you want to do.
+
 <LinkCard
-  title="Setting up your environment"
-  description="Learn how to set up your environment for modding Among Us."
-  href="/guides/first-mod"
-  icon="right-arrow"
+  title="Using Mods"
+  description="Install mods and get them running."
+  href="/guides/user/"
+  icon="open-book"
+/>
+
+<LinkCard
+  title="Developing Mods"
+  description="Set up a project and write your own mod."
+  href="/guides/developer/"
+  icon="pencil"
 />

@@ -1,10 +1,63 @@
 ---
 title: Getting Started
-description: A reference page in my new Starlight docs site.
+description: Learn how to use, make, and find Among Us mods.
+editUrl: false
+lastUpdated: false
+stars: true
 ---
 
-Welcome to the Among Us Modding Wiki! 
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+import InnerslothDisclaimer from '../../components/InnerslothDisclaimer.astro';
 
-This wiki is a work in progress, but you can get started by checking out the guides below. 
+Welcome to the Among Us Modding Wiki! The wiki is still a work in progress, so pick a section below and start there.
 
-If you want to contribute, consider reaching out on Discord.
+## Choose your path
+
+<CardGrid>
+  <LinkCard
+    title="Using Mods"
+    description="Install mods and get them loading."
+    href="/guides/user/"
+    icon="open-book"
+  />
+  <LinkCard
+    title="Developing Mods"
+    description="Set up a project and write your own mod."
+    href="/guides/developer/"
+    icon="pencil"
+  />
+  <LinkCard
+    title="Resources"
+    description="Tools, assets, and more."
+    href="/resources/"
+    icon="document"
+  />
+</CardGrid>
+
+## First steps
+
+<Steps>
+1. Set up your environment. Players need BepInEx and developers need the .NET SDK on top of that.
+   <LinkCard
+     title="Environment setup for players"
+     description="How to set up BepInEx so you can load mods."
+     href="/guides/user/environment"
+     icon="setting"
+   />
+   <LinkCard
+     title="Environment setup for developers"
+     description="The extra tools you need to write mods."
+     href="/guides/developer/environment"
+     icon="setting"
+   />
+2. Pick a path. The "Using Mods" path is for a normal user wanting to play mods while the "Developing Mods" path is for developers willing to create their own mods.
+3. Having issues? You can ask for help in the All Of Us Discord server
+   <LinkCard
+     title="Ask on Discord"
+     description="Join the All Of Us server."
+     href="https://discord.gg/JcHncQVWa2"
+     icon="discord"
+   />
+</Steps>
+
+<InnerslothDisclaimer />

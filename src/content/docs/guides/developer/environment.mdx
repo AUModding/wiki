@@ -1,6 +1,8 @@
 ---
 title: Setting up your environment
 description: The prerequisites for modding Among Us. Learn how to set up your environment for modding Among Us.
+sidebar:
+  order: 1
 ---
 <sup>Learn how to set up your environment for modding Among Us.</sup>
 
@@ -8,7 +10,7 @@ description: The prerequisites for modding Among Us. Learn how to set up your en
 This page covers setting up BepInEx for users to run mods. For making mods, see Setting up your developer environment for modding Among Us.
 :::
 
-Among Us is a **Unity Il2cpp Game**. As so, BepInEx is used as a mod loader for the game.
+Among Us is a **Unity IL2CPP Game**. As so, BepInEx is used as a mod loader for the game.
 
 :::tip
 Mod managers like [Starlight PC](https://github.com/All-Of-Us-Mods/Starlight-PC) and [Bean Manager](https://github.com/rewalo/BeanModManager) handle setting up BepInEx automatically.
@@ -30,13 +32,10 @@ Mod managers like [Starlight PC](https://github.com/All-Of-Us-Mods/Starlight-PC)
 * Find your game install directory, and copy its contents to a new folder, this will be used to distinguish between your modded and un-modded game installations.
 
 ### Step 3: Extracting BepInEx
-* Unzip the BepInEx zip file into your new folder. 
+* Unzip the BepInEx zip file into your new folder.
 
 ### Step 4: First Launch
 * Launch the game by opening the executable (Among Us.exe), it may take some time on first launch as it downloads the required files.
 
 ### Step 5: Verify Plugin Folder
 * After the first launch, a new directory will be created at `BepInEx\plugins`. This is where your mods will need to be placed.
-
-### Step 6: Install Mods!
-* Download mods online, most commonly distributed via GitHub. Mods are shared as `DLL` files, so make sure to put your DLLs inside the `BepInEx\plugins` folder. 
