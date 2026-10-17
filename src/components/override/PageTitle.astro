@@ -1,10 +1,14 @@
 ---
 import Default from "@astrojs/starlight/components/PageTitle.astro";
+const translate = Astro.locals.t;
 const description = Astro.locals.starlightRoute.entry.data.description;
 const author = Astro.locals.starlightRoute.entry.data.author;
+const translator = Astro.locals.starlightRoute.entry.data.translator;
 ---
 
 <Default {...Astro.props} />
 {description && <sup class="sl-description">{description}</sup>}
-{description && author && <br />}
-{author && <sup class="sl-author">Written by: <b>{author}</b></sup>}
+{description && (author || translator) && <br />}
+{author && <sup class="sl-author">{translate('tag.writtenBy')} <b>{author}</b></sup>}
+{author && translator && <br />}
+{translator && <sup class="sl-author">{translate('tag.translatedBy')} <b>{translator}</b></sup>}

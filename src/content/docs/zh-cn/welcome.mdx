@@ -1,0 +1,65 @@
+---
+title: 快速开始
+description: 学习如何使用、制作和寻找 Among Us 模组。
+author: "Neon, ThetaHalo"
+translator: "HayashiUme"
+editUrl: false
+lastUpdated: false
+stars: true
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+import InnerslothDisclaimer from '../../../components/InnerslothDisclaimer.astro';
+
+欢迎来到 Among Us 模组维基！本 Wiki 仍在建设中，先从下面选一个方向开始吧。
+
+## 你的方向的是？
+
+<CardGrid>
+  <LinkCard
+    title="使用模组"
+    description="安装模组并让它们正常运行。"
+    href="/zh-cn/guides/user/"
+    icon="open-book"
+  />
+  <LinkCard
+    title="开发模组"
+    description="搭建项目并编写你自己的模组。"
+    href="/zh-cn/guides/developer/"
+    icon="pencil"
+  />
+  <LinkCard
+    title="资源"
+    description="工具、素材以及更多内容。"
+    href="/zh-cn/resources/"
+    icon="document"
+  />
+</CardGrid>
+
+## 第一步
+
+<Steps>
+1. 配置好你的环境。玩家需要 BepInEx 框架，开发者还需要在此基础上安装 .NET 开发套件。
+   <LinkCard
+     title="玩家环境配置"
+     description="如何安装 BepInEx 来加载模组。"
+     href="/zh-cn/guides/user/environment"
+     icon="setting"
+   />
+   <LinkCard
+     title="开发者环境配置"
+     description="编写模组所需的额外工具。"
+     href="/zh-cn/guides/developer/environment"
+     icon="setting"
+   />
+2. 选择一条指南。「使用模组」面向想体验模组的普通玩家，「开发模组」面向想自己制作模组的开发者。
+3. 遇到问题？你可以在 All Of Us Discord 服务器里求助
+   <LinkCard
+     title="在 Discord 上提问"
+     description="加入 All Of Us 服务器。"
+     href="https://discord.gg/JcHncQVWa2"
+     icon="discord"
+   />
+</Steps>
+
+<InnerslothDisclaimer />
