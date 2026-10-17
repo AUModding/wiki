@@ -5,6 +5,8 @@ const layers = [
     { amount: 50, size: 3, speed: 240 },
 ];
 
+const showGlassPane = Astro.locals.starlightRoute.entry.data.template !== "splash";
+
 function makeStars(amount: number) {
     const stars = [];
 
@@ -18,32 +20,47 @@ function makeStars(amount: number) {
 }
 ---
 
-<div class="stars" aria-hidden="true">
-    {layers.map(({ amount, size, speed }) => {
-        const stars = makeStars(amount);
-        const mobileStars = stars.slice(0, Math.round(stars.length * 0.35));
+<div class="space" aria-hidden="true">
+    <div class="stars">
+        {layers.map(({ amount, size, speed }) => {
+            const stars = makeStars(amount);
+            const mobileStars = stars.slice(0, Math.round(stars.length * 0.35));
 
-        return (
-            <div
-                class="layer"
-                style={`
-                    --size: ${size}px;
-                    --duration: ${speed}s;
-                    --stars: ${stars.join(", ")};
-                    --stars-mobile: ${mobileStars.join(", ")};
-                `}
-            />
-        );
-    })}
+            return (
+                <div
+                    class="layer"
+                    style={`
+                        --size: ${size}px;
+                        --duration: ${speed}s;
+                        --stars: ${stars.join(", ")};
+                        --stars-mobile: ${mobileStars.join(", ")};
+                    `}
+                />
+            );
+        })}
+    </div>
+
+    {showGlassPane && <div class="glass-pane" />}
 </div>
 
 <style>
-    .stars {
+    .space {
         position: fixed;
         inset: 0;
         z-index: -10;
         pointer-events: none;
         overflow: hidden;
+    }
+
+    .stars {
+        position: absolute;
+        inset: 0;
+    }
+
+    .glass-pane {
+        position: absolute;
+        inset: 0;
+        background: color-mix(in srgb, var(--sl-color-black) 45%, transparent);
     }
 
     .layer {
