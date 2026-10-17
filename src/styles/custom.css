@@ -71,3 +71,7 @@
 html[data-stars='off'] .space {
 	display: none;
 }
+
+.sl-link-button.icon-left {
+	flex-direction: row-reverse;
+}
