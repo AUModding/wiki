@@ -1,7 +1,7 @@
 ---
 title: Setting up your environment
 description: Learn how to set up your environment for playing Among Us mods.
-author: "WanderingPix, Neon"
+author: "WanderingPix, Neon, Astral"
 ---
 
 :::note
@@ -11,32 +11,43 @@ This page covers setting up BepInEx for users to run mods. For making mods, see 
 Among Us is a **Unity IL2CPP Game**. As so, BepInEx is used as a mod loader for the game.
 
 :::tip
-Mod managers like [Starlight PC](https://github.com/All-Of-Us-Mods/Starlight-PC) and [Bean Manager](https://github.com/rewalo/BeanModManager) handle setting up BepInEx automatically.
+Mod managers like [Starlight PC](https://github.com/All-Of-Us-Mods/Starlight-PC) and [Bean Mod Manager](https://github.com/rewalo/BeanModManager) handle setting up BepInEx automatically.
 :::
 
 # Manual Installation Steps
 
 ### Step 1: Download BepInEx
-* Download the correct BepInEx zip archive matching your game platform:
+
+Download the correct BepInEx zip archive matching your game platform:
 
 | Game Platform | Download Link |
 | :--- | :--- |
-| **Steam** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752+dd0655f.zip`](https://builds.bepinex.dev/projects/bepinex_be/752/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752%2Bdd0655f.zip) |
-| **Microsoft Store** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752+dd0655f.zip`](https://builds.bepinex.dev/projects/bepinex_be/752/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752%2Bdd0655f.zip) |
-| **Epic Games** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752+dd0655f.zip`](https://builds.bepinex.dev/projects/bepinex_be/752/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752%2Bdd0655f.zip) |
-| **Itch.io** | [`BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.752+dd0655f.zip`](https://builds.bepinex.dev/projects/bepinex_be/752/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.752%2Bdd0655f.zip) |
+| **Steam** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789+6cea286.zip`](https://builds.bepinex.dev/projects/bepinex_be/789/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789%2B6cea286.zip) |
+| **Microsoft Store** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789+6cea286.zip`](https://builds.bepinex.dev/projects/bepinex_be/789/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789%2B6cea286.zip) |
+| **Epic Games** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789+6cea286.zip`](https://builds.bepinex.dev/projects/bepinex_be/789/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789%2B6cea286.zip) |
+| **Itch.io** | [`BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.789+6cea286.zip`](https://builds.bepinex.dev/projects/bepinex_be/789/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.789%2B6cea286.zip) |
 
-### Step 2: Prepare Modded Game Folder
-* Find your game install directory, and copy its contents to a new folder, this will be used to distinguish between your modded and un-modded game installations.
+:::note
+The exact BepInEx version usually doesn't matter (any version newer than 6.0.0-be.735 should work fine), it's just the architecture (x86 vs x64) that's important.
+:::
 
-### Step 3: Extracting BepInEx
-* Unzip the BepInEx zip file into your new folder. 
+### Step 2: Extracting BepInEx
 
-### Step 4: First Launch
-* Launch the game by opening the executable (Among Us.exe), it may take some time on first launch as it downloads the required files.
+Unzip the BepInEx zip file into your game install directory. You can find it like this:
 
-### Step 5: Verify Plugin Folder
-* After the first launch, a new directory will be created at `BepInEx\plugins`. This is where your mods will need to be placed.
+- **Steam:** Right-click Among Us in your library → <kbd>Manage</kbd> → <kbd>Browse local files</kbd>
+- **Epic Games:** Right-click Among Us in your library → <kbd>Manage</kbd> → click the small folder icon next to <kbd>Installation</kbd>
+- **Itch.io:** Open the Itch.io app → Right-click Among Us in your library → <kbd>Manage</kbd> → <kbd>Open folder in Explorer</kbd>.
+- **Xbox App / Microsoft Store:** Open the Xbox app → Right-click Among Us in your library → <kbd>Manage</kbd> → <kbd>Files</kbd> → <kbd>Browse...</kbd>
 
-### Step 6: Install Mods!
-* Download mods online, most commonly distributed via GitHub. Mods are shared as `DLL` files, so make sure to put your DLLs inside the `BepInEx\plugins` folder. 
+### Step 3: First Launch
+
+Launch the game from your library (do not not double-click Among Us.exe!). It may take some time on first launch as it downloads the required files.
+
+### Step 4: Verify Plugin Folder
+
+After the first launch, a new directory will be created at `BepInEx\plugins`. This is where your mods will need to be placed.
+
+### Step 5: Install Mods!
+
+Download mods online, most commonly distributed via GitHub. Mods are shared as `DLL` files, so make sure to put your DLLs inside the `BepInEx\plugins` folder.
