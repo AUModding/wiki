@@ -1,0 +1,27 @@
+---
+title: Troubleshooting
+description: Lists some common issues you might encounter and how to troubleshoot them.
+author: "PalmForest"
+---
+
+When setting up your first mod or getting started with modding in general, you might run into various problems that you don't understand.
+Here we will cover as many of these common issues as possible, so that hopefully you will be able to resolve them quickly and continue modding!
+
+# Harmony
+
+### Inlined Methods
+
+This can often be the issue if your patch doesn't run when attached to a specific method.
+Unity's IL2CPP backend converts the game's C# code into C++, after which it undergoes AOT compilation into native code.
+During that compilation, the compiler can **inline** methods, which means that any call to that method gets expanded to the method's body.
+Hence, Harmony cannot hook that method due to there not being a method call to hook!
+
+Here's what you can do about inlining:
+
+- Patch the caller of your target method instead. Patching a caller of the inlined method will often work,
+since it's usually larger and less likely to be inlined itself.
+- Patch an entirely different method. If a method (or even a group of methods) is inlined, it often helps to look
+elsewhere when patching, as other methods might not be.
+- Check the [Mono Method Analyser](https://allofus.dev/il2cpp/) for inlined methods.
+This tool will allow you to browse the game's methods and see if they are safe to patch.
+For a guide on using the analyser, see [Using the Method Analyser](../../../../resources/method-analyser)
