@@ -1,7 +1,7 @@
 ---
 title: Using Harmony Patches
 description: Provides a brief introduction to Harmony and writing your first patch
-author: "PalmForest"
+author: "PalmForest, Neon"
 ---
 
 One key function that each mod requires is being able to patch the game's code.
@@ -19,32 +19,54 @@ Deeper analysis of the game's code will be covered in a future advanced guide, w
 
 ## Patching methods
 
-The simplest way to attach a patch to a method is with the various available overloads of the `[HarmonyPatch]` attribute.
+One of the simplest ways to target a method for patching is with the various available overloads of the `[HarmonyPatch]` attribute.
 Let's take a look at the first part of a basic Harmony patch:
-
 
 ```csharp
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.IsFlashlightEnabled))]
+internal static class IsFlashlightEnabledPatch
+{
+    // ... (your patch logic here)
+}
+```
+
+You will notice above that a static class is created to house the patch and given a descriptive name.
+It is annotated with a `[HarmonyPatch]` attribute, allowing HarmonyX to identify the patch target when it discovers the class.
+
+The `[HarmonyPatch]` attribute has multiple overloads; but for normal patching, you would only 1 of them.
+You will also notice that the attribute is called with 2 parameters only: the result of `typeof(PlayerControl)` and `nameof(PlayerControl.IsFlashlightEnabled)`. Before knowing how to use the attribute, let's find out what these methods do.
+
+`typeof` is an operator which gives you a `Type` (also known as `System.Type`) object representing a type, such as `MonoBehaviour`. The compiler checks whether the type exists in your referenced game libraries. The resulting `Type` object is then used at runtime.
+
+`nameof` is an operator that gets **the name** of variables, types, members and namespaces. This returns a `string`, unlike `typeof` which returns a `Type`. For example, `nameof(PlayerControl.IsFlashlightEnabled)` returns `"IsFlashlightEnabled"` without the class name.
+
+Using `typeof` and `nameof` helps prevent typos and makes your code easier to maintain. Furthermore, if you update your game library references and the target method has been renamed or removed, your code will fail to compile. This makes the problem easier to solve before running the mod.
+
+Now for the attribute itself. `[HarmonyPatch]` is an attribute we use to tell HarmonyX (the framework underneath BepInEx, our mod loader, used to patch the game) to patch a specific thing (in our case, we are telling HarmonyX to patch `PlayerControl.IsFlashlightEnabled`). This overload of `[HarmonyPatch]` takes 2 parameters: a `Type` and a `string` (keep in mind that order is important here). Other overloads let you provide additional information, such as if the method is overloaded with multiple parameter types to identify the correct target.
+
+The first parameter of the type `Type` is needed by HarmonyX to find the type of the targeted method's class, while the second parameter of the type `string` is to find the targeted method to patch within the class.
+
+:::danger[Important Note!]
+The `[HarmonyPatch]` attribute itself doesn't patch the method. You still need to include a prefix or postfix method or use the `[HarmonyPrefix]`/`[HarmonyPostfix]` attributes and call `Harmony.PatchAll()` in your mod's `Load()` method to get applied.
+:::
+
+After compilation, the mod DLL should look something like this under a decompiler:
+```csharp
+[HarmonyPatch(typeof(PlayerControl), "IsFlashlightEnabled")]
 internal static class IsFlashlightEnabledPatch
 {
     
 }
 ```
 
-You will notice above that a static class is created to house the patch and given a descriptive name.
-It is annotated with a `[HarmonyPatch]` attribute, exposing it to Harmony and specifying the target method.
-
-:::note
-It is recommended to use `nameof()` when providing the method name to avoid common mistakes such as typos.
-Furthermore, when the game updates and you go to build your mod, your target method being renamed or removed
-will cause a compile-time error instead of a runtime error, making the problem more obvious.
+:::tip
+Comments are not compiled/included into the DLL, so you wouldn't see them in a decompiler such as ILSpy.
 :::
 
 Once you have declared your static patch class, within it you can write code that will run **before** or **after** the target method.
 This is done with a `Prefix` and `Postfix` method respectively. While both prefixes and postfixes can modify the output of a method,
 the key advantage of a prefix is its ability to **cancel the original method**. The following prefix utilises this by allowing the
 original method to run in Hide and Seek mode, otherwise changing the result and skipping it.
-
 
 ```csharp
 [HarmonyPrefix] // Optional here, since the method is already named Prefix
