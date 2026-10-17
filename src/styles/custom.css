@@ -50,6 +50,10 @@
 		transition: width 0.25s ease, padding-inline-start 0.25s ease, opacity 0.2s ease;
 	}
 
+	.header {
+		transition: grid-template-columns 0.25s ease;
+	}
+
 	.main-frame {
 		padding-inline-start: var(--sidebar-width);
 		transition: padding-inline-start 0.25s ease;
@@ -70,4 +74,8 @@
 
 html[data-stars='off'] .space {
 	display: none;
+}
+
+.sl-link-button.icon-left {
+	flex-direction: row-reverse;
 }
