@@ -71,3 +71,7 @@
 html[data-stars='off'] .space {
 	display: none;
 }
+
+@view-transition {
+	navigation: auto;
+}
