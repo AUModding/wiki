@@ -35,10 +35,23 @@ The exact BepInEx version usually doesn't matter (any version newer than 6.0.0-b
 
 Unzip the BepInEx zip file into your game install directory. You can find it like this:
 
-- **Steam:** Right-click Among Us in your library → <kbd>Manage</kbd> → <kbd>Browse local files</kbd>
-- **Epic Games:** Right-click Among Us in your library → <kbd>Manage</kbd> → click the small folder icon next to <kbd>Installation</kbd>
-- **Itch.io:** Open the Itch.io app → Right-click Among Us in your library → <kbd>Manage</kbd> → <kbd>Open folder in Explorer</kbd>.
-- **Xbox App / Microsoft Store:** Open the Xbox app → Right-click Among Us in your library → <kbd>Manage</kbd> → <kbd>Files</kbd> → <kbd>Browse...</kbd>
+- **Steam:** Right-click Among Us in your library → `Manage` → `Browse local files`
+- **Epic Games:** Right-click Among Us in your library → `Manage` → click the small folder icon next to `Installation`
+- **Itch.io:** Open the Itch.io app → Right-click Among Us in your library → `Manage` → `Open folder in Explorer`
+- **Xbox App / Microsoft Store:** Open the Xbox app → Right-click Among Us in your library → `Manage` → `Files` → `Browse...`
+
+### Step 2.1: DLL override (Linux only)
+
+This step is only relevant if you're using a GNU/Linux-based operating system.
+
+You should already be running your game under a compatibility layer like Wine, Proton, Proton-GE, or similar. If you're using Proton 11 or newer, you can skip ahead to step 3.
+
+To ensure BepInEx gets loaded, you need to set up a DLL override:
+
+- **Steam:** Right-click Among Us in your library → `Properties` → `General` → `Launch Options`. In the input field, paste `WINEDLLOVERRIDES="winhttp.dll=n,b" %command%`.
+- **Heroic Games Launcher:** Right-click Among Us in your library → `Settings` → `Advanced` → `Environment Variables`. Under `Add New Variable`, paste `WINEDLLOVERRIDES` in the `NAME` box and `winhttp=n,b` in the `VALUE` box.
+- **Lutris:**
+- **Manually using protontricks:** Run `protontricks --gui` in a terminal → select Among Us → `Select the default wineprefix` → `Run winecfg`. In the `Libraries` tab, select `winhttp` in the `New override for library` dropdown → click `Add` → `Apply`.
 
 ### Step 3: First Launch
 
