@@ -38,6 +38,13 @@ These are mods that are **required** for everyone to play.
 These are mods that are **only required on the host's client**, meaning unmodded clients can join and play without installing the mod.
 These are generally much more limited than all clients mods.
 
-### Client Side Mods;
+### Client Side Mods:
 
 These are mods which make changes on **your local client**, you can freely use these without others needing to install them.
+
+:::note
+If you are using Reactor, you can register your mods using the`[ReactorModFlags]` attribute in your plugin class.
+- All Clients: use `ModFlags.RequireOnAllClients`.
+- Host Only: use `ModFlags.DisableServerAuthority`.
+- Client Side; use `ModFlags.None`.
+:::
