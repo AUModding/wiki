@@ -1,8 +1,8 @@
 ---
 const layers = [
-    { amount: 350, size: 1, speed: 110 },
-    { amount: 100, size: 2, speed: 180 },
-    { amount: 50, size: 3, speed: 240 },
+    { amount: 350, size: 1, speed: 90 },
+    { amount: 100, size: 2, speed: 150 },
+    { amount: 50, size: 3, speed: 200 },
 ];
 
 const showGlassPane = Astro.locals.starlightRoute.entry.data.template !== "splash";
@@ -21,24 +21,22 @@ function makeStars(amount: number) {
 ---
 
 <div class="space" aria-hidden="true">
-    <div class="stars">
-        {layers.map(({ amount, size, speed }) => {
-            const stars = makeStars(amount);
-            const mobileStars = stars.slice(0, Math.round(stars.length * 0.35));
+    {layers.map(({ amount, size, speed }) => {
+        const stars = makeStars(amount);
+        const mobileStars = stars.slice(0, Math.round(stars.length * 0.35));
 
-            return (
-                <div
-                    class="layer"
-                    style={`
-                        --size: ${size}px;
-                        --duration: ${speed}s;
-                        --stars: ${stars.join(", ")};
-                        --stars-mobile: ${mobileStars.join(", ")};
-                    `}
-                />
-            );
-        })}
-    </div>
+        return (
+            <div
+                class="layer"
+                style={`
+                    --size: ${size}px;
+                    --duration: ${speed}s;
+                    --stars: ${stars.join(", ")};
+                    --stars-mobile: ${mobileStars.join(", ")};
+                `}
+            />
+        );
+    })}
 
     {showGlassPane && <div class="glass-pane" />}
 </div>
@@ -52,20 +50,20 @@ function makeStars(amount: number) {
         overflow: hidden;
     }
 
-    .stars {
-        position: absolute;
-        inset: 0;
-    }
-
     .glass-pane {
         position: absolute;
         inset: 0;
-        background: color-mix(in srgb, var(--sl-color-black) 45%, transparent);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--sl-color-white) 5%, transparent), transparent 55%),
+            color-mix(in srgb, var(--sl-color-gray-6) 45%, transparent);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
     }
 
     .layer {
         width: var(--size);
         height: var(--size);
+        border-radius: 50%;
         box-shadow: var(--stars);
         animation: drift var(--duration) linear infinite;
     }
@@ -76,6 +74,7 @@ function makeStars(amount: number) {
         top: 100vh;
         width: inherit;
         height: inherit;
+        border-radius: inherit;
         box-shadow: inherit;
     }
 

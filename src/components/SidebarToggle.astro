@@ -3,14 +3,14 @@ import { Icon } from "@astrojs/starlight/components";
 ---
 
 <button
-  id="sidebar-toggle"
-  type="button"
-  class="sidebar-toggle"
-  aria-label="Toggle sidebar"
-  aria-pressed="false"
-  title="Toggle sidebar"
+    id="sidebar-toggle"
+    type="button"
+    class="sidebar-toggle"
+    aria-label="Toggle sidebar"
+    aria-pressed="false"
+    title="Toggle sidebar"
 >
-  <Icon name="bars" />
+    <span class="sidebar-toggle-icon"><Icon name="right-caret" /></span>
 </button>
 
 <script is:inline>
@@ -33,21 +33,49 @@ import { Icon } from "@astrojs/starlight/components";
 </script>
 
 <style>
-  .sidebar-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: transparent;
-    color: var(--sl-color-gray-2);
-    cursor: pointer;
-    padding: 0.25rem;
-    border-radius: 0.25rem;
-  }
+    .sidebar-toggle {
+        position: fixed;
+        top: 50%;
+        left: var(--sidebar-width);
+        translate: 0 -50%;
+        display: grid;
+        width: 1rem;
+        height: 2rem;
+        padding: 0;
+        border-radius: 0 999px 999px 0;
+        background: var(--sl-color-bg-sidebar);
+        color: var(--sl-color-gray-2);
+        cursor: pointer;
+        font-size: 0.75rem;
+        border: 2px solid var(--sl-color-gray-4);
+        transition:
+            left 0.25s ease,
+            width 0.25s ease,
+            height 0.25s ease,
+            border-radius 0.25s ease,
+            font-size 0.25s ease;
+    }
 
     .sidebar-toggle:hover {
         background: var(--sl-color-gray-6);
         color: var(--sl-color-white);
+    }
+
+    .sidebar-toggle-icon {
+        display: grid;
+        place-items: center;
+        transition: rotate 0.25s ease;
+    }
+
+    html[data-sidebar-collapsed='true'] .sidebar-toggle {
+        left: calc(var(--sidebar-width) + 1rem);
+        width: 2rem;
+        border-radius: 999px;
+        font-size: 1rem;
+    }
+
+    html[data-sidebar-collapsed='true'] .sidebar-toggle-icon {
+        rotate: 180deg;
     }
 
     :global(html:not([data-has-sidebar])) .sidebar-toggle {
