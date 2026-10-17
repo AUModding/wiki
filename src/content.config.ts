@@ -8,7 +8,7 @@ import { autoSidebarSchema } from 'starlight-auto-sidebar/schema';
 export const collections = {
 	docs: defineCollection({
 		loader: docsLoader(),
-		schema: docsSchema({ extend: z.object({ stars: z.boolean().default(false) }) }),
+		schema: docsSchema({ extend: z.object({ stars: z.boolean().default(true), author: z.string().optional() }) }),
 	}),
 	autoSidebar: defineCollection({
 		loader: autoSidebarLoader(),
