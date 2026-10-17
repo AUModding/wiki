@@ -59,7 +59,12 @@ export default defineConfig({
 						name: 'twitter:card',
 						content: "summary"
 					}
-				}],
+        },
+        {
+          tag: 'style',
+          content: '@view-transition { navigation: auto; }'
+        }
+      ],
 			plugins: [
 				starlightLlmsMarkdown(),
 				starlightAutoSidebar(),
