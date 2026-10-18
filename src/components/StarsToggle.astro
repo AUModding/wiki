@@ -1,7 +1,8 @@
 ---
+const translate = Astro.locals.t;
 ---
 
-<button class="stars-toggle" type="button" aria-label="Toggle stars" aria-pressed="true" title="Toggle stars">
+<button class="stars-toggle" type="button" aria-label={translate('settings.toggleStars')} aria-pressed="true" title={translate('settings.toggleStars')}>
   <svg
     class="stars-on"
     xmlns="http://www.w3.org/2000/svg"

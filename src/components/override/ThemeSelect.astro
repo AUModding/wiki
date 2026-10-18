@@ -1,11 +1,13 @@
 ---
 import StarsToggle from "../StarsToggle.astro";
 import { Icon } from "@astrojs/starlight/components";
+
+const translate = Astro.locals.t;
 ---
 
 <div class="sl-theme-controls">
   <StarsToggle />
-  <button type="button" aria-label="Toggle theme" class="theme-toggle">
+  <button type="button" aria-label={translate('settings.toggleTheme')} class="theme-toggle">
     <Icon name="sun" size="1rem" class="light-icon" />
     <Icon name="moon" size="1rem" class="dark-icon" />
   </button>

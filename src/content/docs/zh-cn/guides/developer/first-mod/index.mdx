@@ -1,0 +1,55 @@
+---
+title: 工具与要求
+description: 说明所需的软件和知识。
+author: "XtraCube, PalmForest"
+translator: "HayashiUme"
+---
+
+欢迎来到这份从零制作第一个 Among Us 模组的分步指南。
+建议先按照[环境配置指南](/zh-cn/guides/developer/environment/)完成配置再继续。
+
+开始之前，你需要具备以下条件：
+
+- 一台性能尚可的电脑。建议至少 8GB 内存。
+- [.NET SDK](https://dotnet.microsoft.com/en-us/download)。任意较新的版本都可以。
+- 适合 .NET 的 IDE，例如 [VS Code](https://code.visualstudio.com/download)、
+[JetBrains Rider](https://www.jetbrains.com/rider/)
+和 [Visual Studio](https://visualstudio.microsoft.com/)。
+- 一定的编程基础。
+
+本指南假定你已有 C# 或 Java 等面向对象语言的经验。
+如果你刚接触 C#，可以在 [freeCodeCamp](https://www.freecodecamp.org/) 或 [Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/csharp/) 上学习。
+
+## 安装 .NET SDK
+
+希望这一步不会难倒你，否则后面会比较难受。
+
+安装 .NET 很简单，打开官方的 .NET [下载页面](https://dotnet.microsoft.com/en-us/download)，
+下载适合你平台的最新版 SDK 即可。虽然 Among Us 模组是为 .NET 6.0 开发的，
+但新版 SDK 依然可以编译为旧版本编写的程序。直接使用最新的 SDK 就行。
+
+如果你想在移动设备上开发模组……请别这么做。
+在移动端安装 .NET SDK 和 IDE 要困难得多。
+如果你有办法搞定，那就去尝试，但这里不展开讨论。
+
+## 安装 IDE
+
+真正写代码需要一个 IDE（集成开发环境）。大多数模组开发者推荐 Rider 或 VS Code。
+新手通常从 VS Code 起步，但 Rider 自带一些 VS Code 没有的功能。
+看完下面这些选项后做个选择：
+
+- **JetBrains Rider**：功能完整的 .NET IDE，支持 C# 和 Unity，具备自动补全、语法高亮、
+调试等功能。比较吃资源，但总体是个好选择。可以在[这里](https://www.jetbrains.com/rider/)下载。
+
+- **Visual Studio Code**：轻量、开源。
+安装 C# 和 Unity 扩展后，功能几乎和JetBrains Rider 一样全。适合想节省内存和硬盘空间的用户。
+在[这里](https://code.visualstudio.com/download)下载。
+
+- **Visual Studio**：功能完整的 .NET IDE，具备上述各种功能。基本上和Rider 相当，
+但对 CPU 和内存的占用更高，也比 VS Code 更复杂。
+可以在[这里](https://visualstudio.microsoft.com/)下载。
+
+- ** 新建文本文档（请输入文本）**：你系统自带的玩意，比如 Windows 的记事本，但没有任何辅助写代码的功能。
+没有语法高亮，没有自动补全，什么都没有。**不推荐**这个选项。
+
+选好并装好 IDE 以及必要的插件或扩展之后，我们接着了解模组开发中需要理解的重要术语。

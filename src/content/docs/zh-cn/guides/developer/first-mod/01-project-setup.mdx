@@ -1,0 +1,61 @@
+---
+title: 搭建你的项目
+description: 概述项目搭建流程以及可用的各种模板。
+author: "XtraCube"
+translator: "HayashiUme"
+---
+
+好在有人为我们准备好了 [Among Us 模组的 .NET 模板](https://github.com/AUModding/AUModding.Templates)，
+每个模板面向不同的使用场景。
+
+安装好 .NET SDK 后，打开终端，执行以下命令安装这些模板：
+```bash
+dotnet new install AUModding.Templates
+```
+
+一共有三个模板：Minimal、Reactor 和 MiraAPI。本指南使用Reactor 模板。
+通常推荐用 Reactor 构建模组，因为它提供了许多让模组开发更省事的工具。
+
+### Minimal
+
+一个最小化模板，除 BepInEx 外不包含任何 API。
+```bash
+dotnet new aumodding.minimal -n (你的模组名)
+```
+
+### Reactor
+
+预装了 Reactor，并为你做好了一些最小化配置。
+```bash
+dotnet new aumodding.reactor -n (你的模组名)
+```
+致谢：[Daemon](https://github.com/DaemonBeast/Reactor.Template)
+
+### MiraAPI
+
+预装了 MiraAPI，并为你做好了一些最小化配置。
+```bash
+dotnet new aumodding.miraapi -n (你的模组名)
+```
+致谢：[All Of Us](https://github.com/All-Of-Us-Mods/MiraAPI/tree/master/MiraAPI.Example)
+
+## 构建你的项目
+
+大多数 IDE 都有一个「构建」按钮，可以构建你的项目。
+如果没有或找不到，也可以从命令行构建。打开终端，进入项目文件夹，运行：
+```bash
+dotnet build
+```
+
+构建成功后会生成一个包含你模组的 DLL 文件。通常构建输出中会
+告诉你它在哪：
+```
+还原完成(0.3)
+  ModTemplate net6.0 已成功 (5.2 秒) → bin\Debug\net6.0\ModTemplate.dll
+
+在 6.2 秒内生成 已成功
+```
+
+你可以把这个 DLL 放进 BepInEx 的 plugins 文件夹，将它加载进游戏。
+只要把 `AmongUs` 环境变量设置为你的 Among Us 安装路径，
+模板会自动帮你把 DLL 放进 plugins 文件夹。

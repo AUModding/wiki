@@ -1,17 +1,19 @@
 ---
 // code credit: https://github.com/lorenzolewis/starlight-utils/blob/6ec8fa66ee0dd4186a02678a5443e8ff1f59ab91/packages/starlight-utils/components/NavLinks.astro
 import { getRelativeLocaleUrl } from "astro:i18n";
+const translate = Astro.locals.t;
 const entries = [
     {
-        label: "Getting Started",
+        label: translate("nav.gettingStarted"),
         link: "/welcome",
     },
     {
-        label: "Guides",
+        label: translate("nav.guides"),
         link: "/guides",
     },
     {
         label: "Resources",
+        label: translate("nav.resources"),
         link: "/resources",
     }
 ];
