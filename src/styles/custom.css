@@ -68,6 +68,25 @@
 	}
 }
 
+@media (prefers-reduced-motion: no-preference) {
+	site-search dialog[open] {
+		transition: opacity 0.12s ease-out, scale 0.12s ease-out;
+
+		@starting-style {
+			opacity: 0;
+			scale: 0.85;
+		}
+	}
+
+	site-search dialog[open]::backdrop {
+		transition: opacity 0.12s ease-out;
+
+		@starting-style {
+			opacity: 0;
+		}
+	}
+}
+
 .glass-pane {
 	backdrop-filter: blur(3px);
 }
