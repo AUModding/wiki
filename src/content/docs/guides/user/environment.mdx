@@ -71,10 +71,20 @@ You should already be running your game under a compatibility layer like Wine, P
 
 To ensure BepInEx gets loaded, you need to set up a DLL override:
 
-- **Steam:** Right-click Among Us in your library → `Properties` → `General` → `Launch Options`. In the input field, paste `WINEDLLOVERRIDES="winhttp.dll=n,b" %command%`.
-- **Heroic Games Launcher:** Right-click Among Us in your library → `Settings` → `Advanced` → `Environment Variables`. Under `Add New Variable`, paste `WINEDLLOVERRIDES` in the `NAME` box and `winhttp=n,b` in the `VALUE` box.
-- **Lutris:**
-- **Manually using protontricks:** Run `protontricks --gui` in a terminal → select Among Us → `Select the default wineprefix` → `Run winecfg`. In the `Libraries` tab, select `winhttp` in the `New override for library` dropdown → click `Add` → `Apply`.
+<Tabs>
+  <TabItem label="Steam">
+    Right-click Among Us in your library → `Properties` → `General` → `Launch Options`. In the input field, paste `WINEDLLOVERRIDES="winhttp.dll=n,b" %command%`.
+  </TabItem>
+  <TabItem label="Heroic Games Launcher">
+    Right-click Among Us in your library → `Settings` → `Advanced` → `Environment Variables`. Under `Add New Variable`, paste `WINEDLLOVERRIDES` in the `NAME` box and `winhttp=n,b` in the `VALUE` box.
+  </TabItem>
+  <TabItem label="Lutris">
+    To be added
+  </TabItem>
+  <TabItem label="Manually using protontricks">
+    Run `protontricks --gui` in a terminal → select Among Us → `Select the default wineprefix` → `Run winecfg`. In the `Libraries` tab, select `winhttp` in the `New override for library` dropdown → click `Add` → `Apply`.
+  </TabItem>
+</Tabs>
 
 ### Step 3: First Launch
 
