@@ -94,3 +94,15 @@ html[data-stars='off'] .space {
 .sl-link-button.icon-left {
 	flex-direction: row-reverse;
 }
+
+.sl-link-card {
+	transition:
+		backdrop-filter 0.15s ease,
+		border-color 0.15s ease;
+}
+
+.sl-link-card:hover {
+	background: transparent;
+	backdrop-filter: blur(3px);
+	-webkit-backdrop-filter: blur(3px);
+}
