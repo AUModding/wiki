@@ -44,27 +44,40 @@
 		--sl-content-inline-start: 0rem;
 	}
 
+	.main-frame {
+		padding-inline-start: var(--sidebar-width);
+	}
+
 	.sidebar-pane {
 		width: var(--sidebar-width);
 		overflow-x: hidden;
-		transition: width 0.25s ease, padding-inline-start 0.25s ease, opacity 0.2s ease;
-	}
-
-	.header {
-		transition: grid-template-columns 0.25s ease;
-	}
-
-	.main-frame {
-		padding-inline-start: var(--sidebar-width);
-		transition: padding-inline-start 0.25s ease;
 	}
 
 	html[data-sidebar-collapsed='true'] .sidebar-pane {
 		opacity: 0;
 		visibility: hidden;
-		transition:
-			opacity 0.2s ease,
-			visibility 0s 0.25s;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.sidebar-pane {
+			transition:
+				width 0.25s ease,
+				padding-inline-start 0.25s ease,
+				opacity 0.2s ease,
+				visibility 0s;
+		}
+		
+		html[data-sidebar-collapsed='true'] .sidebar-pane {
+			transition-delay: 0s, 0s, 0s, 0.25s;
+		}
+
+		.main-frame {
+			transition: padding-inline-start 0.25s ease;
+		}
+
+		.header {
+			transition: grid-template-columns 0.25s ease;
+		}
 	}
 }
 
