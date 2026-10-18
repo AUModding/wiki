@@ -8,7 +8,8 @@ Innersloth 不算太抵制《Among Us》的玩家自制模组，[模组政策](h
 
 这些政策可分为 **3 类**：
 
-### 要求：
+### 要求
+
 1. 必须始终在屏幕上显示 Mod 标识。如果你的模组使用 Reactor，这已经为你处理好了；否则，你必须对 `MainMenuManager.Start` 打补丁，并调用 `ModManager.Instance.ShowModStamp();`
 2. 必须在你的模组网站/GitHub 仓库上显示以下免责声明：
 ``` This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC.```
@@ -16,10 +17,12 @@ Innersloth 不算太抵制《Among Us》的玩家自制模组，[模组政策](h
 3. 任何会改变官方服务器上游玩流程的模组（通过添加职业或修改交互逻辑）都必须在创建大厅时中注册；客户端侧模组不受此要求限制。更多信息见[此处](https://github.com/Innersloth-LLC/AmongUsModdingInformation)。
 4. 如果你的模组是仅房主模组，你必须使用 Modded（+25）协议，以确保未安装模组的客户端无法通过搜索游戏找到你的游戏。更多信息见下文。
 
-### 不鼓励：
+### 不鼓励
+
 1. 任何形式的模组付费/售卖行为都是不鼓励的，而非禁止。Innersloth 已明确表示希望模组开发者获得报酬，但更希望模组免费。
 
-### 禁止：
+### 禁止
+
 1. 制作给其他玩家带来不公平优势的作弊模组。
 2. 分发伪装成模组的恶意软件。
 3. 以任何形式制作 Among Us 的克隆。
@@ -28,15 +31,15 @@ Innersloth 不算太抵制《Among Us》的玩家自制模组，[模组政策](h
 6. 不要随模组分发游戏文件。
 7. 不要声称或暗示你的模组获得 Innersloth 认可。
 
-## 模组分类：
+## 模组分类
 
 Innersloth 将模组归为 **3 类**：
 
-### 全客户端模组：
+### 全客户端模组
 
 所有人都必须安装才能游玩的模组。
 
-### 仅房主端 (H系) 模组：
+### 仅房主端 (H系) 模组
 
 这些模组仅在房主客户端上需要，意味着未安装模组的客户端无需安装该模组即可加入并游玩。  
 这类模组通常比所有客户端模组受限得多。
@@ -66,7 +69,7 @@ internal static class ModdedProtocolPatch
 ```
 :::
 
-### 仅客户端模组：
+### 仅客户端模组
 
 这些模组在你的本地客户端上进行更改，你可以自由使用，而无需其他人安装它们。
 
