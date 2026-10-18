@@ -103,6 +103,5 @@ html[data-stars='off'] .space {
 
 .sl-link-card:hover {
 	background: transparent;
-	backdrop-filter: blur(3px);
-	-webkit-backdrop-filter: blur(3px);
+	backdrop-filter: blur(4px);
 }
