@@ -74,9 +74,11 @@ To ensure BepInEx gets loaded, you need to set up a DLL override:
 <Tabs>
   <TabItem label="Steam">
     Right-click Among Us in your library → `Properties` → `General` → `Launch Options`. In the input field, paste `WINEDLLOVERRIDES="winhttp.dll=n,b" %command%`.
+    ![Steam DLL Override steps](@assets/environment-setup/overrides-steam.png)
   </TabItem>
   <TabItem label="Heroic Games Launcher">
     Right-click Among Us in your library → `Settings` → `Advanced` → `Environment Variables`. Under `Add New Variable`, paste `WINEDLLOVERRIDES` in the `NAME` box and `winhttp=n,b` in the `VALUE` box.
+    ![Heroic DLL Override steps](@assets/environment-setup/overrides-heroic.png)
   </TabItem>
   <TabItem label="Lutris">
     To be added
