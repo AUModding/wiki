@@ -1,9 +1,243 @@
 ---
-title: A Good PC Is One That Doesn't Complain
-description: And learn why some sins are unforgivable.
+title: Make Your C# Sharper
+description: A Good PC Is One That Doesn't Complain
 author: "AlchlcDvl"
 ---
 
-No matter how good the mod may be, it is prone to hell.
+No matter how brilliant a mod's concept is, it will only ever be as good as the
+code it's built on. A computer is simultaneously incredibly smart and incredibly
+dumb. It's smart enough to calculate complex shortcuts in a millisecond, but
+dumb enough to follow your instructions to the letter, even when those
+instructions are terrible.
 
-Lorem ipsum, some stuff to add here later.
+## Readability
+
+Code can be highly unoptimised, but if you want to fix it, you need to actually
+understand what is written. This is the biggest pain point of debugging: it
+often stops being a process of "Where is this pesky bug?" and devolves into
+"What on earth did I even write here?".
+
+You aren't expected to follow every single rule mentioned here perfectly (as
+with every other part of this wiki), but it is highly recommended that you try.
+You want other developers, and more importantly, future-you, to be able to read
+and understand your intent.
+
+### Comment Your Thoughts
+
+If you've written code before, you know what a comment is. If you haven't, a
+comment is essentially a post-it note embedded directly into the code. It does
+absolutely nothing except provide context to the code around it.
+
+In fact, comments don't even get compiled into your final DLL. Commenting is
+basically a free action.
+
+Now, this doesn't mean you must write comments for every single line of code.
+You'd have to be insane to do that. Instead, leave comments in the parts of your
+code where your intent isn't immediately obvious.
+
+```cs
+var something = SomeClass.DoSomething(); // Gets a value from somewhere
+```
+
+Or, you can use comments to vent your frustrations. That is a very common
+practice too.
+
+```cs
+// For some reason this randomly turns null??? WHy??
+private static MonoBehaviour? Script;
+```
+
+### Naming Things
+
+Names have meaning, and so does the way you write them. If you're ever stuck
+reading code without syntax highlighting, being able to figure out what a
+variable does just by looking at its formatting is a massive lifesaver.
+
+#### Variables
+
+Nothing is worse than seeing `var x = SomeValue();` and having zero clue what
+`x` is supposed to represent. There is a very simple solution to this: **name
+your variables so they actually mean something.**
+
+```cs
+var particle = ScriptLocation.GetParticle();
+```
+
+:::tip
+Avoid single-letter variable names (like `a`, `b`, `c`) wherever you can. The
+only exception is if you are writing simple loops or delegates.
+:::
+
+Typically, variables are written in `camelCase`.
+
+#### Parameters
+
+Just like variables, method parameters are usually written in `camelCase`.
+
+```cs
+public void DoSomething(int index, bool flagForSomething);
+```
+
+#### Fields
+
+Class-level fields are typically written in `camelCase`.
+
+```cs
+private static bool someFlag; // Works!
+private static bool SomeFlag; // Generally, no
+```
+
+There are exceptions. Usually, when a field is marked with `readonly`, you swap
+to `PascalCase` instead.
+
+```cs
+public static readonly List<int> MyNumbers = new();
+```
+
+When a field is `public`, you also typically use `PascalCase`.
+
+```cs
+public bool Flag; // Since it's public
+```
+
+:::note
+Having a non-`readonly` public field is generally frowned upon, but Unity has
+its own weird rules for them. More on that later!
+:::
+
+It is also a very common practice to prefix private field names with an
+underscore (`_someFlag`). This isn't quite as universally adopted in the modding
+scene as it is in professional software development, so using the `_` is
+entirely up to you.
+
+#### Everything Else
+
+Any part of the code that doesn't fit into the previous sections (like Classes,
+Methods, and Properties) is typically named using `PascalCase`.
+
+```cs
+public static class MyClass
+{
+    public static int MyProperty { get; set; }
+
+    public static void MyMethod() { }
+}
+```
+
+### Guard The Code, Don't Nest It
+
+Take a look at the following two blocks of code, and note which one seems easier
+to read without getting a headache.
+
+Nested Code:
+
+```cs
+if (response.IsValid)
+{
+    Logger.Log(response.Name + " is valid!");
+
+    if (response.IsAuthorized)
+    {
+        Logger.Log("Authorized!");
+
+        if (response.Sector == "R&D")
+            return "ResearchAndDevelopment";
+        else if (response.Sector == "HR")
+            return "HumanResources";
+        else if (response.Sector == "IT")
+            return "Technology";
+        else if (response.Sector == "$$")
+            return "Finances";
+
+        if (response.AuthorizationLevel > 1)
+        {
+            Logger.Log("Have enough clearance.");
+            return ProcessResponse(response);
+        }
+
+        return "None";
+    }
+    else
+    {
+        return "Unauthorized";
+    }
+}
+else
+{
+    return "Invalid";
+}
+```
+
+Guarded Code:
+
+```cs
+if (!response.IsValid)
+    return "Invalid";
+
+Logger.Log(response.Name + " is valid!");
+
+if (!response.IsAuthorized)
+    return "Unauthorized";
+
+Logger.Log("Authorized!");
+
+if (response.Sector == "R&D")
+    return "ResearchAndDevelopment";
+else if (response.Sector == "HR")
+    return "HumanResources";
+else if (response.Sector == "IT")
+    return "Technology";
+else if (response.Sector == "$$")
+    return "Finances";
+
+if (response.AuthorizationLevel <= 1)
+    return "None";
+
+Logger.Log("Have enough clearance.");
+return ProcessResponse(response);
+```
+
+:::tip
+This technique is called an **Early Return**. By exiting the method as soon as a
+condition fails, you avoid having to write complex, deeply indented logic to
+handle the "happy path".
+
+```cs
+if (!response.IsValid)
+    return "Invalid";
+```
+:::
+
+When you nest a lot of code blocks, it gets incredibly messy trying to figure
+out where one check ends and another begins. This "mental overhead" makes your
+code a chore to read. Early returns not only keep your brain aligned with the
+logic, but they also give the computer a clear exit sign so it can stop running
+unnecessary code.
+
+### Magic Strings and Numbers
+
+A "magic number" (or magic string) isn't a cool wizard spell. It's a random,
+unexplained value dropped directly into your logic. Leaving magic numbers in
+your code is like setting a booby trap for yourself a month from now.
+
+```cs
+// Bad: What does 3 mean? What is 1.5f?
+if (player.State == 3)
+{
+    player.Speed *= 1.5f;
+}
+```
+
+Instead of leaving your future self guessing, assign these values to a
+well-named constant.
+
+```cs
+// Good: The code reads like plain English.
+const int SprintingState = 3;
+const float SprintSpeedMultiplier = 1.5f;
+
+if (player.State == SprintingState)
+{
+    player.Speed *= SprintSpeedMultiplier;
+}
+```
