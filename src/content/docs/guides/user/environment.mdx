@@ -1,7 +1,7 @@
 ---
 title: Setting up your environment
 description: Learn how to set up your environment for playing Among Us mods.
-author: "WanderingPix, Neon, Astral"
+author: "WanderingPix, Neon, Astral, ThetaHalo"
 ---
 
 :::note
@@ -18,7 +18,8 @@ Mod managers like [Starlight PC](https://github.com/All-Of-Us-Mods/Starlight-PC)
 
 ### Step 1: Download BepInEx
 
-Download the correct BepInEx zip archive matching your game platform:
+Download the correct BepInEx zip archive matching your game platform: <br />
+<sup>**All platforms except for Itch.io use the x64 version of BepInEx. Itch.io uses the x86 version.**</sup>
 
 | Game Platform | Download Link |
 | :--- | :--- |
@@ -42,9 +43,11 @@ Unzip the BepInEx zip file into your game install directory. You can find it lik
 
 ### Step 2.1: DLL override (Linux only)
 
+:::note
 This step is only relevant if you're using a GNU/Linux-based operating system.
+:::
 
-You should already be running your game under a compatibility layer like Wine, Proton, Proton-GE, or similar. If you're using Proton 11 or newer, you can skip ahead to step 3.
+You should already be running your game under a compatibility layer like Wine, Proton, Proton-GE, or similar. **If you're using Proton 11 or newer, you can skip ahead to step 3.**
 
 To ensure BepInEx gets loaded, you need to set up a DLL override:
 
