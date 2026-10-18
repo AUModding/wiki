@@ -1,14 +1,16 @@
 ---
 import { Icon } from "@astrojs/starlight/components";
+
+const translate = Astro.locals.t;
 ---
 
 <button
     id="sidebar-toggle"
     type="button"
     class="sidebar-toggle"
-    aria-label="Toggle sidebar"
+    aria-label={translate('settings.toggleSidebar')}
     aria-pressed="false"
-    title="Toggle sidebar"
+    title={translate('settings.toggleSidebar')}
 >
     <span class="sidebar-toggle-icon"><Icon name="left-caret" /></span>
 </button>
@@ -48,12 +50,16 @@ import { Icon } from "@astrojs/starlight/components";
         cursor: pointer;
         font-size: 0.75rem;
         border: 2px solid var(--sl-color-gray-4);
-        transition:
-            left 0.25s ease,
-            width 0.25s ease,
-            height 0.25s ease,
-            border-radius 0.25s ease,
-            font-size 0.25s ease;
+
+        @media (prefers-reduced-motion: no-preference) {
+            transition:
+                left 0.25s ease,
+                width 0.25s ease,
+                height 0.25s ease,
+                border-radius 0.25s ease,
+                font-size 0.25s ease;
+        }
+        
     }
 
     .sidebar-toggle:hover {
@@ -64,7 +70,10 @@ import { Icon } from "@astrojs/starlight/components";
     .sidebar-toggle-icon {
         display: grid;
         place-items: center;
-        transition: rotate 0.25s ease;
+        
+        @media (prefers-reduced-motion: no-preference) {
+            transition: rotate 0.25s ease;
+        }
     }
 
     html[data-sidebar-collapsed='true'] .sidebar-toggle {

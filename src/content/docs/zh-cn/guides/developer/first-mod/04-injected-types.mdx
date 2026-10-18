@@ -1,0 +1,50 @@
+---
+title: 使用注入类型
+description: 简要介绍如何注册你自己的 MonoBehaviour。
+author: "WanderingPix"
+translator: "HayashiUme"
+---
+
+Unity 是一个基于组件的游戏引擎。将 [MonoBehaviours](https://docs.unity3d.com/6000.6/Documentation/Manual/class-MonoBehaviour.html) 附加到 [GameObjects](https://docs.unity3d.com/6000.6/Documentation/ScriptReference/GameObject.html) 上，
+可以驱动特定的功能。这在实现更复杂的功能时非常有用。
+
+## 创建新的 MonoBehaviour
+
+你可以像这样创建一个新的 MonoBehaviour：
+
+```csharp
+using System;
+using UnityEngine;
+
+namespace YourMod.Modules.Components
+{
+    public class CustomMonoBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
+    {
+        private void Start() {} // 组件首次启用时调用。
+        private void Update() {} // 每帧调用。
+    }
+}
+```
+
+## 注册 MonoBehaviour
+
+如果你使用 [Reactor](https://github.com/NuclearPowered/Reactor)，可以在你的类上使用 `[RegisterInIl2Cpp]` 特性来注册它。
+不过这种做法有一个小缺点：无法控制哪些类型先被注册。
+
+更好的做法是使用 `ClassInjector` 类，
+在插件的 `Load` 函数中调用 `ClassInjector.RegisterTypeInIl2Cpp<CustomMonoBehaviour>();` 方法。
+
+## 注册顺序
+
+如果你有多个**相互依赖**的自定义 MonoBehaviour，注册顺序非常重要。
+
+## 访问 Unity Inspector 中设置的字段
+
+如果你在 Unity 中有一个带自定义 MonoBehaviour 的 prefab，并尝试通过 AssetBundle 将它加载进游戏，
+你可能会注意到在编辑器里设置的值**丢失**了。
+要保留它们，你应该在（模组代码库中的）MonoBehaviour 里使用 `Il2CppReferenceField<T>`，
+其中 `T` 是对象的类型。对于整数、浮点数等值类型，请使用 `Il2CppValueField<T>`。
+
+:::note
+类、命名空间和字段名在你的 Unity 项目和模组中**必须保持一致**。
+:::

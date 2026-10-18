@@ -1,0 +1,144 @@
+---
+title: 使用 Harmony 补丁
+description: 简要介绍 Harmony，并编写你的第一个补丁
+author: "PalmForest, Neon"
+translator: "HayashiUme"
+---
+
+每个模组都离不开一个关键能力：修补游戏的代码。
+当你想要修改现有功能，或钩住某个方法以运行自己的代码时，这就非常有用。
+这通过 Harmony 实现（更准确地说是它的一个分支 [HarmonyX](https://github.com/BepInEx/HarmonyX)，
+通常以 `0Harmony.dll` 的形式被引用）。 BepInEx 使用这个改修改游戏。
+
+## 找到目标方法
+
+写补丁之前，你必须先找到想要修补的类和方法。
+在编写补丁之前，你必须先找到要附加补丁的类和方法。
+最简单的方法是去看 InnerSloth 提供的 `Assembly-CSharp.dll`，这可以使用我们的 [Code Inspector](https://code.aumodding.dev) 来完成。
+
+不过，在下面的示例中，我们要修补 `PlayerControl.IsFlashlightEnabled`，让手电筒在「捉迷藏」模式之外也能启用。
+对游戏代码更深入的分析会在以后的高级指南中介绍，等你对 Harmony 足够熟悉之后再去阅读。
+
+## 修补方法
+
+为方法附加补丁目标方法的最简单方式之一，就是使用 `[HarmonyPatch]` 特性提供的各种重载。
+先来看一个基础 Harmony 补丁的第一部分：
+
+
+```csharp
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.IsFlashlightEnabled))]
+internal static class IsFlashlightEnabledPatch
+{
+     // ... 具体的逻辑在这里写
+}
+```
+
+你会注意到，上面创建了一个静态类来承载该补丁，并给它起了一个描述性的名称。  
+该类使用 `[HarmonyPatch]` 特性进行标注，使 HarmonyX 能够定位该补丁并识别其目标。
+
+:::tip
+注释不会被包含在编译后的 DLL 中，因此你在 ILSpy 这类反编译器中看不到它们。
+:::
+
+`[HarmonyPatch]` 特性有多个重载，但在普通打补丁时，你通常只会用到其中一个或两个。  
+你还会注意到，这个特性只传入了两个参数：`typeof(PlayerControl)` 的结果和 `nameof(PlayerControl.IsFlashlightEnabled)` 的结果。  
+在解释该特性的用法之前，我们先介绍这两个运算符：
+
+- `typeof` 会给你一个表示某个类型的 `Type`（也称为 `System.Type`）对象，例如 `MonoBehaviour`。  
+  编译器会检查你引用的游戏库中是否存在该类型。生成的 `Type` 对象随后会在运行时使用。
+- `nameof` 会获取变量、类型、成员或命名空间的名称。与返回 `Type` 的 `typeof` 不同，它返回一个 `string`。  
+  例如，`nameof(PlayerControl.IsFlashlightEnabled)` 返回 `"IsFlashlightEnabled"`，不包含类名。
+
+:::note
+使用 `typeof` 和 `nameof` 有助于避免拼写错误，并使代码更易于维护。  
+此外，如果你更新了游戏库引用，而目标方法已被重命名或删除，你的代码将无法编译。  
+这样一来，问题在运行模组之前就更容易解决。
+:::
+
+现在来说特性本身。`[HarmonyPatch]` 是我们用来告诉 HarmonyX 对某个特定方法打补丁的特性  
+（在我们的例子中，就是告诉 HarmonyX 对 `PlayerControl.IsFlashlightEnabled` 打补丁）。这个 `[HarmonyPatch]` 重载接受两个参数：  
+一个 `Type` 和一个 `string`（这里的顺序很重要）。其他重载允许你提供附加信息，例如参数类型，  
+以便在方法存在重载时，Harmony 能选对正确的目标。
+
+`Type` 参数告诉 HarmonyX 哪个类包含目标方法，`string` 参数告诉它要对该类中的哪个方法打补丁。
+
+:::danger[重要提示！]
+`[HarmonyPatch]` 特性本身并不会对方法打补丁。  
+你仍然需要包含一个 prefix 或 postfix 方法，并在模组的 `Load()` 方法中调用 `Harmony.PatchAll()`，你的补丁才会被附加。  
+关于如何正确编写 prefix 和 postfix 的细节，请参阅下一节。
+:::
+
+## Prefix 与 Postfix
+
+声明好静态补丁类之后，你可以在其中编写会在目标方法**之前**或**之后**运行的代码。
+这分别通过 `Prefix` 和 `Postfix` 方法实现。虽然前缀和后缀都能修改方法的输出，
+Prefix 的关键优势在于它能够**取消原方法**。下面的 Prefix 利用了这一能力：在“捉迷藏”模式下让原方法照常运行，否则就自行设置结果并跳过原方法。
+
+```csharp
+[HarmonyPrefix] // （可选）因为该方法已经命名为 Prefix
+private static bool Prefix(ref bool __result)
+{
+    if (GameOptionsManager.Instance.currentGameMode == GameModes.HideNSeek)
+        return true;
+
+    __result = true;
+    return false;
+}
+```
+
+关于上面的前缀，你需要注意以下几点：
+- 补丁方法必须命名为 ***Prefix*** 或 ***Postfix***，你的代码才会运行。或者，你可以用 `[HarmonyPrefix]` 或 `[HarmonyPostfix]` 特性标注它，以明确告诉 Harmony 你的补丁类型。  
+上面的示例两者都用了以作演示，但只用其中一种就足够了。
+- `bool` 返回类型让前缀可以控制原方法是否运行。
+返回 `true` 表示在你的代码之后正常执行原方法，返回 `false` 则完全跳过它。
+- 在这种情况下，原方法的返回类型是 `bool`，因此可以使用 `ref` 参数 `ref bool __result` 来修改该方法的输出。  
+如果没有 `ref` 关键字，你可以读取结果，但不能修改它。
+
+:::note
+如果你愿意，也可以改为在 prefix 或 postfix 方法上指定目标方法，如下所示：
+
+```csharp
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.IsFlashlightEnabled))]
+private static bool Prefix(ref bool __result)
+{
+    
+}
+```
+
+ただし、无论如何，包含补丁的类都必须带有 `[HarmonyPatch]` 特性。  
+否则，Harmony 将找不到你的补丁：
+
+```csharp
+[HarmonyPatch]
+internal static class IsFlashlightEnabledPatch
+{
+    
+}
+```
+:::
+
+:::tip
+补丁方法中最有用的参数之一是 `__instance`，它让你可以访问被修补方法所在的那个实例。
+例如：
+
+```csharp
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Begin))]
+internal static class ShipStatusBeginPatch
+{
+    private static void Postfix(ShipStatus __instance)
+    {
+    
+    }
+}
+```
+:::
+
+## 故障排除
+
+假设你一切都做对了，测试模组时你的补丁应该会运行，手电筒也应该会被启用！  
+如果你的补丁（或你编写的任何其他补丁）没有运行，请尝试以下操作：
+
+- 确保在模组的 `Load()` 方法中调用了 `Harmony.PatchAll()`（参见[插件结构](../02-plugin-structure)）。
+- 参阅[故障排除](../04-troubleshooting)，了解内联或其他可能影响补丁的问题。
+
+如果你想进一步了解 Harmony，请参阅 [HarmonyX Wiki](https://github.com/BepInEx/HarmonyX/wiki) 和 [Harmony Docs](https://harmony.pardeike.net/v2/articles/intro.html)。
