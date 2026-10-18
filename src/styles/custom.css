@@ -48,27 +48,20 @@
 		padding-inline-start: var(--sidebar-width);
 	}
 
-	.sidebar-pane {
-		width: var(--sidebar-width);
-		overflow-x: hidden;
-	}
-
 	html[data-sidebar-collapsed='true'] .sidebar-pane {
-		opacity: 0;
+		translate: -100% 0;
 		visibility: hidden;
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
 		.sidebar-pane {
 			transition:
-				width 0.25s ease,
-				padding-inline-start 0.25s ease,
-				opacity 0.2s ease,
+				translate 0.25s ease,
 				visibility 0s;
 		}
-		
+
 		html[data-sidebar-collapsed='true'] .sidebar-pane {
-			transition-delay: 0s, 0s, 0s, 0.25s;
+			transition-delay: 0s, 0.25s;
 		}
 
 		.main-frame {
