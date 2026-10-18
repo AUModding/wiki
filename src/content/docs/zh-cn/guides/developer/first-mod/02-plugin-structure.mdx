@@ -1,0 +1,66 @@
+---
+title: 插件结构
+description: 概述插件的结构，以及构成插件的各种文件。
+author: "XtraCube"
+translator: "HayashiUme"
+---
+
+大多数 Among Us 模组都是一个 BepInEx 插件。
+BepInEx 插件是一个由 BepInEx 模组加载器加载的 .NET 程序集（DLL）。
+每个 BepInEx 插件都有固定的结构，你应该熟悉一下。
+
+:::note
+本指南假定你使用的是 BepInEx 6.0.0 bleeding edge 版本，
+并且面向 IL2CPP（而不是 Mono）开发，这也是 Among Us 所使用的。
+:::
+
+### 插件类（Plugin Class）
+
+Plugin 类是你插件的主类，负责插件的加载和卸载。
+每个插件类都必须继承 `BasePlugin`——这是 BepInEx 提供的类。
+下面是一个插件类的示例：
+
+```csharp
+
+namespace MyFirstMod;
+
+[BepInAutoPlugin]
+[BepInProcess("Among Us.exe")]
+[BepInDependency(ReactorPlugin.Id)]
+[ReactorModFlags(ModFlags.RequireOnAllClients)]
+public partial class MyFirstModPlugin : BasePlugin
+{
+    public Harmony Harmony { get; } = new(Id);
+
+    public override void Load()
+    {
+        Harmony.PatchAll();
+        ReactorCredits.Register<MyFirstModPlugin>(location => location is ReactorCredits.Location.MainMenu);
+    }
+
+    public override bool Unload()
+    {
+        Harmony.UnpatchSelf();
+        return base.Unload();
+    }
+}
+```
+
+关于这个类，有几点需要注意：
+- `BepInAutoPlugin` 特性会自动从程序集元数据中填入插件的 ID和版本。
+你也可以手动指定这些信息，比如使用
+`[BepInAutoPlugin("dev.xtracube.myfirstmod", "My First Mod", "1.0.0")]`。
+
+- `BepInProcess` 特性指定该插件会在哪个进程中运行。
+它不是必需的，但可以用它来防止插件在其他进程中加载。
+在这个例子里，插件只会在 Among Us 进程中加载。
+
+- `BepInDependency` 特性指定该插件的依赖项。
+在这个例子里，插件依赖于 Reactor 插件。
+
+你可能还注意到了 `ReactorModFlags` 特性。它用来声明该插件在多人游戏中必须存在于所有客户端上。
+如果你做的是仅房主模组，或者不影响游戏玩法的模组，应该指定另一组标志。
+关于 Reactor 模组标志的更多信息可以在
+[Reactor 文档](https://docs.reactor.gg/)中找到。
+
+还有就是，不许写中文，虽然是个常识，但我真的见过有人这么做。

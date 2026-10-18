@@ -1,0 +1,13 @@
+{
+  "nav.gettingStarted": "快速开始",
+  "nav.guides": "指南",
+  "nav.resources": "资源",
+  "tag.writtenBy": "作者：",
+  "tag.translatedBy": "译者：",
+  "settings.toggleTheme": "切换主题",
+  "settings.toggleSidebar": "折叠侧边栏",
+  "settings.toggleStars": "切换星空背景",
+  "inner.disclaimer.line1": "本 Wiki 与 Among Us 或 Innersloth LLC 无任何关联，其中的内容未经 Innersloth LLC 认可或赞助。",
+  "inner.disclaimer.line2": "本文所含部分材料为 Innersloth LLC 的财产。",
+  "heading.anchorLabel": "小节标题“{{title}}”"
+}
