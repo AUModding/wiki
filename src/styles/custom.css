@@ -28,12 +28,6 @@
 	--sl-color-black: #ffffff;
 }
 
-@property --sidebar-width {
-	syntax: '<length>';
-	inherits: true;
-	initial-value: 0rem;
-}
-
 @media (min-width: 50em) {
 	html[data-has-sidebar] {
 		--sidebar-width: var(--sl-sidebar-width);
@@ -91,10 +85,6 @@
 			opacity: 0;
 		}
 	}
-}
-
-.glass-pane {
-	backdrop-filter: blur(3px);
 }
 
 html[data-stars='off'] .space {
