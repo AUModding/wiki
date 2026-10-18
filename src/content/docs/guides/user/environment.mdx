@@ -74,17 +74,19 @@ To ensure BepInEx gets loaded, you need to set up a DLL override:
 <Tabs>
   <TabItem label="Steam">
     Right-click Among Us in your library → `Properties` → `General` → `Launch Options`. In the input field, paste `WINEDLLOVERRIDES="winhttp.dll=n,b" %command%`.
-    ![Steam DLL Override steps](@assets/environment-setup/overrides-steam.png)
+    ![Steam DLL Override steps](@assets/environment-setup/overrides/steam.png)
   </TabItem>
   <TabItem label="Heroic Games Launcher">
     Right-click Among Us in your library → `Settings` → `Advanced` → `Environment Variables`. Under `Add New Variable`, paste `WINEDLLOVERRIDES` in the `NAME` box and `winhttp=n,b` in the `VALUE` box.
-    ![Heroic DLL Override steps](@assets/environment-setup/overrides-heroic.png)
+    ![Heroic DLL Override steps](@assets/environment-setup/overrides/heroic.png)
   </TabItem>
   <TabItem label="Lutris">
     Right-click Among Us in your library → `Configure` → `Runner options`. Under `DLL overrides`, click `Add` and paste `winhttp` in the `Key` field and `n,b` in the `Value` field.
+    ![Lutris DLL Override steps](@assets/environment-setup/overrides/lutris.png)
   </TabItem>
   <TabItem label="Manually using protontricks">
     Run `protontricks --gui` in a terminal → select Among Us → `Select the default wineprefix` → `Run winecfg`. In the `Libraries` tab, select `winhttp` in the `New override for library` dropdown → click `Add` → `Apply`.
+    ![Protontricks DLL Override steps](@assets/environment-setup/overrides/protontricks.png)
   </TabItem>
 </Tabs>
 
