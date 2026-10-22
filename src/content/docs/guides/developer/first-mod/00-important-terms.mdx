@@ -46,16 +46,3 @@ This comes with many benefits, like various optimizations and speedups that can 
 compile the app "Ahead-Of-Time". However, IL2CPP makes reverse engineering much more difficult because
 assembly code cannot be turned back into C++ as easily as IL -> C#. It also makes modding more difficult
 because modding IL2CPP games from C# programs requires an interop layer (Il2CppInterop).
-
-## Modding Tools
-
-- **Assembly-CSharp (Mono DLL)**: An essential tool in every modders toolkit!
-Thankfully, InnerSloth is merciful enough to provide modders with the `Assembly-CSharp.dll`
-file from the Mono build of Among Us, before they run the IL2CPP process.
-Since the Mono DLL is IL code, it makes it easy for modders to find out how 
-the game works internally without using a disassembler like IDA or Ghidra.
-We will discuss working with the Mono DLL later.
-
-- **[dnSpyEx](https://github.com/dnSpyEx/dnSpy) / [ILSpy](https://github.com/icsharpcode/ILSpy)**: A decompiler for .NET programs.
-Use it to open the Mono DLL and read the original code. You can also explore other mods and plugins in these programs.
-For quick reading of the game's code, you can instead use our provided [Code Inspector](https://code.aumodding.dev).
