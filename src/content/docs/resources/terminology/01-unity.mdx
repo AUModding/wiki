@@ -1,0 +1,35 @@
+---
+title: Unity
+description: Terminology relating to Unity and its scripting backends.
+author: "XtraCube, AlchlcDvl, PalmForest"
+order: 1
+---
+
+### Unity
+
+The game engine that Among Us uses. Unity games are usually written in C#, and the
+games themselves can be compiled to two different scripting backends: Mono and IL2CPP. Among Us
+uses IL2CPP. Because of the way IL2CPP works, there is a Mono version of Among Us, but we will get back
+to this later.
+
+### Mono
+
+An older, open-source implementation of the .NET Runtime. Mono games are easy
+to reverse engineer because IL code is easy to convert back into C# code. Mono games are also easy
+to mod because you can write a standard C# program targeting the Mono runtime (usually netstandard)
+and add it to the game files.
+
+### IL2CPP
+
+Developed by Unity to convert IL code into C++, then compile to assembly code.
+This comes with many benefits, like various optimizations and speedups that can only happen when you
+compile the app "Ahead-Of-Time". However, IL2CPP makes reverse engineering much more difficult because
+assembly code cannot be turned back into C++ as easily as IL -> C#. It also makes modding more difficult
+because modding IL2CPP games from C# programs requires an interop layer (Il2CppInterop).
+
+### Interop
+
+Since IL2CPP converts the game into C++, but your mod is
+written in C#, they speak different languages. "Interop" is the translator
+sitting between them. Crossing this translation boundary takes computational
+effort, so you want to cross it as little as possible to avoid lag.

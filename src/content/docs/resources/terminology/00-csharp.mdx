@@ -1,0 +1,41 @@
+---
+title: C#
+description: Terminology relating to C#, compilation and the .NET runtime.
+author: "XtraCube, PalmForest, AlchlcDvl"
+order: 0
+---
+
+### .NET Runtime
+
+The "program" that runs your C# code. When you run a C# program, your
+computer is not directly running it. Your computer runs a program called the .NET runtime,
+which will actually run your C# code. In Among Us modding, we use the .NET runtime to run
+our mods on top of the game.
+
+### IL (Intermediate Language)
+
+Similar to assembly language, but for the .NET runtime
+instead of your computer. C# programs are compiled into IL, then .NET compiles that IL into assembly
+for your specific machine at runtime. This is called Just-In-Time, or JIT, compilation.
+
+### Just-In-Time (JIT)
+
+JIT compilation makes it easier to develop cross-platform apps, 
+but comes at the cost of slower app startup and more memory usage. In the context of
+Among Us mods, the .NET Runtime reads the IL code from your mod and converts it into 
+assembly code for your computer when the code is about to run.
+
+### Ahead-Of-Time (AOT)
+
+AOT compilation turns source code directly into assembly code
+without any runtime compilation. The main benefits of AOT are faster startup times, 
+lower memory usage, and lower CPU usage. AOT is also required for some platforms,
+like iOS, which do not allow JIT programs to run. In the context of Among Us modding,
+the Among Us game itself uses AOT because it is built with IL2CPP.
+
+### Assembly (.dll)
+
+Think of this as the final shipped package of your mod. When you compile your C# code,
+it gets bundled into a Dynamic Link Library (DLL). This is the physical file
+users will drop into their `plugins` folder to make the magic happen.
+DLL files can also be used for adding dependencies or other external code to your project.

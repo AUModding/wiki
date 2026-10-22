@@ -1,0 +1,33 @@
+---
+title: Tools
+description: Terminology relating to various modding tools.
+author: "AlchlcDvl, PalmForest"
+order: 2
+---
+
+
+### Reflection
+
+The programming equivalent of picking a lock. It allows your code to inspect the game's code while it is running,
+and more importantly, read, run or change `private` or `protected` variables and methods.
+This makes for a powerful modding tool, as it gives you access to code hidden by the developers.
+
+### Harmony
+
+The toolkit that makes modern modding possible without permanently modifying the game's original files.
+It lets you intercept the game's code while it's running and safely inject your own through different types of patches.
+
+### Prefix / Postfix
+
+The two main ways you will use Harmony. A Prefix runs *before* the game's original method
+(great for modifying inputs or cancelling the original method entirely), while a Postfix runs *after* it
+(great for reading/editing the final results or adding extra effects).
+
+### `NullReferenceException` (NRE)
+
+The most common error you will ever see
+in your console. It means your code tried to interact with a variable or
+object that is entirely empty (`null`). It is the programming equivalent of
+reaching into your pocket for your car keys and grasping empty air.
+
+Admittedly, this is not a tool and shouldn't be on this page :D
