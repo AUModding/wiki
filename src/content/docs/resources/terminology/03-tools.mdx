@@ -8,12 +8,18 @@ author: "AlchlcDvl, PalmForest"
 
 The programming equivalent of picking a lock. It allows your code to inspect the game's code while it is running,
 and more importantly, read, run or change `private` or `protected` variables and methods.
-This makes for a powerful modding tool, as it gives you access to code hidden by the developers.
+This makes for a powerful modding tool, as it lets you work with code that has been access protected by the developers.
 
-### Harmony
+:::caution
+Reflection is much slower than normal calls, since the runtime has to look up and retrieve metadata.
+Avoid using it in code that runs frequently.
+:::
 
-The toolkit that makes modern modding possible without permanently modifying the game's original files.
+### HarmonyX
+
+The toolkit that makes patching Among Us possible without permanently modifying the game's original files.
 It lets you intercept the game's code while it's running and safely inject your own through different types of patches.
+HarmonyX is BepInEx's fork of the Harmony patching library.
 
 ### Prefix / Postfix
 
