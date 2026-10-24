@@ -1,0 +1,45 @@
+---
+title: Performance Terms
+description: Terminology relating to performance and optimisation concepts.
+author: "AlchlcDvl, PalmForest"
+---
+
+### Cache
+
+A cache is essentially storage. If you have a value you tend to
+use often, you *cache* it (save it to a variable). The main benefit is that
+your computer won't have to repeatedly calculate or initialize new values.
+The data is already there, so you might as well reuse it.
+
+### Garbage Collector (GC)
+
+If you need an enemy to fight, the GC is a
+prime candidate. The GC's main job is to reclaim memory resources so your mod
+doesn't just keep eating RAM over time. It's useful, so why is it our enemy?
+Well, any random lag spike you feel in-game is usually caused by you creating
+and destroying values too quickly and letting the GC run rampant cleaning up
+after you. More on that later.
+
+### Boxing
+
+Sounds like a sport, but in C#, it’s a performance trap. It
+happens when you take a simple, lightweight value (like an `int` or a `float`)
+and stuff it inside a heavier "object" wrapper. Doing this creates unnecessary
+garbage that the GC has to clean up later. If you box values constantly in a
+fast-running loop, your mod will cause micro-stutters.
+
+### LINQ (`System.Linq`)
+
+A magical set of C# commands (like `.Where()`,
+`.Select()`, or `.ToList()`) that makes searching through lists incredibly easy
+and readable. However, LINQ is notorious for secretly creating a massive amount
+of garbage behind the scenes. It's fantastic for code that runs once when the
+game loads, but using it inside an `Update()` loop is a cardinal sin of game
+modding.
+
+### Hot / Cold Paths
+
+When you expect to run a piece of code multiple times a
+second, that is a hot path. You absolutely want to keep allocations here to a
+minimum. A cold path is a piece of code that doesn't run as frequently. Feel
+free to thrash the GC here, no one's looking or judging.
