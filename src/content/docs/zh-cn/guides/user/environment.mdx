@@ -42,24 +42,24 @@ BepInEx 的具体版本通常无关紧要（只要比 6.0.0-be.735 新都能正�
 
 <Tabs>
   <TabItem label="Steam">
-    在你的游戏库中右键 Among Us → `Manage` → `Browse local files`
+    在你的游戏库中右键 Among Us → 「管理」→「浏览本地文件」
 
-    ![Steam 安装步骤](@assets/environment-setup/steam.png)
+    ![Steam 安装步骤](@assets/zh-cn/environment-setup/steam.png)
   </TabItem>
   <TabItem label="Epic Games">
-    在你的游戏库中右键 Among Us → `Manage` → 点击 `Installation` 旁边的小文件夹图标
+    在你的游戏库中右键 Among Us → 「管理」→ 点击「安装」旁边的小文件夹图标
 
-    ![Epic Games 安装步骤](@assets/environment-setup/egl.png)
+    ![Epic Games 安装步骤](@assets/zh-cn/environment-setup/egl.png)
   </TabItem>
   <TabItem label="Itch.io">
-    打开 Itch.io 应用 → 在你的游戏库中右键 Among Us → `Manage` → `Open folder in Explorer` → 打开 `AmongUsItch/Itch` 文件夹
+    打开 Itch.io 应用 → 在你的游戏库中右键 Among Us → 「管理」→「在资源管理器中打开文件夹」→ 打开 `AmongUsItch/Itch` 文件夹
 
-    ![Itch.io 安装步骤](@assets/environment-setup/itch.png)
+    ![Itch.io 安装步骤](@assets/zh-cn/environment-setup/itch.png)
   </TabItem>
   <TabItem label="Xbox 应用 / Microsoft Store">
-    打开 Xbox 应用 → 在你的游戏库中右键 Among Us → `Manage` → `Files` → `Browse...` → 打开 `Among Us/Content` 文件夹
+    打开 Xbox 应用 → 在你的游戏库中右键 Among Us → 「管理」→「文件」→「浏览…」→ 打开 `Among Us/Content` 文件夹
 
-    ![Xbox 应用安装步骤](@assets/environment-setup/xbox.png)
+    ![Xbox 应用安装步骤](@assets/zh-cn/environment-setup/xbox.png)
   </TabItem>
 </Tabs>
 
@@ -75,20 +75,24 @@ BepInEx 的具体版本通常无关紧要（只要比 6.0.0-be.735 新都能正�
 
 <Tabs>
   <TabItem label="Steam">
-    在你的游戏库中右键 Among Us → `Properties` → `General` → `Launch Options`。在输入框中粘贴 `WINEDLLOVERRIDES="winhttp.dll=n,b" %command%`。
-    ![Steam DLL override 步骤](@assets/environment-setup/overrides/steam.png)
+    在你的游戏库中右键 Among Us → 「属性」→「通用」→「启动选项」。在输入框中粘贴 `WINEDLLOVERRIDES="winhttp.dll=n,b" %command%`。
+
+    ![Steam DLL override 步骤](@assets/zh-cn/environment-setup/overrides/steam.png)
   </TabItem>
   <TabItem label="Heroic Games Launcher">
-    在你的游戏库中右键 Among Us → `Settings` → `Advanced` → `Environment Variables`。在 `Add New Variable` 下，`NAME` 一栏填 `WINEDLLOVERRIDES`，`VALUE` 一栏填 `winhttp=n,b`。
-    ![Heroic DLL override 步骤](@assets/environment-setup/overrides/heroic.png)
+    在你的游戏库中右键 Among Us → 「设置」→「高级」→「环境变量」。在「添加新变量」下，`NAME` 一栏填 `WINEDLLOVERRIDES`，`VALUE` 一栏填 `winhttp=n,b`，然后点击右侧的「+」保存。
+
+    ![Heroic DLL override 步骤](@assets/zh-cn/environment-setup/overrides/heroic.png)
   </TabItem>
   <TabItem label="Lutris">
-    在你的游戏库中右键 Among Us → `Configure` → `Runner options`。在 `DLL overrides` 下点击 `Add`，`Key` 一栏填 `winhttp`，`Value` 一栏填 `n,b`。
-    ![Lutris DLL override 步骤](@assets/environment-setup/overrides/lutris.png)
+    在你的游戏库中右键 Among Us → 「配置」→「运行程序选项」。在「DLL 覆盖」下点击「添加」，`Key` 一栏填 `winhttp`，`Value` 一栏填 `n,b`。
+
+    ![Lutris DLL override 步骤](@assets/zh-cn/environment-setup/overrides/lutris.png)
   </TabItem>
   <TabItem label="手动使用 protontricks">
-    在终端里运行 `protontricks --gui` → 选择 Among Us → `Select the default wineprefix` → `Run winecfg`。在 `Libraries` 选项卡中，在 `New override for library` 下拉框里选择 `winhttp` → 点击 `Add` → `Apply`。
-    ![Protontricks DLL override 步骤](@assets/environment-setup/overrides/protontricks.png)
+    在终端里运行 `protontricks --gui` → 选择 Among Us → 「选择默认 wine 前缀」→「运行 winecfg」。在「库」选项卡中，在「新建库覆盖条目」下拉框里选择 `winhttp` → 点击「添加」→「应用」。
+
+    ![Protontricks DLL override 步骤](@assets/zh-cn/environment-setup/overrides/protontricks.png)
   </TabItem>
 </Tabs>
 
