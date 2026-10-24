@@ -1,8 +1,25 @@
 ---
 title: 资源
-description: Starlight 文档站的参考页面。
+description: 汇集各种有用的资源的页面。
 translator: "HayashiUme"
-stars: true
+sidebar:
+    order: 0
 ---
 
-此处正在施工，或许你可以来帮忙填坑？ :D
+import { CardGrid, LinkCard } from '@astrojs/starlight/components'
+
+在这里浏览术语、准则和工具，帮助你更深入地了解模组开发。
+
+<hr/>
+
+<LinkCard
+    title="学习重要术语"
+    description="巩固你对各种术语的认识，或者查一查某个词是什么意思。"
+    href="/zh-cn/resources/terminology/01-csharp"
+/>
+
+<LinkCard
+    title="阅读模组准则"
+    description="了解 InnerSloth 的模组政策与社区准则。"
+    href="/zh-cn/resources/guidelines/01-mod-policy"
+/>
