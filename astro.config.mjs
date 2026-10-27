@@ -12,11 +12,13 @@ export default defineConfig({
 		starlight({
 			title: { 
 				en: 'Among Us Modding Wiki',
-				'zh-CN': 'AmongUs 模组维基' },
+				'zh-CN': 'AmongUs 模组维基',
+				'ar': 'الويكي لمود Among Us' },
 			defaultLocale: 'root',
 			locales: {
 				root: { label: 'English', lang: 'en' },
 				'zh-cn': { label: '简体中文', lang: 'zh-CN' },
+				'ar': { label: 'العربية', lang: 'ar' },
 			},
 			logo: { src: './public/logo.png', alt: 'AU Modding Logo', replacesTitle: true },
 			social: [
@@ -70,19 +72,19 @@ export default defineConfig({
 				starlightAutoSidebar(),
 				starlightSidebarTopics([
 					{
-						label: { en: 'Getting Started', 'zh-CN': '快速开始' },
+						label: { en: 'Getting Started', 'zh-CN': '快速开始', 'ar' : 'البداية' },
 						link: '/welcome',
 						icon: 'information',
 						items: ['welcome'],
 					},
 					{
-						label: { en: 'Guides', 'zh-CN': '指南' },
+						label: { en: 'Guides', 'zh-CN': '指南', 'ar': 'الإرشادات' },
 						link: '/guides/',
 						icon: 'open-book',
 						items: [{ autogenerate: { directory: 'guides' } }],
 					},
 					{
-						label: { en: 'Resources', 'zh-CN': '资源' },
+						label: { en: 'Resources', 'zh-CN': '资源', 'ar': 'المصادر' },
 						link: '/resources/',
 						icon: 'document',
 						items: [{ autogenerate: { directory: 'resources' } }],
