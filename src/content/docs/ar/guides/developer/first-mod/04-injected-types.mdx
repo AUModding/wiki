@@ -1,0 +1,44 @@
+---
+title: Using Injected Types
+description: Provides a brief introduction to registering your own MonoBehaviours.
+author: "WanderingPix"
+---
+
+Unity is a component-based game engine. [MonoBehaviours](https://docs.unity3d.com/6000.6/Documentation/Manual/class-MonoBehaviour.html) are attached to [GameObjects](https://docs.unity3d.com/6000.6/Documentation/ScriptReference/GameObject.html) to drive specific functionality.
+This is useful for implementing more complex functionality.
+
+## Creating a new MonoBehaviour
+
+You can create a new MonoBehaviour like so:
+
+```csharp
+using System;
+using UnityEngine;
+
+namespace YourMod.Modules.Components
+{
+    public class CustomMonoBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
+    {
+        private void Start() {} // Gets called when the component is first enabled.
+        private void Update() {} // Gets called every frame.
+    }
+}
+```
+
+## Registering the MonoBehaviour
+
+If you're using [Reactor](https://github.com/NuclearPowered/Reactor), you can use the `[RegisterInIl2Cpp]` attribute on your class to register it. However, this approach has a small drawback of losing control over which types are registered first.
+
+A better approach is to use the `ClassInjector` class and call the `ClassInjector.RegisterTypeInIl2Cpp<CustomMonoBehaviour>();` method in your plugin's `Load` function.
+
+## Registration Order
+
+Registration order is very important if you have multiple custom MonoBehaviours that depend on **one another**.
+
+## Accessing fields set within Unity's Inspector
+
+If you have a prefab in Unity with a custom MonoBehaviour, and try loading it into the game through an AssetBundle, you may notice that the values you set in the editor are **lost**. To preserve them, you should use `Il2CppReferenceField<T>` in your MonoBehaviour (in the mod's codebase), where `T` is the type of the object. For values like integers, floats, and other value types, use `Il2CppValueField<T>`.
+
+:::note
+The class, namespace, and field names **must match** in both your Unity project and mod.
+:::

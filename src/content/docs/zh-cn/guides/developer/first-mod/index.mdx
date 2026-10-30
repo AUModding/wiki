@@ -6,7 +6,7 @@ translator: "HayashiUme"
 ---
 
 欢迎来到这份从零制作第一个 Among Us 模组的分步指南。
-建议先按照[环境配置指南](/zh-cn/guides/developer/environment/)完成配置再继续。
+建议先按照[环境配置指南](/zh-cn/guides/user/environment/)安装好 BepInEx 再继续。
 
 开始之前，你需要具备以下条件：
 
@@ -52,4 +52,19 @@ translator: "HayashiUme"
 - ** 新建文本文档（请输入文本）**：你系统自带的玩意，比如 Windows 的记事本，但没有任何辅助写代码的功能。
 没有语法高亮，没有自动补全，什么都没有。**不推荐**这个选项。
 
-选好并装好 IDE 以及必要的插件或扩展之后，我们接着了解模组开发中需要理解的重要术语。
+## 查看反编译代码
+
+所幸 InnerSloth 挺够意思，在运行 IL2CPP 流程之前，就把 Among Us Mono 构建版的 `Assembly-CSharp.dll`
+文件提供给了模组开发者。由于 Mono DLL 是 IL 代码，模组开发者无需使用 IDA 或 Ghidra 这类反汇编器，
+就能轻松弄清游戏的内部运作方式。你可以使用我们的 [Code Inspector](https://code.aumodding.dev)
+或下面提到的工具来查看反编译代码。
+
+- **[dnSpy (dnSpyEx)](https://github.com/dnSpyEx/dnSpy)**：简单便捷的反编译器，自带程序集分析工具，导航速度快，方便浏览游戏代码。
+它是已归档原项目的维护分支。
+- **[ILSpy](https://github.com/icsharpcode/ILSpy)**：轻量级反编译器，活跃维护，界面简洁，方便快速阅读代码。
+它在 Windows、Mac 和 Linux 上都能用，而另外两个只能在 Windows 上使用。
+- **[dotPeek](https://www.jetbrains.com/decompiler/)**：JetBrains 出品的重型反编译器，UI 和导航风格与他们的 IDE 类似。
+不过和前两者不同，它不开源。
+
+<br/><br/><hr/>
+选好并装好 IDE 以及必要的插件或扩展之后，我们就可以开始你第一个模组的项目设置了。

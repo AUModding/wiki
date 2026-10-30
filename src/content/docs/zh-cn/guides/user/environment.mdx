@@ -1,43 +1,109 @@
 ---
 title: 配置你的环境
 description: 学习如何配置环境来游玩 Among Us 模组。
-author: "WanderingPix, Neon"
+author: "WanderingPix, Neon, Astral, ThetaHalo"
 translator: "HayashiUme"
 ---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 
 :::note
-本页介绍的是玩家运行模组所需的 BepInEx 配置。如果你想制作模组，请参阅搭建 Among Us 模组开发环境。
+本页介绍的是玩家运行模组所需的 BepInEx 配置。如果你想制作模组，请参阅[你的第一个模组](/zh-cn/guides/developer/first-mod/)。
 :::
 
 Among Us 是一款 **Unity IL2CPP 游戏**，因此使用 BepInEx 作为游戏的模组加载器。
 
 :::tip
-像 [Starlight PC](https://github.com/All-Of-Us-Mods/Starlight-PC) 和 [Bean Manager](https://github.com/rewalo/BeanModManager) 这样的模组管理器可以自动完成 BepInEx 的配置。
+像 [Starlight PC](https://github.com/All-Of-Us-Mods/Starlight-PC) 和 [Bean Mod Manager](https://github.com/rewalo/BeanModManager) 这样的模组管理器可以自动完成 BepInEx 的配置。
 :::
 
 # 手动安装步骤
 
 ### 第 1 步：下载 BepInEx
-* 下载与你的游戏平台相匹配的 BepInEx 压缩包：
+
+下载与你的游戏平台相匹配的 BepInEx 压缩包： <br />
+<sup>**除 Itch.io 以外，所有平台都使用 x64 版本的 BepInEx。Itch.io 使用 x86 版本。**</sup>
 
 | 游戏平台 | 下载链接 |
 | :--- | :--- |
-| **Steam** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752+dd0655f.zip`](https://builds.bepinex.dev/projects/bepinex_be/752/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752%2Bdd0655f.zip) |
-| **Microsoft Store** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752+dd0655f.zip`](https://builds.bepinex.dev/projects/bepinex_be/752/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752%2Bdd0655f.zip) |
-| **Epic Games** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752+dd0655f.zip`](https://builds.bepinex.dev/projects/bepinex_be/752/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752%2Bdd0655f.zip) |
-| **Itch.io** | [`BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.752+dd0655f.zip`](https://builds.bepinex.dev/projects/bepinex_be/752/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.752%2Bdd0655f.zip) |
+| **Steam** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789+6cea286.zip`](https://builds.bepinex.dev/projects/bepinex_be/789/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789%2B6cea286.zip) |
+| **Microsoft Store** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789+6cea286.zip`](https://builds.bepinex.dev/projects/bepinex_be/789/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789%2B6cea286.zip) |
+| **Epic Games** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789+6cea286.zip`](https://builds.bepinex.dev/projects/bepinex_be/789/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789%2B6cea286.zip) |
+| **Itch.io** | [`BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.789+6cea286.zip`](https://builds.bepinex.dev/projects/bepinex_be/789/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.789%2B6cea286.zip) |
 
-### 第 2 步：准备模组版游戏文件夹
-* 找到你的游戏安装目录，把里面的内容复制到一个新文件夹中。这样可以把「已装模组」和「原版」的游戏安装区分开。
+:::note
+BepInEx 的具体版本通常无关紧要（只要比 6.0.0-be.735 新都能正常工作），
+重要的是架构（x86 还是 x64）。
+:::
 
-### 第 3 步：解压 BepInEx
-* 把 BepInEx 压缩包解压到你新建的文件夹里。
+### 第 2 步：解压 BepInEx
 
-### 第 4 步：首次启动
-* 通过运行可执行文件（Among Us.exe）启动游戏。首次启动可能需要一些时间，因为它要下载所需的文件。
+把 BepInEx 压缩包解压到你的游戏安装目录里。目录可以这样找到：
 
-### 第 5 步：确认插件文件夹
-* 首次启动后，会自动创建 `BepInEx\plugins` 目录。你的模组需要放进这里。
+<Tabs>
+  <TabItem label="Steam">
+    在你的游戏库中右键 Among Us → 「管理」→「浏览本地文件」
 
-### 第 6 步：安装模组！
-* 从网上下载模组（最常见的渠道是 GitHub）。模组以 `DLL` 文件的形式分享，把 DLL 放进 `BepInEx\plugins` 文件夹即可。
+    ![Steam 安装步骤](@assets/zh-cn/environment-setup/steam.png)
+  </TabItem>
+  <TabItem label="Epic Games">
+    在你的游戏库中右键 Among Us → 「管理」→ 点击「安装」旁边的小文件夹图标
+
+    ![Epic Games 安装步骤](@assets/zh-cn/environment-setup/egl.png)
+  </TabItem>
+  <TabItem label="Itch.io">
+    打开 Itch.io 应用 → 在你的游戏库中右键 Among Us → 「管理」→「在资源管理器中打开文件夹」→ 打开 `AmongUsItch/Itch` 文件夹
+
+    ![Itch.io 安装步骤](@assets/zh-cn/environment-setup/itch.png)
+  </TabItem>
+  <TabItem label="Xbox 应用 / Microsoft Store">
+    打开 Xbox 应用 → 在你的游戏库中右键 Among Us → 「管理」→「文件」→「浏览…」→ 打开 `Among Us/Content` 文件夹
+
+    ![Xbox 应用安装步骤](@assets/zh-cn/environment-setup/xbox.png)
+  </TabItem>
+</Tabs>
+
+### 第 2.1 步：DLL override（仅 Linux）
+
+:::note
+只有在你使用 GNU/Linux 系统时，这一步才相关。
+:::
+
+你的游戏此时应该已经运行在 Wine、Proton、Proton-GE 之类的兼容层下了。**如果你用的是 Proton 11 或更新的版本，可以直接跳到第 3 步。**
+
+为了让 BepInEx 能被正常加载，你需要设置一个 DLL override：
+
+<Tabs>
+  <TabItem label="Steam">
+    在你的游戏库中右键 Among Us → 「属性」→「通用」→「启动选项」。在输入框中粘贴 `WINEDLLOVERRIDES="winhttp.dll=n,b" %command%`。
+
+    ![Steam DLL override 步骤](@assets/zh-cn/environment-setup/overrides/steam.png)
+  </TabItem>
+  <TabItem label="Heroic Games Launcher">
+    在你的游戏库中右键 Among Us → 「设置」→「高级」→「环境变量」。在「添加新变量」下，`NAME` 一栏填 `WINEDLLOVERRIDES`，`VALUE` 一栏填 `winhttp=n,b`，然后点击右侧的「+」保存。
+
+    ![Heroic DLL override 步骤](@assets/zh-cn/environment-setup/overrides/heroic.png)
+  </TabItem>
+  <TabItem label="Lutris">
+    在你的游戏库中右键 Among Us → 「配置」→「运行程序选项」。在「DLL 覆盖」下点击「添加」，`Key` 一栏填 `winhttp`，`Value` 一栏填 `n,b`。
+
+    ![Lutris DLL override 步骤](@assets/zh-cn/environment-setup/overrides/lutris.png)
+  </TabItem>
+  <TabItem label="手动使用 protontricks">
+    在终端里运行 `protontricks --gui` → 选择 Among Us → 「选择默认 wine 前缀」→「运行 winecfg」。在「库」选项卡中，在「新建库覆盖条目」下拉框里选择 `winhttp` → 点击「添加」→「应用」。
+
+    ![Protontricks DLL override 步骤](@assets/zh-cn/environment-setup/overrides/protontricks.png)
+  </TabItem>
+</Tabs>
+
+### 第 3 步：首次启动
+
+从你的游戏库中启动游戏（不要直接双击 Among Us.exe！）。首次启动可能需要一些时间，因为它要下载所需的文件。
+
+### 第 4 步：确认插件文件夹
+
+首次启动后，会自动创建 `BepInEx\plugins` 目录。你的模组需要放进这里。
+
+### 第 5 步：安装模组！
+
+从网上下载模组（最常见的渠道是 GitHub）。模组以 `DLL` 文件的形式分享，把 DLL 放进 `BepInEx\plugins` 文件夹即可。

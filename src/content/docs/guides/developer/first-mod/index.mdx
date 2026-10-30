@@ -52,5 +52,19 @@ You can download it [here](https://visualstudio.microsoft.com/).
 - **No IDE (Text Editor)**: It's included with your platform, like Notepad on Windows, but you don't get
 anything to help you write code. No syntax highlighting, no autocomplete, nothing. This option is **not recommended**.
 
-Once you have chosen and installed an IDE, as well as any necessary plugins or extensions, we can move on
-to important terminology you should understand for modding.
+## Viewing Decompiled Code
+
+Thankfully, InnerSloth is merciful enough to provide modders with the `Assembly-CSharp.dll` file from the Mono build of Among Us,
+before they run the IL2CPP process. Since the Mono DLL is IL code, it makes it easy for modders
+to find out how the game works internally without using a disassembler like IDA or Ghidra.
+You can view the decompiled code with our [Code Inspector](https://code.aumodding.dev) or using one of the tools mentioned below.
+
+- **[dnSpy (dnSpyEx)](https://github.com/dnSpyEx/dnSpy)**: Simple and convenient decompiler which provides assembly analysis tools 
+with fast navigation for exploring the game's code. This is a maintained fork of the original archived project.
+- **[ILSpy](https://github.com/icsharpcode/ILSpy)**: Lightweight decompiler that is actively maintained and allows for quick code
+reading with a simple interface. It is available on Windows, Mac and Linux, while the other two options are Windows-only.
+- **[dotPeek](https://www.jetbrains.com/decompiler/)**: A heavier decompiler created by JetBrains, with UI and navigation
+that is similar to their IDEs. However, unlike the other two options, it is not open-source.
+
+<br/><br/><hr/>
+Once you have chosen and installed an IDE, as well as any necessary plugins or extensions, we can move onto project setup for your first mod.
