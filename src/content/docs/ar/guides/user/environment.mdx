@@ -1,42 +1,125 @@
 ---
-title: Setting up your environment
-description: Learn how to set up your environment for playing Among Us mods.
-author: "WanderingPix, Neon"
+title: تهيئة بيئتك
+description: تعلم كيفية تهيئة بيئتك من اجل لعب مودات Among Us.
+author: "WanderingPix, Neon, Astral, ThetaHalo"
+translator: "Pro"
 ---
 
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
 :::note
-This page covers setting up BepInEx for users to run mods. For making mods, see Setting up your developer environment for modding Among Us.
+هذه الصفحة تتضمن كيفية تجهيز BepInEx لكي يستعمل المستخدمون المودات. اذا اردت صنع مودات - اذهب الى صفحة تهيئة بيئتك من اجل صنع مود ل Among Us.
 :::
 
-Among Us is a **Unity IL2CPP Game**. As so, BepInEx is used as a mod loader for the game.
+Among Us يعتبر **Unity IL2CPP Game**. و منه فان BepInEx يستعمل كمحمل للمودات الخاصة باللعبة.
 
 :::tip
-Mod managers like [Starlight PC](https://github.com/All-Of-Us-Mods/Starlight-PC) and [Bean Manager](https://github.com/rewalo/BeanModManager) handle setting up BepInEx automatically.
+هنالك برامج لادارة المودات مثل [Starlight PC] (https://github.com/All-Of-Us-Mods/Starlight-PC) و [Bean Mod Manager] (https://github.com/rewalo/BeanModManager) الذين يتعاملون مع BepInEx عشوائيا لك. لديهم ايضا مجموعة من المودات التي يمكنك التثبيت و هذه البرامج تتعامل مع التحديث لك.
 :::
 
-# Manual Installation Steps
+# خطوات التحديث اليدوي
 
-### Step 1: Download BepInEx
-* Download the correct BepInEx zip archive matching your game platform:
+### الخطوة 1: تثبيت BepInEx
 
-| Game Platform | Download Link |
-| :--- | :--- |
-| **Steam** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752+dd0655f.zip`](https://builds.bepinex.dev/projects/bepinex_be/752/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752%2Bdd0655f.zip) |
-| **Microsoft Store** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752+dd0655f.zip`](https://builds.bepinex.dev/projects/bepinex_be/752/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752%2Bdd0655f.zip) |
-| **Epic Games** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752+dd0655f.zip`](https://builds.bepinex.dev/projects/bepinex_be/752/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.752%2Bdd0655f.zip) |
-| **Itch.io** | [`BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.752+dd0655f.zip`](https://builds.bepinex.dev/projects/bepinex_be/752/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.752%2Bdd0655f.zip) |
+ثبت zip archive الBepInEx :الصحيح الذي يطابق منصة لعبك <br />
+<sup>
+  **All platforms except for Itch.io use the x64 version of
+  BepInEx. Itch.io uses the x86 version.**
+</sup>
+<sup>
+  كل المنصات ماعدا **  Itch.io تستعمل نسخة x64 من BepInEx. Itch.io تستعمل نسخة x86. **
+</sup>
 
-### Step 2: Prepare Modded Game Folder
-* Find your game install directory, and copy its contents to a new folder, this will be used to distinguish between your modded and un-modded game installations.
+| منصة اللعب        | رابط التثبيت                                                                                                                                                          |
+| :------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Steam**           | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789+6cea286.zip`](https://builds.bepinex.dev/projects/bepinex_be/789/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789%2B6cea286.zip) |
+| **Microsoft Store** | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789+6cea286.zip`](https://builds.bepinex.dev/projects/bepinex_be/789/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789%2B6cea286.zip) |
+| **Epic Games**      | [`BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789+6cea286.zip`](https://builds.bepinex.dev/projects/bepinex_be/789/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.789%2B6cea286.zip) |
+| **Itch.io**         | [`BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.789+6cea286.zip`](https://builds.bepinex.dev/projects/bepinex_be/789/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.789%2B6cea286.zip) |
 
-### Step 3: Extracting BepInEx
-* Unzip the BepInEx zip file into your new folder. 
+:::note
+في العادة,  النسخة الالمضبوطة ل BepInEx ليست مهمة (اي نسخة اجدد من 6.0.0-be.735 مفروض ان تعمل بشكل عادي), فقط البنية (x86 vs x64) مهمة.
+:::
 
-### Step 4: First Launch
-* Launch the game by opening the executable (Among Us.exe), it may take some time on first launch as it downloads the required files.
+### الخطوة 2: استخراج BepInEx
 
-### Step 5: Verify Plugin Folder
-* After the first launch, a new directory will be created at `BepInEx\plugins`. This is where your mods will need to be placed.
+استخرج ملف zip ل BepInEx الى مكان تثبيت لعبتك. يمكنك ايجاده كالتالي:
 
-### Step 6: Install Mods!
-* Download mods online, most commonly distributed via GitHub. Mods are shared as `DLL` files, so make sure to put your DLLs inside the `BepInEx\plugins` folder. 
+<Tabs>
+  <TabItem label="Steam">
+    اضغط بالزر الايمن للفارة Among Us في مكتبتك --> `Manage` --> `Browse local files` 
+
+    ![خطوات التثبيت ل Steam](@assets/environment-setup/steam.png)
+  </TabItem>
+  <TabItem label="Epic Games">
+     اضغط بالزر الايمن للفارة Among Us في مكتبتك --> `Manage` --> اضغط ايقونة الملف الصغير الذي بجانب `Installation`
+
+    ![خطوات التثبيت ل Epic Games](@assets/environment-setup/egl.png)
+
+  </TabItem>
+  <TabItem label="Itch.io">
+    افتح تطبيق Itch.io --> اضغط بالزر الايمن للفارة Among Us في مكتبتك --> `Manage` --> `Open folder in Explorer` --> افتح ملف `AmongUsItch/Itch`
+
+    ![خطوات التثبيت ل Itch.io](@assets/environment-setup/itch.png)
+  </TabItem>
+  <TabItem label="Xbox App / Microsoft Store">
+    افتح تطبيق Xbox --> اضغط بالزر الايمن Among Us في مكتبتك --> `Manage` --> `Files` --> `Browse...` --> افتح ملف `Among Us/Content`
+    
+    ![خطوات التثبيت ل Xbox](@assets/environment-setup/xbox.png)
+  </TabItem>
+</Tabs>
+
+### Step 2.1: DLL override (Linux only)
+### الخطوة 2.1: تجاوز الDLL (Linux فقط)
+
+:::note
+هذه الخطوة فقط مهمة لو كنت تستعمل نظام تشغبل مبني على GNU/Linux.
+:::
+
+You should already be running your game under a compatibility layer like Wine, Proton, Proton-GE, or similar. **If you're using Proton 11 or newer, you can skip ahead to step 3.**
+
+To ensure BepInEx gets loaded, you need to set up a DLL override:
+
+<Tabs>
+  <TabItem label="Steam">
+    Right-click Among Us in your library → `Properties` →
+    `General` → `Launch Options`. In the input field, paste
+    `WINEDLLOVERRIDES="winhttp.dll=n,b" %command%`. ![Steam DLL
+    Override
+    steps](@assets/environment-setup/overrides/steam.png)
+  </TabItem>
+  <TabItem label="Heroic Games Launcher">
+    Right-click Among Us in your library → `Settings` →
+    `Advanced` → `Environment Variables`. Under `Add New
+    Variable`, paste `WINEDLLOVERRIDES` in the `NAME` box and
+    `winhttp=n,b` in the `VALUE` box. ![Heroic DLL Override
+    steps](@assets/environment-setup/overrides/heroic.png)
+  </TabItem>
+  <TabItem label="Lutris">
+    Right-click Among Us in your library → `Configure` → `Runner
+    options`. Under `DLL overrides`, click `Add` and paste
+    `winhttp` in the `Key` field and `n,b` in the `Value` field.
+    ![Lutris DLL Override
+    steps](@assets/environment-setup/overrides/lutris.png)
+  </TabItem>
+  <TabItem label="Manually using protontricks">
+    Run `protontricks --gui` in a terminal → select Among Us →
+    `Select the default wineprefix` → `Run winecfg`. In the
+    `Libraries` tab, select `winhttp` in the `New override for
+    library` dropdown → click `Add` → `Apply`. ![Protontricks DLL
+    Override
+    steps](@assets/environment-setup/overrides/protontricks.png)
+  </TabItem>
+</Tabs>
+
+### الخطوة 3: اول اطلاق
+
+اطلق اللعبة من مكتبتك (لا تقر ال AmongUs.exe مرتين!).
+
+### الخطوة 4: تحقق من ملف Plugin
+
+بعد الاطلاق الاول, سيظهر ملف جديد في `BepInEx\plugins`. هذا هو المكان الذي يوجب على موداتك ان تكون فيه.
+
+### الخطوة 5: تثبيت المودات!
+
+ثبت المودات عبر الانترنت, الاكثر موجود فيه هو موقع Github. المودات تكون على شكل ملفات `DLL`, لذا تاكد من ان ملفات الDLL الخاصة بك محتواة داخل ملف `BepInEx\plugins`.
