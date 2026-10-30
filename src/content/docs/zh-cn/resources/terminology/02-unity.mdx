@@ -1,0 +1,35 @@
+---
+title: Unity 术语
+description: 与 Unity 及其脚本后端相关的术语。
+author: "XtraCube, AlchlcDvl, PalmForest"
+translator: "HayashiUme"
+---
+
+### Unity
+
+Among Us 使用的游戏引擎。Unity 游戏用 C# 编写，
+游戏本身可以编译为两种不同的脚本后端：Mono 和 IL2CPP。
+Among Us 使用的是 IL2CPP。由于 IL2CPP 的工作方式，
+Among Us 还存在一个 Mono 版本，这一点我们稍后再讲。
+
+### Mono
+
+.NET 运行时的早期开源实现。Mono 游戏把代码以普通 DLL 的形式编译成 IL，
+在游戏运行时再进行 JIT 编译。因为 IL 很容易还原成 C# 代码，
+Mono 游戏很容易被逆向工程，也就很容易制作模组。
+对 Among Us 来说，InnerSloth 特意提供了一份 Mono DLL，让模组开发更轻松。
+
+### IL2CPP
+
+由 Unity 开发，用于把 IL 代码转换成 C++，再编译为汇编代码。
+它带来了许多好处，比如只有[提前编译](../01-csharp/#提前编译aotahead-of-time)那时的应用
+才能实现的各类优化和提速。但 IL2CPP 让逆向工程难得多，
+因为汇编代码不能像「IL 转 C#」那样容易地还原成 C++。
+它也让开发模组更困难，因为用 C# 给 IL2CPP 游戏写模组需要一层互操作层
+（参见 [Il2CppInterop](https://github.com/BepInEx/Il2CppInterop)）。
+
+### 互操作（Interop）
+
+IL2CPP 把游戏转换成了 C++，而你的模组是用 C# 写的，两者语言不通。
+「互操作」就是坐在它们之间的翻译。跨过这层翻译会消耗计算资源，
+所以要尽量避免频繁跨越，以免卡顿。

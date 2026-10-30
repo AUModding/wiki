@@ -1,0 +1,145 @@
+---
+title: Using Harmony Patches
+description: Provides a brief introduction to Harmony and writing your first patch
+author: "PalmForest, Neon"
+---
+
+One key function that each mod requires is being able to patch the game's code.
+This is useful for situations where you might want to modify existing functionality or hook a method to run your own code.
+This is done through the use of Harmony (more specifically a fork of it called [HarmonyX](https://github.com/BepInEx/HarmonyX),
+which is usually referenced as `0Harmony.dll`). BepInEx uses it to patch the game.
+
+## Finding a Method
+
+Before you write your patch, you must first find the class and method you want to attach the patch to. The easiest way to do this
+is by inspecting the `Assembly-CSharp.dll` provided by InnerSloth, which can be done using our [Code Inspector](https://code.aumodding.dev).
+
+In the following example, we will be patching `PlayerControl.IsFlashlightEnabled` to enable flashlights outside of Hide and Seek mode.
+Deeper analysis of the game's code will be covered in a future advanced guide, which you should read once you have familiarised yourself with Harmony.
+
+## Patching Methods
+
+One of the simplest ways to target a method for patching is with the various available overloads of the `[HarmonyPatch]` attribute.
+Let's take a look at the first part of a basic Harmony patch:
+
+```csharp
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.IsFlashlightEnabled))]
+internal static class IsFlashlightEnabledPatch
+{
+    // ... (your patch logic here)
+}
+```
+
+You will notice above that a static class is created to house the patch and given a descriptive name.
+It is annotated with a `[HarmonyPatch]` attribute, allowing HarmonyX to locate the patch and identify its target.
+
+:::tip
+Comments are not included in the compiled DLL, so you wouldn't see them in a decompiler such as ILSpy.
+:::
+
+The `[HarmonyPatch]` attribute has multiple overloads, but you would only use one or two for normal patching.
+You will also notice that the attribute is called with only two arguments: the result of `typeof(PlayerControl)` and `nameof(PlayerControl.IsFlashlightEnabled)`.
+Before explaining the usage of the attribute, we'll first cover these two operators:
+
+- `typeof` gives you a `Type` (also known as `System.Type`) object representing a type, such as `MonoBehaviour`.
+The compiler checks whether the type exists in your referenced game libraries. The resulting `Type` object is then used at runtime.
+- `nameof` gets the name of a variable, type, member or namespace. This returns a `string`, unlike `typeof`, which returns a `Type`.
+For example, `nameof(PlayerControl.IsFlashlightEnabled)` returns `"IsFlashlightEnabled"` without the class name.
+
+:::note
+Using `typeof` and `nameof` helps prevent typos and makes your code easier to maintain.
+Furthermore, if you update your game library references and the target method has been renamed or removed, your code will fail to compile.
+This makes the problem easier to solve before running the mod.
+:::
+
+Now for the attribute itself. `[HarmonyPatch]` is an attribute we use to tell HarmonyX to patch a specific method
+(in our case, we are telling HarmonyX to patch `PlayerControl.IsFlashlightEnabled`). This overload of `[HarmonyPatch]` takes two parameters:
+a `Type` and a `string` (the order matters here). Other overloads let you provide additional information, such as the parameter types,
+so Harmony can pick the correct target when a method is overloaded.
+
+The `Type` parameter tells HarmonyX which class contains the target method, and the `string` parameter tells it which method in that class to patch.
+
+:::danger[Important Note!]
+The `[HarmonyPatch]` attribute itself doesn't patch the method.
+You still need to include a prefix or postfix method and call `Harmony.PatchAll()` in your mod's `Load()` method for your patch to be attached.
+For details on correctly writing prefixes and postfixes, see the next section.
+:::
+
+## Prefixes and Postfixes
+
+Once you have declared your static patch class, within it you can write code that will run **before** or **after** the target method.
+This is done with a `Prefix` and `Postfix` method respectively. While both prefixes and postfixes can modify the output of a method,
+the key advantage of a prefix is its ability to **cancel the original method**. The following prefix utilises this by letting the
+original method run in Hide and Seek mode, otherwise setting the result itself and skipping the original.
+
+```csharp
+[HarmonyPrefix] // Optional here, since the method is already named Prefix
+private static bool Prefix(ref bool __result)
+{
+    if (GameOptionsManager.Instance.currentGameMode == GameModes.HideNSeek)
+        return true;
+
+    __result = true;
+    return false;
+}
+```
+
+In the above prefix, you should note the following:
+
+- The patch method must be named ***Prefix*** or ***Postfix*** for your code to run. Alternatively, you can annotate it with
+the `[HarmonyPrefix]` or `[HarmonyPostfix]` attribute to explicitly tell Harmony the type of your patch.
+The example above uses both for demonstration, but either one on its own is enough.
+- A `bool` return type allows the prefix to control whether the original method should run.
+Returning `true` causes it to execute normally after your code, while `false` skips it entirely.
+- In this case the original method's return type is `bool`, so the `ref` parameter `ref bool __result` can be used to change the method's output.
+Without the `ref` keyword, you can read the result but not change it.
+
+:::note
+If you prefer, you can specify your target method on your prefix or postfix method instead, like so:
+
+```csharp
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.IsFlashlightEnabled))]
+private static bool Prefix(ref bool __result)
+{
+    
+}
+```
+
+However, it is important that the class containing your patch has the `[HarmonyPatch]` attribute regardless.
+Otherwise, Harmony will not find your patch:
+
+```csharp
+[HarmonyPatch]
+internal static class IsFlashlightEnabledPatch
+{
+    
+}
+```
+:::
+
+:::tip
+One of the most useful parameters available in a patch method is `__instance`, since it provides access to the instance on which the patched method is running.
+For example:
+
+```csharp
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Begin))]
+internal static class ShipStatusBeginPatch
+{
+    private static void Postfix(ShipStatus __instance)
+    {
+        
+    }
+}
+```
+:::
+
+## Troubleshooting
+
+Assuming you did everything correctly, your patch should run when you test the mod and flashlights should be enabled!
+If your patch (or any other you've written) doesn't run, try the following:
+
+- Make sure `Harmony.PatchAll()` is called in your mod's `Load()` method (see [Plugin Structure](../02-plugin-structure)).
+- See [Troubleshooting](../04-troubleshooting) to learn about inlining or other issues that might be affecting your patches.
+
+If you would like to learn more about Harmony, see the [HarmonyX Wiki](https://github.com/BepInEx/HarmonyX/wiki)
+and the [Harmony Docs](https://harmony.pardeike.net/v2/articles/intro.html).

@@ -1,0 +1,40 @@
+---
+title: C# 术语
+description: 与 C#、编译过程和 .NET 运行时相关的术语。
+author: "XtraCube, PalmForest, AlchlcDvl"
+translator: "HayashiUme"
+---
+
+### .NET 运行时（.NET Runtime）
+
+[.NET 运行时](https://en.wikipedia.org/wiki/.NET)是运行 C#（以及其他受支持语言）
+所编写应用的环境。它本质上是运行你 C# 代码的底层程序：把代码编译成
+[IL](#il中间语言intermediate-language)，并在运行时处理内存管理等事务。
+如果你熟悉 Java 开发或 Minecraft 模组，.NET 运行时就相当于 Java 世界里的 JVM。
+在 Among Us 模组开发中，模组就运行在游戏内置的 .NET 运行时上。
+
+### IL（中间语言，Intermediate Language）
+
+类似汇编语言，但面向的是 .NET 运行时而不是你的计算机。
+C# 程序先被编译成 IL，然后 .NET 在运行时再把 IL 编译成适合你机器的汇编代码。
+这被称为即时编译（JIT）。
+
+### 即时编译（JIT，Just-In-Time）
+
+JIT 编译让 .NET 运行时可以在程序运行期间把 IL 代码转换成原生的机器指令。
+在 Among Us 模组的场景中，.NET 运行时会读取你模组 DLL 里的 IL，
+并在需要用到时把它编译成原生代码。这让跨平台应用更容易运行，
+但代价是应用启动更慢、内存占用更高。
+
+### 提前编译（AOT，Ahead-Of-Time）
+
+AOT 编译把源代码直接转换成汇编代码，不经过任何运行时编译。
+AOT 的主要优点是启动更快、内存和 CPU 占用更低。
+某些平台（例如 iOS）也强制要求 AOT，因为它们不允许运行 JIT 程序。
+在 Among Us 模组开发中，游戏本体就是用 IL2CPP 构建的，因此使用 AOT。
+
+### 程序集（Assembly，或者说 .dll）
+
+可以把它看作你模组的最终发布包。编译 C# 代码后，它会被打包成动态链接库（DLL）。
+这就是用户放进 `BepInEx/plugins` 文件夹来运行你的模组的那个文件。
+DLL 文件也可以用来给你的项目添加依赖或其他外部代码。

@@ -1,7 +1,24 @@
 ---
 title: Resources
-description: A reference page in my new Starlight docs site.
-stars: true
+description: A page containing links to various helpful resources.
+sidebar:
+    order: 0
 ---
 
-This page isn't filled out yet, maybe you could do it? :D
+import { CardGrid, LinkCard } from '@astrojs/starlight/components'
+
+Explore terminology, guidelines, and tools to help you learn more about modding.
+
+<hr/>
+
+<LinkCard
+    title="Learn Important Terminology"
+    description="Improve your knowledge of terms or find out what something means."
+    href="/resources/terminology/01-csharp"
+/>
+
+<LinkCard
+    title="Read the Mod Guidelines"
+    description="Discover InnerSloth's mod policy and the community standards."
+    href="/resources/guidelines/01-mod-policy"
+/>

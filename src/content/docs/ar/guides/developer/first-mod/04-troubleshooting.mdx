@@ -3,6 +3,7 @@ title: Troubleshooting
 description: Lists some common issues you might encounter and how to troubleshoot them.
 author: "PalmForest"
 ---
+import { getRelativeLocaleUrl } from "astro:i18n"
 
 When setting up your first mod or getting started with modding in general, you might run into various problems that you don't understand.
 Here we will cover as many of these common issues as possible, so that hopefully you will be able to resolve them quickly and continue modding!
@@ -24,4 +25,4 @@ since it's usually larger and less likely to be inlined itself.
 elsewhere when patching, as other methods might not be.
 - Check the [Mono Method Analyser](https://allofus.dev/il2cpp/) for inlined methods.
 This tool will allow you to browse the game's methods and see if they are safe to patch.
-For a guide on using the analyser, see [Using the Method Analyser](../../../../resources/method-analyser)
+For a guide on using the analyser, see [Using the Method Analyser]({getRelativeLocaleUrl("ar", "resources/method-analyser")})
