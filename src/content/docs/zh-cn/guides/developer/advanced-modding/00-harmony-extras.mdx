@@ -1,0 +1,101 @@
+---
+title: Harmony 进阶
+description: 介绍一些对更复杂的模组制作很重要的额外 Harmony 概念。
+author: "PalmForest, HayashiUme"
+translator: "HayashiUme"
+---
+
+在用 Harmony 给一些方法打好补丁之后，你可能会遇到需要以另一种方式钩住游戏代码的情况。
+Harmony 提供了多种补丁类型，这里将讨论它们的用法与局限。
+
+本指南假定你已有 Harmony 的使用经验，或者至少先读过入门篇的 [Harmony 补丁指南](../../first-mod/03-harmony-patches) 再继续。
+
+## HarmonyPatch 重载
+
+`[HarmonyPatch]` 特性有多个替代重载，在给不同类型的方法打补丁时非常有用。
+
+## 优先级
+
+一个方法可以同时附加许多补丁——你的模组的，以及每个其他已安装模组的。HarmonyX 并不会只运行其中最新的那个；它会运行所有补丁，而当两个补丁涉及同一行为时，它们的运行顺序就决定了结果。该顺序由补丁优先级控制。每个 Prefix 和 Postfix 都有自己的优先级，但它们是分开排序的：只有当这个方法同时被两个 Prefix 补丁或者两个 Postfix 所修改时，才需要用到优先级。
+
+可以通过下面这几个方法来更改优先级：
+
+- `[HarmonyPriority(int)]` 设置补丁的优先级。默认是 `Priority.Normal`（400）。
+- `[HarmonyBefore(string[])]` 让该补丁在任意给定 Harmony ID 的补丁之前运行。
+- `[HarmonyAfter(string[])]` 让该补丁在任意给定 Harmony ID 的补丁之后运行。
+
+优先级通常使用 Harmony 的常量之一来写：
+
+`Priority.First`（800）、`Priority.VeryHigh`（700）、`Priority.High`（600）、`Priority.HigherThanNormal`（500）、`Priority.Normal`（400）、`Priority.LowerThanNormal`（300）、`Priority.Low`（200）、`Priority.VeryLow`（100）、`Priority.Last`（0）
+
+:::note
+数值越高，运行越早。`Priority.First` 在 `Priority.High` 之前运行，`Priority.Normal` 在中间运行，`Priority.Last` 在所有其他补丁之后运行。
+选择优先级永远不会阻止另一个补丁运行。所有 Prefix 和 Postfix 仍会执行——在 HarmonyX 中，即使 Prefix 返回 `false` 也只是跳过原方法，而不会跳过其他 Prefix。这意味着如果两种行为确实无法共存，冲突必须在逻辑内部解决；仅靠优先级无法移除另一个补丁。
+:::
+
+### 事件与监听器
+
+把每个角色的逻辑写成各自的补丁无法扩展：补丁是全局且匿名的，单个角色功能最终会分散在许多补丁中。因此，许多功能共享的反应——谋杀、报告、会议——通常会被包装一次并作为事件暴露出来：一个补丁对游戏方法作出反应，触发诸如 `PlayerMurderEvent` 这样的事件，而每段角色逻辑只需监听它。像 [MiraAPI's event system](https://github.com/All-Of-Us-Mods/MiraAPI/wiki/Events) 这样的框架就是围绕这一理念构建的，它建议使用其事件而不是直接给游戏打补丁。
+
+在底层，事件仍然是 Harmony：一个 **Prefix** 或 **Postfix** 触发事件，每个监听器都在该补丁内部运行。像谋杀这样的事后事件从 postfix 触发；必须能够取消操作的钩子则改用 prefix。上一节中的优先级在这里仍然重要——它们决定补丁的顺序，进而决定事件到达监听器的顺序。（有些框架也会给监听器自己的优先级，所以请检查你正在使用的框架。）
+
+### 示例：Bait 与 Evil Hacker
+
+Bait 是不少模组中的人气角色：其凶手会被迫报告尸体，从而暴露自己。作为谋杀事件的监听器，该逻辑可以简单到这样：
+
+```csharp
+private void OnMurderPlayer(PlayerMurderEvent @event)
+{
+    var killer = @event.Player;
+    var target = @event.Target;
+    if (killer == target) return;
+    if (target.IsRole(this)) killer.CmdReportDeadBody(target.Data);
+}
+```
+
+现在考虑一个思路相反的第二角色——Evil Hacker：当其某次击杀被报告时，报告会显示为来自除凶手以外的任意玩家。作为监听器，它会随机选择一名存活玩家，让对方代替报告尸体：
+
+```csharp
+private void OnMurderPlayer(PlayerMurderEvent @event)
+{
+    var killer = @event.Player;
+    var target = @event.Target;
+    if (killer == target) return;
+    if (!killer.IsRole(this)) return;
+
+    // 除凶手外的任意存活玩家都可以成为报告者
+    List<PlayerControl> candidates = new();
+    foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+        if (!player.Data.IsDead && player != killer)
+            candidates.Add(player);
+
+    var reporter = candidates[UnityEngine.Random.Range(0, candidates.Count)];
+    reporter.CmdReportDeadBody(target.Data);
+}
+```
+
+如果 Evil Hacker 谋杀了 Bait，两种能力都试图决定同一件事：那具尸体的报告显示什么。最后生效的效果就是玩家最终看到的结果——而由于监听器在触发事件的补丁内部运行，该顺序由这些补丁的优先级决定。
+
+当双方各自在同一方法上用补丁触发自己的事件时，代码写出来大致是这样：
+
+```csharp
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
+[HarmonyPriority(Priority.High)] // 最先运行
+internal static class MurderEventPatch
+{
+    private static void Postfix(PlayerControl __instance, PlayerControl target)
+    {
+        // 触发 PlayerMurderEvent，于是 Bait 的监听器在这里生效。
+    }
+}
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
+[HarmonyPriority(Priority.Low)] // 最后运行
+internal static class EvilHackerMurderEventPatch
+{
+    private static void Postfix(PlayerControl __instance, PlayerControl target)
+    {
+        // 触发它自己的事件，于是 Evil Hacker 的监听器最后生效。
+    }
+}
+```

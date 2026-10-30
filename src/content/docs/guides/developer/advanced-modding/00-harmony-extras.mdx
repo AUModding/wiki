@@ -1,0 +1,101 @@
+---
+title: Harmony Extras
+description: Explains additional Harmony concepts that are important for more complex modding.
+author: PalmForest, HayashiUme
+---
+
+After you have used Harmony to patch some methods, you might run into a situation where you need to hook the game's code in a different way.
+Harmony provides multiple patch types, the applications and limitations of which will be discussed here.
+
+This guide assumes you have prior experience with Harmony, or have at least read the
+introductory [guide to Harmony patches](../../first-mod/03-harmony-patches) before continuing. 
+
+## HarmonyPatch Overloads
+
+The `[HarmonyPatch]` attribute has multiple alternative overloads that can be very useful for patching different method types.
+
+## Harmony Priority
+
+A method can have many patches attached to it at once — your mod's, and those of every other installed mod. HarmonyX does not run only the newest of them; it runs all of them, and when two patches touch the same behaviour, the order they run in decides the outcome. That order is controlled by patch priority. Each prefix and postfix has its own, but they are ordered separately: priority only comes into play when the same method is patched by two prefixes, or by two postfixes.
+
+The priority can be changed with a few annotations:
+
+- `[HarmonyPriority(int)]` sets the priority of the patch. The default is `Priority.Normal` (400).
+- `[HarmonyBefore(string[])]` runs this patch before the patches of any of the given Harmony IDs.
+- `[HarmonyAfter(string[])]` runs this patch after the patches of any of the given Harmony IDs.
+
+The priority is normally written with one of Harmony's constants:
+
+`Priority.First` (800), `Priority.VeryHigh` (700), `Priority.High` (600), `Priority.HigherThanNormal` (500), `Priority.Normal` (400), `Priority.LowerThanNormal` (300), `Priority.Low` (200), `Priority.VeryLow` (100), `Priority.Last` (0)
+
+:::note
+A higher value runs earlier. `Priority.First` runs before `Priority.High`, `Priority.Normal` runs in the middle, and `Priority.Last` runs after every other patch.
+Choosing a priority never stops another patch from running. All prefixes and postfixes are still executed — in HarmonyX, even a prefix returning `false` only skips the original method, not the other prefixes. This means that if two behaviours truly cannot coexist, the conflict has to be resolved inside the logic itself; priorities alone will not remove the other patch.
+:::
+
+### Events and Listeners
+
+Writing each role's logic as its own patch does not scale: patches are global and anonymous, and a single role feature would end up scattered across many of them. Reactions that many features share — a murder, a report, a meeting — are therefore usually wrapped once and exposed as events: a patch reacts to the game method, raises an event such as `PlayerMurderEvent`, and every piece of role logic simply listens for it. [MiraAPI's event system](https://github.com/All-Of-Us-Mods/MiraAPI/wiki/Events) is built around this idea and recommends using its events instead of patching the game directly.
+
+Underneath, the events are still Harmony: a **Prefix** or **Postfix** raises the event, and every listener runs from inside that patch. After-the-fact events like a murder are raised from a postfix; hooks that must be able to cancel an action use a prefix instead. The priorities from the previous section do not stop mattering here — they decide the order of the patches, and with them the order in which the events reach the listeners. (Some frameworks also give listeners their own priority, so check the framework you are using.)
+
+### Example: The Bait and the Evil Hacker
+
+The Bait is a popular role from some mods: its killer is forced to report the body, exposing themselves. As a listener on the murder event, that logic can be as simple as this:
+
+```csharp
+private void OnMurderPlayer(PlayerMurderEvent @event)
+{
+    var killer = @event.Player;
+    var target = @event.Target;
+    if (killer == target) return;
+    if (target.IsRole(this)) killer.CmdReportDeadBody(target.Data);
+}
+```
+
+Now consider a second role with the opposite idea — the Evil Hacker: when one of its kills gets reported, the report is shown as coming from any player other than the killer. As a listener, it picks a random living player and lets them report the body instead:
+
+```csharp
+private void OnMurderPlayer(PlayerMurderEvent @event)
+{
+    var killer = @event.Player;
+    var target = @event.Target;
+    if (killer == target) return;
+    if (!killer.IsRole(this)) return;
+
+    // any alive player except the killer can be the reporter
+    List<PlayerControl> candidates = new();
+    foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+        if (!player.Data.IsDead && player != killer)
+            candidates.Add(player);
+
+    var reporter = candidates[UnityEngine.Random.Range(0, candidates.Count)];
+    reporter.CmdReportDeadBody(target.Data);
+}
+```
+
+If the Evil Hacker murders the Bait, both abilities try to decide the same thing: what the report of that body says. The effect that applies last is what the players end up seeing — and because listeners run inside the patches that raise the events, that order is decided by the priority of those patches.
+
+When each side raises its event from its own patch on the same method, the code look like this:
+
+```csharp
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
+[HarmonyPriority(Priority.High)] // runs first
+internal static class MurderEventPatch
+{
+    private static void Postfix(PlayerControl __instance, PlayerControl target)
+    {
+        // Raise PlayerMurderEvent, so the Bait's listener applies here.
+    }
+}
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
+[HarmonyPriority(Priority.Low)] // runs last
+internal static class EvilHackerMurderEventPatch
+{
+    private static void Postfix(PlayerControl __instance, PlayerControl target)
+    {
+        // Raise its own event, so the Evil Hacker's listener applies last.
+    }
+}
+```
