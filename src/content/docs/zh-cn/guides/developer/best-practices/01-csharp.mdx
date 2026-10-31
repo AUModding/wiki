@@ -1,10 +1,224 @@
 ---
-title: 好电脑是一台不抱怨的电脑
-description: 了解为什么有些罪过不可饶恕。
+title: 让你的 C# ++++
+description: 好电脑是一台不抱怨的电脑
 author: "AlchlcDvl"
 translator: "HayashiUme"
 ---
 
-不管模组做得多好，它都可能被搞得一团糟。
+无论一个模组的点子有多绝妙，它终究取决于支撑它的代码写得好不好。
+电脑既聪明得离谱，又蠢得离谱：它聪明到能在一毫秒内算出复杂的捷径，却又蠢到对你的指令照单全收——哪怕这些指令糟糕透顶。
 
-请输入文本，之后再来补内容。
+## 可读性
+
+代码可以优化得很差，但如果你想把它修好，就得先真正看懂它写了什么。
+这是调试时最痛的一点常常不是「这个烦人的 bug 藏在哪？」，而是「我他妈到底写的是什么东西。」。
+
+这里提到的每一条规则，都不要求你做到完美（本 Wiki 的其他部分也一样），
+但强烈建议你尽量照做。你要让其他开发者，更重要的是未来的你能读懂并理解你的意图。
+
+### 写下你的想法
+
+如果你以前写过代码，那你肯定知道注释是什么。如果没写过：注释本质上就是贴在代码里的便利贴，
+除了给周围的代码补充一点上下文以外，它什么都不做。
+
+事实上，注释根本不会被编译进最终的 DLL。写注释是不会增大你的模组体积的。
+
+当然，这并不意味着你必须给每一行代码都写注释——真那样做的人纯属有病。
+你只需要在那些意图不那么一目了然的地方留下注释就够了。
+
+```cs
+var something = SomeClass.DoSomething(); // 从某处取一个值
+```
+
+或者，你也可以用注释来骂街，这种做法也非常常见。
+
+```cs
+// 这东西为什么会莫名其妙变成 null？？？为什么？？
+private static MonoBehaviour? Script;
+```
+
+### 给东西起名
+
+名字有含义，你书写名字的方式也有含义。如果你哪天要在没有语法高亮的情况下读代码，
+那么「光看格式就能猜出某个变量是干什么的」绝对能救你一命。
+
+#### 变量
+
+没什么比看到 `var x = SomeValue();`、却完全不知道 `x` 代表什么更糟的了。
+解决办法非常简单：**给变量起一个真正有意义的名字。**
+
+```cs
+var particle = ScriptLocation.GetParticle();
+```
+
+:::tip
+尽量避免用单个字母命名变量（比如 `a`、`b`、`c`）。
+唯一的例外是编写简单的循环或委托的时候。
+:::
+
+变量通常采用 `camelCase`（驼峰命名法）书写。
+
+#### 参数
+
+和变量一样，方法的参数通常也用 `camelCase` 书写。
+
+```cs
+public void DoSomething(int index, bool flagForSomething);
+```
+
+#### 字段
+
+类级别的字段通常采用 `camelCase` 书写。
+
+```cs
+private static bool someFlag; // 可以！
+private static bool SomeFlag; // 一般来说，不行
+```
+
+当然也有例外。通常当字段被标记为 `readonly` 时，你会改用 `PascalCase`。
+
+```cs
+public static readonly List<int> MyNumbers = new();
+```
+
+当字段是 `public` 时，通常也使用 `PascalCase`。
+
+```cs
+public bool Flag; // 因为它是 public
+```
+
+:::note
+非 `readonly` 的 public 字段通常很不受待见，但 Unity 对它们有自己一套奇怪的规矩。
+这个之后再讲！
+:::
+
+用下划线（`_someFlag`）作为私有字段名的前缀，也是一种非常常见的做法。
+不过在模组圈子里，这远没有专业软件开发领域那么普遍，所以用不用 `_` 完全取决于你自己。
+
+#### 其他一切
+
+凡是前面几类都装不下的代码（比如类、方法和属性），通常都用 `PascalCase` 命名。
+
+```cs
+public static class MyClass
+{
+    public static int MyProperty { get; set; }
+
+    public static void MyMethod() { }
+}
+```
+
+### 守卫代码，不要层层嵌套
+
+看看下面两段代码，注意哪一段读起来更不容易让人头疼。
+
+嵌套写法：
+
+```cs
+if (response.IsValid)
+{
+    Logger.Log(response.Name + " is valid!");
+
+    if (response.IsAuthorized)
+    {
+        Logger.Log("Authorized!");
+
+        if (response.Sector == "R&D")
+            return "ResearchAndDevelopment";
+        else if (response.Sector == "HR")
+            return "HumanResources";
+        else if (response.Sector == "IT")
+            return "Technology";
+        else if (response.Sector == "$$")
+            return "Finances";
+
+        if (response.AuthorizationLevel > 1)
+        {
+            Logger.Log("Have enough clearance.");
+            return ProcessResponse(response);
+        }
+
+        return "None";
+    }
+    else
+    {
+        return "Unauthorized";
+    }
+}
+else
+{
+    return "Invalid";
+}
+```
+
+卫语句写法：
+
+```cs
+if (!response.IsValid)
+    return "Invalid";
+
+Logger.Log(response.Name + " is valid!");
+
+if (!response.IsAuthorized)
+    return "Unauthorized";
+
+Logger.Log("Authorized!");
+
+if (response.Sector == "R&D")
+    return "ResearchAndDevelopment";
+else if (response.Sector == "HR")
+    return "HumanResources";
+else if (response.Sector == "IT")
+    return "Technology";
+else if (response.Sector == "$$")
+    return "Finances";
+
+if (response.AuthorizationLevel <= 1)
+    return "None";
+
+Logger.Log("Have enough clearance.");
+return ProcessResponse(response);
+```
+
+:::tip
+这种技巧叫做**卫语句（Early Return）**。一旦某个条件不满足就立刻退出方法，
+你就不必为了处理「正常路径」而写出层层缩进、错综复杂的逻辑。
+
+```cs
+if (!response.IsValid)
+    return "Invalid";
+```
+:::
+
+当代码块嵌套得太深时，想弄清楚一个判断在哪里结束、另一个判断又从哪里开始，会变得极其混乱。
+这种「心智负担」让你的代码读起来像一桩苦差事。卫语句不仅能让你脑子里的逻辑保持清晰，
+还给电脑立了一块明确的「出口」指示牌，让它尽早停下、不再执行多余的代码。
+
+### 魔法字符串与魔法数字
+
+「魔法数字」（或者魔法字符串）可不是什么炫酷的巫师咒语，
+而是一个被直接丢进逻辑里、来路不明的值。
+在代码里留下魔法数字，就像给一个月后的自己埋了个陷阱。
+
+```cs
+// 十八码的写法：
+// 3 是什么意思？1.5f 又是什么？
+if (player.State == 3)
+{
+    player.Speed *= 1.5f;
+}
+```
+
+与其让未来的你猜来猜去，不如把这些值赋给命名清晰的常量。
+
+```cs
+// 不十八码的写法：
+// 代码读起来就像大白话。
+const int SprintingState = 3;
+const float SprintSpeedMultiplier = 1.5f;
+
+if (player.State == SprintingState)
+{
+    player.Speed *= SprintSpeedMultiplier;
+}
+```
