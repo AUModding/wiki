@@ -1,0 +1,65 @@
+---
+title: Plugin Structure
+description: Outlines the structure of a plugin and the various files that make up a plugin.
+author: "XtraCube"
+---
+
+Most Among Us mods are a BepInEx plugin.
+A BepInEx plugin is a .NET assembly (DLL) that is loaded by the BepInEx mod loader.
+Every BepInEx plugin has a specific structure you should familiarize yourself with.
+
+:::note
+This guide assumes you are using a BepInEx 6.0.0 bleeding edge build.
+It also assumes you are developing for IL2CPP rather than Mono, which is what Among Us uses.
+:::
+
+### The Plugin Class
+
+The Plugin class is the main class of your plugin. It performs the loading and unloading
+functions of your plugin. Every plugin class must inherit from `BasePlugin`,
+which is a class provided by BepInEx. The following is an example of a plugin class:
+
+```csharp
+
+namespace MyFirstMod;
+
+[BepInAutoPlugin]
+[BepInProcess("Among Us.exe")]
+[BepInDependency(ReactorPlugin.Id)]
+[ReactorModFlags(ModFlags.RequireOnAllClients)]
+public partial class MyFirstModPlugin : BasePlugin
+{
+    public Harmony Harmony { get; } = new(Id);
+
+    public override void Load()
+    {
+        Harmony.PatchAll();
+        ReactorCredits.Register<MyFirstModPlugin>(location => location is ReactorCredits.Location.MainMenu);
+    }
+
+    public override bool Unload()
+    {
+        Harmony.UnpatchSelf();
+        return base.Unload();
+    }
+}
+```
+
+There are a few things to note about this class:
+- The `BepInAutoPlugin` attribute automatically fills in the plugin's ID
+and version from the assembly's metadata. You can manually specify this
+information as well. For example, you can use
+`[BepInAutoPlugin("dev.xtracube.myfirstmod", "My First Mod", "1.0.0")]`.
+
+- The `BepInProcess` attribute specifies the process that this plugin will run in.
+It is not necessary, but can be used to prevent the plugin from loading in other processes.
+In this case, the plugin will only load in the Among Us process.
+
+- The `BepInDependency` attribute specifies a dependency for this plugin.
+In this case, the plugin depends on the Reactor plugin.
+
+You may also notice the `ReactorModFlags` attribute. It is used to specify that this plugin
+is required on all clients in a multiplayer game. If you are making a host-only mod,
+or a mod that does not affect gameplay, you should specify a different set of flags.
+You can find more information about Reactor mod flags in the
+[Reactor documentation](https://docs.reactor.gg/).

@@ -1,0 +1,28 @@
+---
+title: Tooling Terms
+description: Terminology relating to various modding tools.
+author: "AlchlcDvl, PalmForest"
+---
+
+### Reflection
+
+The programming equivalent of picking a lock. It allows your code to inspect the game's code while it is running,
+and more importantly, read, run or change `private` or `protected` variables and methods.
+This makes for a powerful modding tool, as it lets you work with code that has been access protected by the developers.
+
+:::caution
+Reflection is much slower than normal calls, since the runtime has to look up and retrieve metadata.
+Avoid using it in code that runs frequently.
+:::
+
+### HarmonyX
+
+The toolkit that makes patching Among Us possible without permanently modifying the game's original files.
+It lets you intercept the game's code while it's running and safely inject your own through different types of patches.
+HarmonyX is BepInEx's fork of the Harmony patching library.
+
+### Prefix / Postfix
+
+The two main ways you will use Harmony. A Prefix runs *before* the game's original method
+(great for modifying inputs or cancelling the original method entirely), while a Postfix runs *after* it
+(great for reading/editing the final results or adding extra effects).

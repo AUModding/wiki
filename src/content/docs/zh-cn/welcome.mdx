@@ -5,15 +5,16 @@ author: "Neon, ThetaHalo"
 translator: "HayashiUme"
 editUrl: false
 lastUpdated: false
+template: splash
 stars: true
 ---
 
 import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
-import InnerslothDisclaimer from '../../../components/InnerslothDisclaimer.astro';
+import InnerslothDisclaimer from '@components/InnerslothDisclaimer.astro';
 
 欢迎来到 Among Us 模组维基！本 Wiki 仍在建设中，先从下面选一个方向开始吧。
 
-## 你的方向的是？
+## 你的方向是？
 
 <CardGrid>
   <LinkCard
@@ -49,7 +50,7 @@ import InnerslothDisclaimer from '../../../components/InnerslothDisclaimer.astro
    <LinkCard
      title="开发者环境配置"
      description="编写模组所需的额外工具。"
-     href="/zh-cn/guides/developer/environment"
+     href="/zh-cn/guides/developer/first-mod/"
      icon="setting"
    />
 2. 选择一条指南。「使用模组」面向想体验模组的普通玩家，「开发模组」面向想自己制作模组的开发者。
