@@ -1,16 +1,8 @@
 ---
-title: Make Your C# Sharper
-description: A Good PC Is One That Doesn't Complain
+title: Eyes Are Important
+description: Dear Diary, I Uncovered A Horror
 author: "AlchlcDvl"
 ---
-
-No matter how brilliant a mod's concept is, it will only ever be as good as the
-code it's built on. A computer is simultaneously incredibly smart and incredibly
-dumb. It's smart enough to calculate complex shortcuts in a millisecond, but
-dumb enough to follow your instructions to the letter, even when those
-instructions are terrible.
-
-## Readability
 
 Code can be highly unoptimised, but if you want to fix it, you need to actually
 understand what is written. This is the biggest pain point of debugging: it
@@ -108,7 +100,8 @@ its own weird rules for them. More on that later!
 It is also a very common practice to prefix private field names with an
 underscore (`_someFlag`). This isn't quite as universally adopted in the modding
 scene as it is in professional software development, so using the `_` is
-entirely up to you.
+entirely up to you, but highly recommended to avoid local variables shadowing
+declared fields.
 
 #### Everything Else
 
@@ -214,11 +207,69 @@ code a chore to read. Early returns not only keep your brain aligned with the
 logic, but they also give the computer a clear exit sign so it can stop running
 unnecessary code.
 
+### Switch Statements and Expressions
+
+If you find yourself writing a massive wall of `if` and `else if` statements to
+check the exact same variable over and over again, it is time to use a `switch`.
+
+Continuing from the earlier example, checking `response.Sector` four different
+times is clunky. A traditional `switch` statement cleans this up by comparing a
+single value against multiple cases:
+
+```cs
+switch (response.Sector)
+{
+    case "R&D":
+        return "ResearchAndDevelopment";
+    case "HR":
+        return "HumanResources";
+    case "IT":
+        return "Technology";
+    case "$$":
+        return "Finances";
+    default:
+        return "None";
+}
+```
+
+A switch case provides the benefit of making the code a lot more digestible, and
+in some cases, even more optimised than `if-else-if` trees!
+
+#### Switch Expressions
+
+Because modern C# is incredibly powerful, you can condense this even further
+using a switch expression. Instead of writing `case` and `return` repeatedly,
+you can map values directly to their results.
+
+This is the exact same logic as above, but written in a fraction of the space:
+
+```cs
+return response.Sector switch
+{
+    "R&D" => "ResearchAndDevelopment",
+    "HR" => "HumanResources",
+    "IT" => "Technology",
+    "$$" => "Finances",
+    _ => "None"
+};
+```
+
+:::tip
+The `_` in a switch expression is called the discard operator. It acts just
+like `default:` in a normal switch statement, acting as the catch-all for any
+value you didn't explicitly list.
+:::
+
+Switch expressions are fantastic for modding because they force you to return
+a value, which prevents bugs where you might accidentally forget to assign a
+variable in one of your `if/else` branches. They read exactly like a look-up
+table, making your intent instantly clear to anyone reading your source code.
+
 ### Magic Strings and Numbers
 
-A "magic number" (or magic string) isn't a cool wizard spell. It's a random,
-unexplained value dropped directly into your logic. Leaving magic numbers in
-your code is like setting a booby trap for yourself a month from now.
+A "magic number" (or magic string) is a random, unexplained value dropped
+directly into your logic. Leaving magic numbers in your code is like setting
+a booby trap for yourself a month from now.
 
 ```cs
 // Bad: What does 3 mean? What is 1.5f?
@@ -232,7 +283,7 @@ Instead of leaving your future self guessing, assign these values to a
 well-named constant.
 
 ```cs
-// Good: The code reads like plain English.
+// Good: The code reads like plain English
 const int SprintingState = 3;
 const float SprintSpeedMultiplier = 1.5f;
 
@@ -241,3 +292,24 @@ if (player.State == SprintingState)
     player.Speed *= SprintSpeedMultiplier;
 }
 ```
+
+The modding scene is notorious for having magic numbers. Same with the field
+naming, you aren't expected to follow this guideline to the letter, but at least
+a comment explaining why that particular value is needed would be much
+appreciated. You can ignore the need to explain yourself if the number/string's
+existence is *reasonable*.
+
+:::tip
+If you frequently compare magic numbers and strings, `enum`s are your best friend!
+```cs
+public enum MyEnum
+{
+    Value1,
+    Value2,
+    Value3,
+}
+```
+
+Enums implicitly define a number-string pair that serve as constants, making
+them super helpful in reading code and making the intent of numbers clear.
+:::
