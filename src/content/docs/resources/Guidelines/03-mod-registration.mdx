@@ -36,7 +36,12 @@ public static class ConstantsGetBroadcastVersionPatch
         {
             return;
         }
-        __result += 25;
+
+        var revision = __result % 50;
+        if (revision < Constants.MODDED_REVISION_MODIFIER_VALUE)
+        {
+            __result += Constants.MODDED_REVISION_MODIFIER_VALUE;
+        }
     }
 }
 ```
