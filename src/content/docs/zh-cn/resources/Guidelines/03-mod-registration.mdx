@@ -1,0 +1,73 @@
+---
+title: 模组注册
+description: Innersloth 对仅房主端和全客户端模组的匹配注册说明。
+author: "HayashiUme"
+---
+
+本页介绍 Innersloth 技术文档中的模组注册机制。
+参考了 [Among Us 模组技术信息](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md)，重点章节包括[仅房主端模组的 +25 注册](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#host-only-mod-registration-25-modded-flag)、[全客户端模组客户端识别](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#all-client-mod-client-identification)以及[如何注册全客户端模组](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#how-to-register-an-all-client-mod)。
+
+## 注册方式
+
+对于使用 Innersloth 官方后端的模组，官方介绍了两种注册方式：
+- 仅房主端模组使用 `+25` Modded 标记
+- 全客户端模组使用模组 GUID。
+两者用途不同；如果模组同时需要这两种能力，可以组合使用。
+
+## 仅房主端（H系）模组
+
+游戏协议版本是一个 `int32`。将其增加 `25` 会为大厅启用房主权威模式。
+大多数通常由服务器权威控制的游戏功能会改由房主控制，使仅房主端模组可以改变部分游戏行为，同时其他玩家无需安装该模组即可加入。
+
+房主并不会因此获得所有状态的控制权。
+Innersloth 特别指出，用户数据和玩家保护相关状态不属于房主权限。
+反作弊措施可能会放宽，但不保证在所有情况下关闭；速率限制和其他安全保护也仍可能生效。
+
+使用 Reactor 时，可以在插件类上使用 `[ReactorModFlags(ModFlags.DisableServerAuthority)]` 声明模组为仅房主端模组。不使用 Reactor 时，常见的协议版本补丁如下：
+
+```csharp
+[HarmonyPatch(typeof(Constants), nameof(Constants.GetBroadcastVersion))]
+public static class ConstantsGetBroadcastVersionPatch
+{
+    public static void Postfix(ref int __result)
+    {
+        if (GameStates.IsLocalGame || GameStates.IsFreePlay)
+        {
+            return;
+        }
+        __result += 25;
+    }
+}
+```
+
+上面的本地模式判断是针对当前 AMCI 与 `+25` 实现的兼容处理；Innersloth README 介绍了两种机制并确认它们可以组合使用，但没有记载 Freeplay/LocalGame 的这一问题。
+
+任何使用 `+25` 标记的大厅也会启用 Innersloth 为仅房主端模组提供的功能，包括将 `/cmd` 聊天消息定向发送给房主。
+详情见官方文档的[仅房主端模组](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#host-only-mods)章节。
+
+## 全客户端模组
+
+Among Us Modded Client Identification (AMCI) 允许全客户端模组选择一个 GUID 来标识自己。AMCI 本身是模组识别和匹配机制，不会启用房主权威模式，也不会因此赋予房主额外权限。官方列出的 AMCI 相关功能包括：
+
+- 搜索注册了相同模组 GUID 的大厅。
+- 将已注册的模组大厅与普通匹配池区分，并阻止未安装模组的客户端加入。
+- Innersloth 为注册模组提供特定的反作弊豁免；这不代表整体关闭或放宽反作弊。
+
+模组 GUID 使用通用的 version 4 UUID。可以在 [uuidgenerator.net](https://www.uuidgenerator.net/) 生成 UUID，并在该模组的各个版本中保持不变。创建大厅时使用的 GUID 必须与匹配筛选中的 GUID 相同。
+
+### Among Us 18.0+ 内置注册方式
+
+Among Us 18.0 及更高版本包含静态类 `CurrentModRegistration` 及其字段 `ModRegistrationGuidString`。在创建或搜索大厅前设置有效 GUID：
+
+```csharp
+CurrentModRegistration.ModRegistrationGuidString = "a1b2c3d4-ef56-7gh8-ij9k-0l0mn0114514";
+```
+
+游戏会使用该值，通过 `HostModdedGame` 标记注册所创建的大厅，并在匹配搜索中自动添加对应的 GUID 筛选。如果字段为 null、空字符串或不是有效 GUID，游戏会使用普通的创建大厅流程，也不会添加 AMCI 匹配筛选。
+这个方法只有一个 GUID 字段。如果多个模组分别设置自己的 GUID，后写入的值会覆盖之前的值；仅使用该接口不能同时表示多个 GUID。
+
+### Reactor 对多个必需模组的处理
+
+[Reactor PR #109](https://github.com/NuclearPowered/Reactor/pull/109) 将 AMCI 集成到 Reactor 现有的模组握手中。
+在该 PR 实现里，Reactor 收集已加载且标记为 `ModFlags.RequireOnAllClients` 的模组，根据它们的 ID 和版本生成规范列表，再将该列表哈希为一个合成 GUID。随后 Reactor 将这个合成值写入 `CurrentModRegistration.ModRegistrationGuidString`，用单个 GUID 表示整组必需模组。
+这是 Pull Request 中的实现，不是 Reactor 正式版已有的功能。要尝试此功能，应从该 PR 对应的 [Reactor Actions](https://github.com/NuclearPowered/Reactor/actions) CI 运行中获取构建产物，而不是下载当前正式版。

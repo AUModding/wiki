@@ -1,0 +1,88 @@
+---
+title: Mod Registration
+description: Innersloth matchmaking registration for host-only and all-client mods.
+author: "HayashiUme"
+---
+
+This page explains the mod registration mechanisms described in Innersloth's technical documentation.
+It references [Technical Information for Modding Among Us](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md), especially [Host-only Mod Registration](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#host-only-mod-registration-25-modded-flag), [All-client Mod Client Identification](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#all-client-mod-client-identification), and [How to register an All-client Mod](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#how-to-register-an-all-client-mod).
+
+## Registration Types
+
+Innersloth describes two registration mechanisms for mods using its backend:
+- Host-only mods use the `+25` modded flag.
+- All-client mods use a mod GUID.
+
+The two mechanisms serve different purposes and can be combined when a mod needs both.
+
+## Host-Only Mods: +25 Modded Flag
+
+The game protocol version is an `int32`. Adding `25` enables host-authority mode for the lobby.
+Most gameplay features that would normally be server-authoritative become host-authoritative, allowing a host-only mod to change some gameplay behavior while other players join without installing that mod.
+
+Host authority does not extend to every state.
+Innersloth specifically notes that user data and player-protection-related state are not granted to the host.
+Anti-cheat measures may be relaxed, but are not guaranteed to be disabled in every case; rate limits and other security protections may still apply.
+
+With Reactor, declare a host-only mod using `[ReactorModFlags(ModFlags.DisableServerAuthority)]` on the plugin class. Without Reactor, a common protocol-version patch is:
+
+```csharp
+[HarmonyPatch(typeof(Constants), nameof(Constants.GetBroadcastVersion))]
+public static class ConstantsGetBroadcastVersionPatch
+{
+    public static void Postfix(ref int __result)
+    {
+        if (GameStates.IsLocalGame || GameStates.IsFreePlay)
+        {
+            return;
+        }
+        __result += 25;
+    }
+}
+```
+
+The local-mode guard above is a compatibility measure for the current AMCI and `+25` implementation; Innersloth's README describes the two mechanisms and confirms they can be combined, but does not document this Freeplay/LocalGame issue.
+
+Any lobby using the `+25` flag also enables Innersloth's host-only features, including `/cmd` chat messages directed to the host.
+See the official [Host-only Mods](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#host-only-mods) section for details.
+
+## All-Client Mods: AMCI Mod GUID
+
+Among Us Modded Client Identification (AMCI) lets an all-client mod opt in to identification by a self-assigned GUID. AMCI is a mod identification and matchmaking mechanism; by itself, it does not enable host-authority mode or grant the host additional authority. Innersloth lists these AMCI-related features:
+
+- Finding lobbies registered with the same mod GUID.
+- Keeping registered modded lobbies out of the normal matchmaking pool and preventing unmodded clients from joining them.
+- Specific anti-cheat exemptions for registered mods; this does not mean anti-cheat is disabled or broadly relaxed.
+
+The mod GUID is a generic version 4 UUID.
+Generate one with [uuidgenerator.net](https://www.uuidgenerator.net/) and keep the same value across releases.
+The same GUID must be used for lobby registration and matchmaking filters.
+
+### Built-In Registration in Among Us 18.0+
+
+Among Us 18.0 and later include the static class `CurrentModRegistration` and its `ModRegistrationGuidString` field.
+Set a valid GUID before hosting or searching:
+
+```csharp
+CurrentModRegistration.ModRegistrationGuidString = "316e7f61-f150-4ac0-b2cd-7f3cc7225963";
+```
+
+The game uses that value to register hosted lobbies with the `HostModdedGame` tag and automatically adds the matching GUID filter to matchmaking searches.
+If the field is null, empty, or not a valid GUID, the game follows the normal hosting path and does not add an AMCI matchmaking filter.
+This method has only one GUID field. If multiple mods independently assign their own GUIDs, a later assignment replaces an earlier one; this method alone cannot represent several GUIDs at the same time.
+
+### Multiple Required Mods with Reactor
+
+[Reactor PR #109](https://github.com/NuclearPowered/Reactor/pull/109) integrates AMCI with Reactor's existing mod handshake.
+In that PR implementation, Reactor gathers the loaded mods marked `ModFlags.RequireOnAllClients`, creates a canonical list from their IDs and versions, and hashes the list into one composite GUID.
+Reactor then assigns this composite value to `CurrentModRegistration.ModRegistrationGuidString`, using one GUID to represent the full set of required mods.
+
+This implementation is in a pull request and is not part of the Reactor stable release.
+To try it, get a build artifact from a CI run for the PR through [Reactor Actions](https://github.com/NuclearPowered/Reactor/actions), rather than downloading the current stable release.
+The implementation may change before the PR is merged.
+
+## Source and Further Details
+
+The explanations above reference Innersloth's [official modding information README](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md).
+Its [advanced technical details](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#advanced-technical-details) include the lower-level `HostModdedGame` message tag, GUID serialization, and matchmaking filter implementation.
+The README also documents host-only chat commands, packed `GameDataTo` messages, and packet-rate and packet-size limits.
