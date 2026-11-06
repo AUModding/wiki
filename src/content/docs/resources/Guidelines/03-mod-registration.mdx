@@ -15,7 +15,7 @@ Innersloth describes two registration mechanisms for mods using its backend:
 
 The two mechanisms serve different purposes and can be combined when a mod needs both.
 
-## Host-Only Mods: +25 Modded Flag
+## Host-Only Mods
 
 The game protocol version is an `int32`. Adding `25` enables host-authority mode for the lobby.
 Most gameplay features that would normally be server-authoritative become host-authoritative, allowing a host-only mod to change some gameplay behavior while other players join without installing that mod.
@@ -28,19 +28,17 @@ With Reactor, declare a host-only mod using `[ReactorModFlags(ModFlags.DisableSe
 
 ```csharp
 [HarmonyPatch(typeof(Constants), nameof(Constants.GetBroadcastVersion))]
-public static class ConstantsGetBroadcastVersionPatch
+internal static class ModdedProtocolPatch
 {
     public static void Postfix(ref int __result)
     {
-        if (GameStates.IsLocalGame || GameStates.IsFreePlay)
+        if (AmongUsClient.Instance.NetworkMode == NetworkModes.OnlineGame)
         {
-            return;
-        }
-
-        var revision = __result % 50;
-        if (revision < Constants.MODDED_REVISION_MODIFIER_VALUE)
-        {
-            __result += Constants.MODDED_REVISION_MODIFIER_VALUE;
+            var revision = __result % 50;
+            if (revision < 25)
+            {
+                __result += 25;
+            }
         }
     }
 }
@@ -51,7 +49,7 @@ The local-mode guard above is a compatibility measure for the current AMCI and `
 Any lobby using the `+25` flag also enables Innersloth's host-only features, including `/cmd` chat messages directed to the host.
 See the official [Host-only Mods](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#host-only-mods) section for details.
 
-## All-Client Mods: AMCI Mod GUID
+## All-Client Mods
 
 Among Us Modded Client Identification (AMCI) lets an all-client mod opt in to identification by a self-assigned GUID. AMCI is a mod identification and matchmaking mechanism; by itself, it does not enable host-authority mode or grant the host additional authority. Innersloth lists these AMCI-related features:
 

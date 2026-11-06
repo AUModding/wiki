@@ -12,6 +12,7 @@ author: "HayashiUme"
 对于使用 Innersloth 官方后端的模组，官方介绍了两种注册方式：
 - 仅房主端模组使用 `+25` Modded 标记
 - 全客户端模组使用模组 GUID。
+
 两者用途不同；如果模组同时需要这两种能力，可以组合使用。
 
 ## 仅房主端（H系）模组
@@ -27,19 +28,17 @@ Innersloth 特别指出，用户数据和玩家保护相关状态不属于房主
 
 ```csharp
 [HarmonyPatch(typeof(Constants), nameof(Constants.GetBroadcastVersion))]
-public static class ConstantsGetBroadcastVersionPatch
+internal static class ModdedProtocolPatch
 {
     public static void Postfix(ref int __result)
     {
-        if (GameStates.IsLocalGame || GameStates.IsFreePlay)
+        if (AmongUsClient.Instance.NetworkMode == NetworkModes.OnlineGame)
         {
-            return;
-        }
-
-        var revision = __result % 50;
-        if (revision < Constants.MODDED_REVISION_MODIFIER_VALUE)
-        {
-            __result += Constants.MODDED_REVISION_MODIFIER_VALUE;
+            var revision = __result % 50;
+            if (revision < 25)
+            {
+                __result += 25;
+            }
         }
     }
 }
