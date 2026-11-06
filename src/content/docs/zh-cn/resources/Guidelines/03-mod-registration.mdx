@@ -5,7 +5,6 @@ author: "HayashiUme"
 ---
 
 本页介绍 Innersloth 技术文档中的模组注册机制。
-参考了 [Among Us 模组技术信息](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md)，重点章节包括[仅房主端模组的 +25 注册](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#host-only-mod-registration-25-modded-flag)、[全客户端模组客户端识别](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#all-client-mod-client-identification)以及[如何注册全客户端模组](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#how-to-register-an-all-client-mod)。
 
 ## 注册方式
 
@@ -46,8 +45,7 @@ internal static class ModdedProtocolPatch
 
 上面的本地模式判断是针对当前 AMCI 与 `+25` 实现的兼容处理；Innersloth README 介绍了两种机制并确认它们可以组合使用，但没有记载 Freeplay/LocalGame 的这一问题。
 
-任何使用 `+25` 标记的大厅也会启用 Innersloth 为仅房主端模组提供的功能，包括将 `/cmd` 聊天消息定向发送给房主。
-详情见官方文档的[仅房主端模组](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#host-only-mods)章节。
+任何使用 `+25` 标记的大厅也会启用 Innersloth 为仅房主端模组提供的功能，包括将 `/cmd` 聊天消息定向发送给房主。详情见[此文档](/zh-cn/resources/guidelines/04-mod-features)。
 
 ## 全客户端模组
 

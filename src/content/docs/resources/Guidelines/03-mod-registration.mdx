@@ -5,7 +5,6 @@ author: "HayashiUme"
 ---
 
 This page explains the mod registration mechanisms described in Innersloth's technical documentation.
-It references [Technical Information for Modding Among Us](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md), especially [Host-only Mod Registration](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#host-only-mod-registration-25-modded-flag), [All-client Mod Client Identification](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#all-client-mod-client-identification), and [How to register an All-client Mod](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#how-to-register-an-all-client-mod).
 
 ## Registration Types
 
@@ -47,7 +46,7 @@ internal static class ModdedProtocolPatch
 The local-mode guard above is a compatibility measure for the current AMCI and `+25` implementation; Innersloth's README describes the two mechanisms and confirms they can be combined, but does not document this Freeplay/LocalGame issue.
 
 Any lobby using the `+25` flag also enables Innersloth's host-only features, including `/cmd` chat messages directed to the host.
-See the official [Host-only Mods](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#host-only-mods) section for details.
+See [This Page](/resources/guidelines/04-mod-features) for details.
 
 ## All-Client Mods
 

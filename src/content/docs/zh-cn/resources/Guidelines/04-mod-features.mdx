@@ -1,0 +1,101 @@
+---
+title: 模组功能
+description: 关于 /cmd 指令与 GameDataTo 消息的说明。
+author: "HayashiUme"
+---
+
+本页整理了 Innersloth [Among Us 模组技术信息](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#mod-features)中介绍的模组功能与网络要求。
+
+## 仅房主端模组
+
+### 聊天指令
+
+使用 `+25` Modded 标记的大厅中，非房主玩家可以发送以 `/cmd` 开头的聊天消息。
+游戏会将该消息只发送给房主，不会作为普通大厅聊天转发给其他玩家。
+这样，仅房主端模组就能实现玩家技能等功能，而不要求所有玩家都安装模组。
+
+例如，带有猜测技能的角色可以发送：
+
+```text
+/cmd guess Impostor 1
+```
+
+房主端模组可以将 `guess` 识别为指令，将 `Impostor 1` 作为参数，然后做出相应的操作。
+
+#### 解析 `/cmd`
+
+游戏提供的是定向发送机制；指令解析和具体行为仍需由模组实现。
+下面的独立示例的做法：
+
+```csharp
+using System;
+
+public static bool TryParseCommand(string message, out string command, out string args)
+{
+    command = string.Empty;
+    args = string.Empty;
+
+    const string prefix = "/cmd ";
+    if (!message.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+        return false;
+
+    var payload = message[prefix.Length..].Trim();
+    if (payload.Length == 0)
+        return false;
+
+    int separator = payload.IndexOf(' ');
+    if (separator < 0)
+    {
+        command = payload;
+        return true;
+    }
+
+    command = payload[..separator];
+    args = payload[(separator + 1)..].Trim();
+    return true;
+}
+
+// 示例输入："/cmd guess Impostor 1"
+if (TryParseCommand(message, out var command, out var args) &&
+    command.Equals("guess", StringComparison.OrdinalIgnoreCase))
+{
+    // 验证参数，并为发送者执行技能。
+    // 将结果私下发送给该玩家。
+}
+```
+
+## 打包 `GameDataTo` 消息
+
+仅房主端模组可以将多条 `GameDataTo` 消息打包进同一个数据包，每条内部消息可以发给不同的远端玩家。
+这对于需要向多名玩家分别发送状态的功能，可以降低数据包发送频率。
+
+使用顶层消息标记 `Tags.PackedGameDataTo`（字节值 `26`），并写入游戏 ID。
+每条打包的内部消息都必须是 `GameDataTo`，并包含正确的游戏 ID 和目标客户端 ID：
+
+```csharp
+int gameId = AmongUsClient.Instance.GameId;
+MessageWriter msg = MessageWriter.Get(SendOption.Reliable);
+msg.StartMessage(Tags.PackedGameDataTo);
+msg.WritePacked(gameId);
+
+foreach (var item in messagesToPack)
+{
+    msg.StartMessage(Tags.GameDataTo);
+    msg.Write(gameId);
+    msg.WritePacked(item.TargetClientId);
+    msg.StartMessage((byte)item.DataType);
+    item.WriteTo(msg);
+    msg.EndMessage(); // 内部 RPC 或 DataFlag
+    msg.EndMessage(); // GameDataTo
+}
+
+msg.EndMessage(); // PackedGameDataTo
+```
+
+要求：
+
+- 只能将 `GameDataTo` 类型的消息打包在一起。
+- 每条内部消息都必须包含正确的游戏 ID。
+- 完整数据包（包括头部）不得超过 1200 字节。
+
+以上代码展示消息结构；应根据具体发送的 RPC 或 DataFlag 实现序列化。

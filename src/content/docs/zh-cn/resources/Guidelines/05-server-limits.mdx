@@ -1,0 +1,56 @@
+---
+title: 服务端限制
+description: 关于模组网络发送频率、数据包大小和优化策略的说明。
+author: "HayashiUme"
+---
+
+开发 Among Us 模组时，必须同时考虑数据包发送频率和大小。
+这两项限制关系到游戏性能与服务端安全。
+
+## 发送频率
+
+Innersloth 尚在确定模组适用的具体发送频率要求。
+即使未来为模组提供额外空间，安全仍是首要考虑；服务端也可能实施严格限速，以避免影响玩家群体。
+
+### 降低发送频率
+
+可采用以下策略：
+
+- 适用时使用 [`GameDataTo` 打包功能](/zh-cn/resources/guidelines/04-mod-features)。
+- 根据消息需求选择可靠或不可靠通道。
+- 将消息分散到多个帧或数秒内发送，避免突发流量。
+- 尽可能使用游戏内置的限速队列和数据流。
+
+### 内置限速队列与数据流
+
+非竞技类 RPC 可以放入队列，由游戏优化发送频率：
+
+```csharp
+// 可靠通道
+RpcSetScannerMessage reliableRpc = new RpcSetScannerMessage(this.NetId, value, cnt);
+AmongUsClient.Instance.LateBroadcastReliableMessage(reliableRpc);
+
+// 不可靠通道
+RpcPlayAnimationMessage unreliableRpc = new RpcPlayAnimationMessage(this.NetId, animType);
+AmongUsClient.Instance.LateBroadcastUnreliableMessage(unreliableRpc);
+```
+
+DataFlag 用于更新 `InnerNetObject` 状态，通过消息流和 dirty-bit 模式发送。
+更新流式对象的数据并将其标记为 dirty 后，流式对象系统会向玩家发送更新。`InnerNetObject` 通常会通过以下调用自动设置 dirty 状态：
+
+```csharp
+this.SetDirtyBit(1);
+```
+
+## 数据包大小
+
+官方文档给出的 `MessageReader` 最大消息长度为 **1200 字节（含头部）**。构建数据包时，应按完整序列化后的大小计算，并在达到上限前停止添加消息。
+
+:::note
+部分实测结果实为 **1203 字节**；开源服务器程序 [Impostor](https://github.com/Impostor/Impostor) 的[默认限速配置](https://github.com/Impostor/Impostor/blob/master/src/Impostor.Server/config.json#L27)也使用 1203 字节。
+该数值是实测和服务器实现中的观察值，与 Innersloth 文档规定的 1200 字节上限有出入。
+:::
+
+### 控制数据包大小
+
+可以使用队列暂存待发送消息，并在加入下一条消息会使数据包超过容量前完成当前数据包。将该策略与发送频率控制结合，可以同时管理数据包大小和发送频率。

@@ -1,0 +1,57 @@
+---
+title: Server Limits
+description: About network send rates, packet sizes, and optimization strategies.
+author: "HayashiUme"
+---
+
+When developing Among Us mods, you must consider both packet send rates and packet sizes.
+These limits affect game performance and server security.
+
+## Send Rates
+
+Innersloth is still determining the specific send-rate requirements for mods.
+Even if additional capacity is provided for mods in the future, security remains the priority; the server may still enforce strict rate limits to avoid disrupting the playerbase.
+
+### Reducing Send Rates
+
+Use the following strategies where appropriate:
+
+- Use [`GameDataTo` packing](/resources/guidelines/04-mod-features) when applicable.
+- Choose reliable or unreliable channels based on the message's needs.
+- Spread messages across multiple frames or seconds to avoid bursts.
+- Use the game's built-in rate-limited queues and streams whenever possible.
+
+### Built-In Rate-Limited Queues and Streams
+
+Non-competitive RPCs can be queued so the game can optimize their send rate:
+
+```csharp
+// Reliable channel
+RpcSetScannerMessage reliableRpc = new RpcSetScannerMessage(this.NetId, value, cnt);
+AmongUsClient.Instance.LateBroadcastReliableMessage(reliableRpc);
+
+// Unreliable channel
+RpcPlayAnimationMessage unreliableRpc = new RpcPlayAnimationMessage(this.NetId, animType);
+AmongUsClient.Instance.LateBroadcastUnreliableMessage(unreliableRpc);
+```
+
+DataFlags update `InnerNetObject` state and are sent using message streams and a dirty-bit pattern.
+After updating a streamed object's data and marking it dirty, the streaming system sends the update to players. `InnerNetObject` objects typically set their dirty state automatically through this call:
+
+```csharp
+this.SetDirtyBit(1);
+```
+
+## Packet Sizes
+
+Innersloth's documentation sets the maximum `MessageReader` message size to **1200 bytes, including the header**.
+When building packets, calculate their complete serialized size and stop adding messages before reaching the limit.
+
+:::note
+Some measurements report an actual limit of **1203 bytes**; the open-source server [Impostor](https://github.com/Impostor/Impostor) also uses 1203 bytes in its [default rate-limit configuration](https://github.com/Impostor/Impostor/blob/master/src/Impostor.Server/config.json#L27).
+This value is an observation from testing and another server implementation, and differs from the 1200-byte limit specified in Innersloth's documentation.
+:::
+
+### Controlling Packet Sizes
+
+You can queue outgoing messages and finish the current packet before adding another message would exceed its capacity. Combined with send-rate controls, this strategy helps manage both packet size and send rate.
