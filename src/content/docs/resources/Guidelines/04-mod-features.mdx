@@ -1,0 +1,99 @@
+---
+title: Mod Features
+description: About /cmd command and packed GameDataTo messages.
+author: "HayashiUme"
+---
+
+This page summarizes the host-only mod features described in Innersloth's [Technical Information for Modding Among Us](https://github.com/Innersloth-LLC/AmongUsModdingInformation/blob/main/README.md#mod-features).
+
+
+## Host-Only Mods
+
+### Chat Commands
+
+In a lobby using the `+25` modded flag, a non-host player can send a chat message beginning with `/cmd`.
+The game routes that message only to the host; it is not forwarded to other players as normal lobby chat.
+This lets host-only mods implement player abilities without requiring every player to install the mod.
+
+For example, a guessing role could send:
+
+```text
+/cmd guess Impostor 1
+```
+
+The host mod can interpret `guess` as the command and `Impostor 1` as its arguments, then perform the corresponding action.
+
+#### Parsing `/cmd`
+
+The game provides the host-directed transport, but the mod must parse the command and implement its behavior.
+
+```csharp
+using System;
+
+public static bool TryParseCommand(string message, out string command, out string args)
+{
+    command = string.Empty;
+    args = string.Empty;
+
+    const string prefix = "/cmd ";
+    if (!message.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+        return false;
+
+    var payload = message[prefix.Length..].Trim();
+    if (payload.Length == 0)
+        return false;
+
+    int separator = payload.IndexOf(' ');
+    if (separator < 0)
+    {
+        command = payload;
+        return true;
+    }
+
+    command = payload[..separator];
+    args = payload[(separator + 1)..].Trim();
+    return true;
+}
+
+// Example input: "/cmd guess Impostor 1"
+if (TryParseCommand(message, out var command, out var args) &&
+    command.Equals("guess", StringComparison.OrdinalIgnoreCase))
+{
+    // Validate args and apply the ability for the sender.
+    // Send any result privately to that player.
+}
+```
+
+## Packed `GameDataTo` Messages
+
+Host-only mods can pack multiple `GameDataTo` messages into one packet, with each inner message addressed to a different remote player. This can reduce packet send rate for features that fan out different state to multiple players.
+
+Use the top-level `Tags.PackedGameDataTo` tag (byte value `26`) and include the game ID. Each packed item must be a `GameDataTo` message with the correct game ID and its target client ID:
+
+```csharp
+int gameId = AmongUsClient.Instance.GameId;
+MessageWriter msg = MessageWriter.Get(SendOption.Reliable);
+msg.StartMessage(Tags.PackedGameDataTo);
+msg.WritePacked(gameId);
+
+foreach (var item in messagesToPack)
+{
+    msg.StartMessage(Tags.GameDataTo);
+    msg.Write(gameId);
+    msg.WritePacked(item.TargetClientId);
+    msg.StartMessage((byte)item.DataType);
+    item.WriteTo(msg);
+    msg.EndMessage(); // Inner RPC or DataFlag
+    msg.EndMessage(); // GameDataTo
+}
+
+msg.EndMessage(); // PackedGameDataTo
+```
+
+Requirements:
+
+- Only `GameDataTo` messages can be packed together.
+- Every inner message must contain the correct game ID.
+- The complete packet, including its header, must not exceed 1200 bytes.
+
+The snippet shows the message structure; adapt serialization to the specific RPC or DataFlag being sent.

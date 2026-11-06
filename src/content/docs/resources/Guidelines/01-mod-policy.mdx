@@ -47,24 +47,7 @@ These mods usually work on the official regions, but must use the modded (+25) p
 :::note
 If you are using Reactor, you can register your mod as a host-only mod by using the `[ReactorModFlags(ModFlags.DisableServerAuthority)]` attribute in your plugin class.
 
-If you do not use Reactor, you can do the following patch to register your mod as a host-only mod:
-```csharp
-[HarmonyPatch(typeof(Constants), nameof(Constants.GetBroadcastVersion))]
-internal static class ModdedProtocolPatch
-{
-    public static void Postfix(ref int __result)
-    {
-        if (AmongUsClient.Instance.NetworkMode == NetworkModes.OnlineGame)
-        {
-            var revision = __result % 50;
-            if (revision < 25)
-            {
-                __result += 25;
-            }
-        }
-    }
-}
-```
+If you do not use Reactor, you can refer to [this page](/resources/guidelines/03-mod-registration) to register the mod as a host-only mod.
 :::
 
 ### Client-Side Mods
