@@ -1,0 +1,26 @@
+---
+title: Bug Squashing
+description: Good Code Is One That Is Fixed Several Times
+author: "AlchlcDvl"
+---
+
+Debugging is an art form. Not many people see eye-to-eye on how to go about fixing
+bugs, but most have converged to the following methods.
+
+## Lobotomy
+
+Sometimes, trying to get a different error is what paves the way to fixing the
+main error. This is a tried and true method, used to essentially break code and
+understand what's wrong where.
+
+The process is simple. In a large block of code, you simply comment out parts of
+it and see how the rest of the code behaves. Slowly changing what's commented and
+what's not gives a really good idea on the underlying operations.
+
+See below:
+```cs
+DoSomething();
+DoSomethingElse();
+DoNothing();
+JustDo();
+```

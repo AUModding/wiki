@@ -18,13 +18,13 @@ our mods on top of the game.
 instead of your computer. C# programs are compiled into IL, then .NET compiles that IL into assembly
 for your specific machine at runtime. This is called Just-In-Time, or JIT, compilation.
 
-- **Just-In-Time (JIT)**: JIT compilation makes it easier to develop cross-platform apps, 
+- **Just-In-Time (JIT)**: JIT compilation makes it easier to develop cross-platform apps,
 but comes at the cost of slower app startup and more memory usage. In the context of
-Among Us mods, the .NET Runtime reads the IL code from your mod and converts it into 
+Among Us mods, the .NET Runtime reads the IL code from your mod and converts it into
 assembly code for your computer when the code is about to run.
 
 - **Ahead-Of-Time (AOT)**: AOT compilation turns source code directly into assembly code
-without any runtime compilation. The main benefits of AOT are faster startup times, 
+without any runtime compilation. The main benefits of AOT are faster startup times,
 lower memory usage, and lower CPU usage. AOT is also required for some platforms,
 like iOS, which do not allow JIT programs to run. In the context of Among Us modding,
 the Among Us game itself uses AOT because it is built with IL2CPP.
@@ -52,10 +52,15 @@ because modding IL2CPP games from C# programs requires an interop layer (Il2CppI
 - **Assembly-CSharp (Mono DLL)**: An essential tool in every modders toolkit!
 Thankfully, InnerSloth is merciful enough to provide modders with the `Assembly-CSharp.dll`
 file from the Mono build of Among Us, before they run the IL2CPP process.
-Since the Mono DLL is IL code, it makes it easy for modders to find out how 
+Since the Mono DLL is IL code, it makes it easy for modders to find out how
 the game works internally without using a disassembler like IDA or Ghidra.
 We will discuss working with the Mono DLL later.
 
 - **[dnSpyEx](https://github.com/dnSpyEx/dnSpy) / [ILSpy](https://github.com/icsharpcode/ILSpy)**: A decompiler for .NET programs.
 Use it to open the Mono DLL and read the original code. You can also explore other mods and plugins in these programs.
 For quick reading of the game's code, you can instead use our provided [Code Inspector](https://code.aumodding.dev).
+
+- **Prefix / Postfix:** The two main ways you will use Harmony. A Prefix runs
+*before* the game's original method (great for modifying inputs, or
+cancelling the original method entirely), and a Postfix runs *after* it
+(great for reading/editing the final results or adding extra effects).
