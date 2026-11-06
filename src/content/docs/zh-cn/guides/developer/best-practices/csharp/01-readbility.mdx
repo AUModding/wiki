@@ -1,14 +1,9 @@
 ---
-title: 让你的 C# ++++
-description: 好电脑是一台不抱怨的电脑
+title: 眼睛很重要
+description: 亲爱的日记，我挖出了一桩恐怖的事
 author: "AlchlcDvl"
 translator: "HayashiUme"
 ---
-
-无论一个模组的点子有多绝妙，它终究取决于支撑它的代码写得好不好。
-电脑既聪明得离谱，又蠢得离谱：它聪明到能在一毫秒内算出复杂的捷径，却又蠢到对你的指令照单全收——哪怕这些指令糟糕透顶。
-
-## 可读性
 
 代码可以优化得很差，但如果你想把它修好，就得先真正看懂它写了什么。
 这是调试时最痛的一点常常不是「这个烦人的 bug 藏在哪？」，而是「我他妈到底写的是什么东西。」。
@@ -93,7 +88,8 @@ public bool Flag; // 因为它是 public
 :::
 
 用下划线（`_someFlag`）作为私有字段名的前缀，也是一种非常常见的做法。
-不过在模组圈子里，这远没有专业软件开发领域那么普遍，所以用不用 `_` 完全取决于你自己。
+不过在模组圈子里，这远没有专业软件开发领域那么普遍，所以用不用 `_` 完全取决于你自己，
+但我们强烈推荐用上它，以免局部变量遮蔽了已声明的字段。
 
 #### 其他一切
 
@@ -194,6 +190,60 @@ if (!response.IsValid)
 这种「心智负担」让你的代码读起来像一桩苦差事。卫语句不仅能让你脑子里的逻辑保持清晰，
 还给电脑立了一块明确的「出口」指示牌，让它尽早停下、不再执行多余的代码。
 
+### switch 语句与 switch 表达式
+
+如果你发现自己在写一大堵由 `if` 和 `else if` 组成的墙，一遍又一遍地检查同一个变量，
+那该改用 `switch` 了。
+
+接着前面的例子来说，把 `response.Sector` 检查上四遍实在很笨拙。
+传统的 `switch` 语句通过把同一个值拿去和多个 case 逐一比较，把这件事收拾得干干净净：
+
+```cs
+switch (response.Sector)
+{
+    case "R&D":
+        return "ResearchAndDevelopment";
+    case "HR":
+        return "HumanResources";
+    case "IT":
+        return "Technology";
+    case "$$":
+        return "Finances";
+    default:
+        return "None";
+}
+```
+
+switch 的好处是让代码好消化得多，某些情况下甚至比 `if-else-if` 树更高效！
+
+#### switch 表达式
+
+因为现代 C# 强大得离谱，你还能用 switch 表达式把它进一步压缩。
+不必一遍遍地写 `case` 和 `return`，你可以直接把值映射到结果。
+
+下面这段逻辑和上面完全一样，但占用的篇幅只有一小部分：
+
+```cs
+return response.Sector switch
+{
+    "R&D" => "ResearchAndDevelopment",
+    "HR" => "HumanResources",
+    "IT" => "Technology",
+    "$$" => "Finances",
+    _ => "None"
+};
+```
+
+:::tip
+switch 表达式里的 `_` 叫做弃元操作符（discard operator）。
+它的作用就和普通 switch 语句里的 `default:` 一样，
+是所有你没显式列出的值的兜底。
+:::
+
+switch 表达式对模组开发来说堪称神器，因为它强制你必须返回一个值，
+从而避免你在某个 `if/else` 分支里忘掉给变量赋值的 bug。
+它读起来完全就是一张查找表，让你写下的意图对任何读者都一目了然。
+
 ### 魔法字符串与魔法数字
 
 「魔法数字」（或者魔法字符串）可不是什么炫酷的巫师咒语，
@@ -222,3 +272,22 @@ if (player.State == SprintingState)
     player.Speed *= SprintSpeedMultiplier;
 }
 ```
+
+模组圈子里魔法数字泛滥成灾。和字段命名一样，你不必严格照搬这条准则，
+但至少写个注释解释一下为什么需要这个特定的值，会让人感激不尽。
+如果这个数字/字符串的存在本身就很*合理*，那你也可以免去这番解释。
+
+:::tip
+如果你经常拿魔法数字和魔法字符串来做比较，`enum` 就是你最好的朋友！
+```cs
+public enum MyEnum
+{
+    Value1,
+    Value2,
+    Value3,
+}
+```
+
+enum 隐式地定义了一对「数字—字符串」常量，这让它在阅读代码时非常有用，
+也让数字的含义一目了然。
+:::

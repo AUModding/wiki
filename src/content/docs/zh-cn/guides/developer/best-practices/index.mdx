@@ -1,9 +1,12 @@
 ---
-title: 前言
+title: 为什么好代码更好
 description: 模组开发者的真经
 author: "AlchlcDvl"
 translator: "HayashiUme"
+sidebar:
+  order: 0
 ---
+import { getRelativeLocaleUrl } from "astro:i18n"
 
 作为一名初出茅庐的模组开发者，你可能会想：「代码能跑就行，为什么还要在意写得*好不好*？」
 
@@ -20,6 +23,9 @@ CPU 飙满、黄金般的内存坏掉、散热萝卜都被煮熟了。想想就�
 
 你想让用户开心，最简单的办法就是写出好代码。
 
+没有什么比诊断一个像双缝干涉实验一样难以观察的 bug 更折磨人的了。
 在本部分中，我们会带你了解编写整洁、优化良好的模组的核心原则。
 不仅用户的电脑会开心，未来的你一定会感谢现在努力付出的自己。（什么鸡汤？）
-没有什么比诊断一个像双缝干涉实验一样难以观察的 bug 更折磨人的了。
+
+强烈建议你在继续之前先读一读<a href={getRelativeLocaleUrl('zh-CN', "resources/terminology")}>术语</a>，
+后面会经常用到。
